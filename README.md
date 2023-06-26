@@ -1,6 +1,6 @@
 # Feed The Elephant Builder App
 
-#### Requirements
+### Requirements
 
 You'll need the following installed to run the template successfully:
 
@@ -27,7 +27,7 @@ brew services start postgresql
 brew services start redis
 ```
 
-#### Initial Setup
+### Initial Setup
 
 Run `bin/setup` to install Rubygem and Javascript dependencies. This will also install `foreman` system wide for you and setup your database.
 
@@ -35,7 +35,17 @@ Run `bin/setup` to install Rubygem and Javascript dependencies. This will also i
 bin/setup
 ```
 
-#### Running FTE Builder
+### Development Things
+
+Testing sending and style of emails locally can be viewed at `localhost:3000/letter_opener`
+
+### Git flow
+
+Feature branch off of `main`. Push feature branch and create a pull request. Pull requests will need to be reviewed before merging.
+
+Use `standardrb`, you can run `standardrb --fix` to automatically fix lint issues.
+
+### Running FTE Builder
 
 To run your application, you'll use the `bin/dev` command:
 
@@ -61,7 +71,7 @@ overmind restart web
 overmind kill
 ```
 
-#### Windows Support
+### Windows Support
 
 If you'd like to run FTE Builder Pro on Windows, we recommend using WSL2. You can find instructions here: https://gorails.com/setup/windows
 
@@ -71,7 +81,7 @@ Alternatively, if you'd like to use Docker on Windows, you'll need to make sure 
 git clone git@github.com:username/myrepo.git --config core.autocrlf=input
 ```
 
-#### Running with Docker Compose
+### Running with Docker Compose
 
 We include a sample Docker Compose configuration that runs Rails, Postgresql, and Redis for you.
 
@@ -82,7 +92,7 @@ docker-compose up
 
 Then open http://localhost:3000
 
-#### Running with Docker
+### Running with Docker
 
 If you'd like to run FTE Builder Pro with Docker directly, you can run:
 

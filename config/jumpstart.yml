@@ -1,0 +1,15 @@
+--- !ruby/object:Jumpstart::Configuration
+application_name: Builder
+business_name: Feed The Elephant
+business_address: ''
+domain: example.com
+default_from_email: Jumpstart <support@example.com>
+support_email: support@feedtheelephant.com
+background_job_processor: sidekiq
+email_provider: ''
+personal_accounts: false
+solargraph: true
+register_with_account: false
+apns: false
+fcm: false
+collect_billing_address: false
