@@ -1,12 +1,4 @@
-# Jumpstart Pro Rails Template
-
-All your Rails apps should start off with a bunch of great defaults.
-
-## Getting Started
-
-Jumpstart Pro is a preconfigured Rails application, so you can either
-download the code or clone this repository and add your own repo as a
-remote to merge in updates.
+# Feed The Elephant Builder App
 
 #### Requirements
 
@@ -37,19 +29,13 @@ brew services start redis
 
 #### Initial Setup
 
-First, edit `config/database.yml` and change the database name.
-
 Run `bin/setup` to install Rubygem and Javascript dependencies. This will also install `foreman` system wide for you and setup your database.
 
 ```bash
 bin/setup
 ```
 
-Optionally, you can rename the application name in `config/application.rb`. This won't affect anything, so it's not too important.
-
-You can also rename the app in the Jumpstart config UI which updates the app name in the navbar, footer, etc.
-
-#### Running Jumpstart Pro
+#### Running FTE Builder
 
 To run your application, you'll use the `bin/dev` command:
 
@@ -77,7 +63,7 @@ overmind kill
 
 #### Windows Support
 
-If you'd like to run Jumpstart Pro on Windows, we recommend using WSL2. You can find instructions here: https://gorails.com/setup/windows
+If you'd like to run FTE Builder Pro on Windows, we recommend using WSL2. You can find instructions here: https://gorails.com/setup/windows
 
 Alternatively, if you'd like to use Docker on Windows, you'll need to make sure you clone the repository and preserve the Linux line endings.
 
@@ -98,7 +84,7 @@ Then open http://localhost:3000
 
 #### Running with Docker
 
-If you'd like to run Jumpstart Pro with Docker directly, you can run:
+If you'd like to run FTE Builder Pro with Docker directly, you can run:
 
 ```bash
 docker build --tag myapp .
