@@ -1,3 +1,7 @@
+# In our app this controller serves the purpose of organizations controller
+# Being wrapped in the admin scope, an Organization of FTE is equivalent of 
+# Account in Jumpstart
+
 module Admin
   class AccountsController < Admin::ApplicationController
     # Overwrite any of the RESTful controller actions to implement custom behavior
