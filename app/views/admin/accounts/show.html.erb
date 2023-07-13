@@ -19,12 +19,12 @@ as well as a link to its edit page.
 <% content_for(:title) { t("administrate.actions.show_resource", name: page.page_title) } %>
 
 <header class="main-content__header">
-  <h1 class="main-content__page-title">
+  <h4 class="main-content__page-title">
     <%= content_for(:title) %>
-  </h1>
+  </h4>
 
   <div>
-    <%= link_to("Edit Organization", edit_admin_account_path(page.resource)) %>
+    <%= link_to("Edit Organization", edit_admin_account_path(page.resource), class: 'btn btn-primary') %>
     <%#= link_to(
       t("administrate.actions.edit_resource", name: page.page_title),
       [:edit, namespace, page.resource],
@@ -42,8 +42,11 @@ as well as a link to its edit page.
 </header>
 
 <section class="main-content__body">
+  <h1>
+    Name: <%= page.resource.name %>
+  </h1>
   <dl>
-    <label for="resource_name">Name</label> <%= page.resource.name %>
+    <!--<label for="resource_name">Name</label> ->
     <%# page.attributes.each do |attribute| %>
       <dt class="attribute-label" id="<%#= attribute.name %>">
       <%#= t(
