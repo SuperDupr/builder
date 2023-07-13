@@ -18,18 +18,19 @@ to display a collection of resources in an HTML table.
 [1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Collection
 %>
 
-<table aria-labelledby="<%= table_title %>">
+<table aria-labelledby="<%= table_title %>"  class="border-collapse table-auto w-full">
   <thead>
     <tr>
-      <th>Organization ID</th>
-      <th>Organization Name</th>
+      <th class='border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left'>Organization ID</th>
+      <th class='border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left'>Organization Name</th>
+      <th class='border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left'>Actions</th>
       <%# collection_presenter.attribute_types.each do |attr_name, attr_type| %>
-        <th class="cell-label
+        <!-- <th class="cell-label
         cell-label--<%#= attr_type.html_class %>
         cell-label--<%#= collection_presenter.ordered_html_class(attr_name) %>
         cell-label--<%#= "#{collection_presenter.resource_name}_#{attr_name}" %>"
         scope="col"
-        aria-sort="<%#= sort_order(collection_presenter.ordered_html_class(attr_name)) %>">
+        aria-sort="<%#= sort_order(collection_presenter.ordered_html_class(attr_name)) %>"> -->
         <%#= link_to(sanitized_order_params(page, collection_field_name).merge(
           collection_presenter.order_params_for(attr_name, key: collection_field_name)
         )) do %>
@@ -45,7 +46,7 @@ to display a collection of resources in an HTML table.
               </span> -->
             <%# end %>
           <%# end %>
-        </th>
+        <!-- </th> -->
       <%# end %>
       <%#= render(
         "collection_header_actions",
@@ -59,10 +60,11 @@ to display a collection of resources in an HTML table.
 
   <tbody>
     <% resources.each do |resource| %>
-      <tr><%= resource.id %></tr>
-      <tr><%= resource.name %></tr>
-      <tr><%= link_to("Edit", edit_admin_account_path(resource)) %></tr>
-      <tr><%= link_to("Destroy", admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }) %></tr>
+    <tr>
+      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400"><%= resource.id %></td>
+      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400"><%= resource.name %></td>
+      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400"><%= link_to("Edit", edit_admin_account_path(resource) , class: "btn btn-primary") %> <%= link_to("Destroy", admin_account_path(resource), class: "btn btn-danger", method: :delete, data: { confirm: "Are you sure?" }) %></td>
+      </tr>
     <% end %>
     <%# resources.each do |resource| %>
       <!-- <tr class="js-table-row"
