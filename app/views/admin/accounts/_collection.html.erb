@@ -62,7 +62,7 @@ to display a collection of resources in an HTML table.
       <tr><%= resource.id %></tr>
       <tr><%= resource.name %></tr>
       <tr><%= link_to("Edit", edit_admin_account_path(resource)) %></tr>
-      <tr><%= link_to("Destroy", admin_account_path(resource), method: :delete) %></tr>
+      <tr><%= link_to("Destroy", admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }) %></tr>
     <% end %>
     <%# resources.each do |resource| %>
       <!-- <tr class="js-table-row"
