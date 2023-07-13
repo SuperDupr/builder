@@ -7,12 +7,21 @@ module Admin
     # Overwrite any of the RESTful controller actions to implement custom behavior
     # For example, you may want to send an email after a foo is updated.
     #
-    # def update
-    #   foo = Foo.find(params[:id])
-    #   foo.update(params[:foo])
-    #   send_foo_updated_email
-    # end
+    def create
+      super      
+      flash[:notice] = "Organization was created successfully!"
+    end
+    
+    def update
+      super
+      flash[:notice] = "Organization was updated successfully!"      
+    end
 
+    def destroy
+      super
+      flash[:notice] = "Organization was deleted successfully!"  
+    end
+    
     # Override this method to specify custom lookup behavior.
     # This will be used to set the resource for the `show`, `edit`, and `update`
     # actions.
