@@ -23,20 +23,18 @@ By default, it renders:
     </title>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= javascript_include_tag "administrate", "data-turbo-track": "reload", defer: true %>
+    <script src="https://kit.fontawesome.com/ebb652e7aa.js" crossorigin="anonymous"></script>
     <%= render "stylesheet" %>
     <%= csrf_meta_tags %>
     <meta name="turbo-root" content="/admin">
   </head>
-  <body>
-    <div class="app-container">
-      <%= render "navigation" -%>
-
-      <main class="main-content" role="main">
+  <body class="flex flex-col h-screen" data-controller="sidebar">
+      <%= render "adminSidebar" -%>
+      <main class="flex flex-col flex-1 ml-0 lg:ml-256 pt-[82px] transition-all duration-100 ease-out" id="mainContent" data-target="sidebar.mainContent">
         <%= render "flashes" -%>
+        <%= render 'adminHeader' %>
         <%= yield %>
       </main>
-    </div>
-
     <div style="display: none; width: 0; height: 0; overflow: hidden; position: absolute">
       <%= render "icons" %>
     </div>

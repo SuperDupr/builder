@@ -6,7 +6,7 @@ button[disabled]        .when-enabled { display: none; }
 
 @layer components {
   .btn {
-    @apply inline-flex text-sm font-semibold text-center px-4 py-0 rounded-md no-underline items-center justify-between shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex text-sm font-semibold text-center px-4 py-0 rounded-md no-underline items-center justify-between shadow-sm focus:outline-none;
 
     height: 40px;
     transition: ease 0.3s background, ease 0.3s transform, ease 0.2s color;
@@ -36,11 +36,11 @@ button[disabled]        .when-enabled { display: none; }
   }
 
   .btn-primary {
-    @apply bg-blue-600 text-white focus:ring-blue-500;
+    @apply bg-primary text-white shadow-none;
 
     &:hover,
     &:focus {
-      @apply bg-blue-500 text-white;
+      @apply bg-primary text-white shadow-none;
     }
 
     &.btn-outline {

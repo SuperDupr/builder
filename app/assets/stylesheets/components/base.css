@@ -10,12 +10,12 @@ body {
 }
 
 a {
-  @apply text-blue-600;
+  @apply text-primary;
 
   &:hover,
   &:focus {
-    @apply text-blue-500;
-
+    @apply text-primary;
+    outline: 0px;
     transform: none;
   }
 }
