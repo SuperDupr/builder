@@ -17,10 +17,10 @@ It displays a header, and renders the `_form` partial to do the heavy lifting.
 
 <% content_for(:title) { t("administrate.actions.edit_resource", name: page.page_title) } %>
 
-<header class="main-content__header">
-  <h1 class="main-content__page-title">
+<header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4 class="main-content__page-title">
     <%= content_for(:title) %>
-  </h1>
+  </h4>
 
   <div>
     <%#= link_to(
@@ -31,6 +31,6 @@ It displays a header, and renders the `_form` partial to do the heavy lifting.
   </div>
 </header>
 
-<section class="main-content__body">
+<section class="px-4">
   <%= render "form", page: page %>
 </section>
