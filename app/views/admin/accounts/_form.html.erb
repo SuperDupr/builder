@@ -32,9 +32,11 @@ and renders all form fields for a resource's editable attributes.
       </ul>
     </div>
   <% end %>
-
-  <%= f.label("Organization Name") %>
-  <%= f.text_field(:name, required: true) %>
+  <div class='flex place-items-end gap-2'>
+      <div>
+        <%= f.label 'Name', for:'account_name' %>
+        <%= f.text_field(:name, required: true, class: 'rounded-lg') %>
+      </div>
 
   <%# page.attributes(controller.action_name).each do |attribute| -%>
     <!-- <div class="field-unit field-unit--<%#= attribute.html_class %> field-unit--<%#= requireness(attribute) %>">
@@ -42,7 +44,8 @@ and renders all form fields for a resource's editable attributes.
     </div> -->
   <%# end -%>
 
-  <div class="form-actions">
-    <%= f.submit("Save") %>
+    <div>
+      <%= f.submit("Save", class: "btn btn-primary") %>
+    </div>
   </div>
 <% end %>

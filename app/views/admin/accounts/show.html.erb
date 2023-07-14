@@ -17,14 +17,13 @@ as well as a link to its edit page.
 %>
 
 <% content_for(:title) { t("administrate.actions.show_resource", name: page.page_title) } %>
-
-<header class="main-content__header">
-  <h1 class="main-content__page-title">
-    <%= content_for(:title) %>
-  </h1>
-
-  <div>
-    <%= link_to("Edit Organization", edit_admin_account_path(page.resource)) %>
+<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4 class="main-content__page-title">
+    <%#= content_for(:title) %>
+    Show Organization
+  </h4>
+  <div class="ml-2">
+    <%= link_to("Edit Organization", edit_admin_account_path(page.resource), class: 'btn btn-primary') %>
     <%#= link_to(
       t("administrate.actions.edit_resource", name: page.page_title),
       [:edit, namespace, page.resource],
@@ -41,9 +40,17 @@ as well as a link to its edit page.
   </div>
 </header>
 
+<div class="px-4">
+  <h3>Organization Name: <%= page.resource.name %></h3>
+</div>
+
+<!--
 <section class="main-content__body">
+  <h2>
+    
+  </h2>
   <dl>
-    <label for="resource_name">Name</label> <%= page.resource.name %>
+    <!--<label for="resource_name">Name</label> ->
     <%# page.attributes.each do |attribute| %>
       <dt class="attribute-label" id="<%#= attribute.name %>">
       <%#= t(
@@ -57,3 +64,4 @@ as well as a link to its edit page.
     <%# end %>
   </dl>
 </section>
+-->
