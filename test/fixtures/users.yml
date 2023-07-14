@@ -71,6 +71,26 @@ two:
   time_zone: "Central Time (US & Canada)"
   confirmed_at: <%= Time.current %>
 
+one:
+  email: one@example.com
+  first_name: User
+  last_name: One
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  accepted_terms_at: <%= Time.current %>
+  accepted_privacy_at: <%= Time.current %>
+  time_zone: "Central Time (US & Canada)"
+  confirmed_at: <%= Time.current %>
+
+three:
+  email: three@example.com
+  first_name: User3
+  last_name: Three
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  accepted_terms_at: <%= Time.current %>
+  accepted_privacy_at: <%= Time.current %>
+  time_zone: "Central Time (US & Canada)"
+  confirmed_at: <%= Time.current %>
+
 admin:
   email: admin@example.com
   first_name: Admin
