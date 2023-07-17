@@ -5,6 +5,9 @@
 module Admin
   class AccountsController < Admin::ApplicationController
     # Overwrite any of the RESTful controller actions to implement custom behavior
+
+    # Callbacks
+    before_action :set_account, only: [:organization_users, :manage_access]
     
     def create
       super
@@ -22,9 +25,24 @@ module Admin
     end
 
     def organization_users
-      @account = Account.find(params[:id])
-
       @account_users = @account.account_users.includes(:user)
+    end
+
+    def manage_access
+      @account.toggle!(:active) ?
+        flash[:notice] = "Organization's access was #{organization_status(@account.active)} successfully!" :
+        flash[:alert] = "Something went wrong while updating organization's access: #{@account.errors.full_messages.join(", ")}"
+      redirect_to(admin_accounts_path)
+    end
+    
+    private
+    
+    def set_account
+      @account = Account.find(params[:id])
+    end
+
+    def organization_status(active)
+      active ? "activated" : "inactivated"
     end
     
     # Override this method to specify custom lookup behavior.

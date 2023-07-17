@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       resources :accounts  do
         member do
           get :organization_users, as: :organization_users
+          patch :manage_access, as: :manage_access
         end
       end
       resources :account_users

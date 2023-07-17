@@ -73,6 +73,9 @@ to display a collection of resources in an HTML table.
               <i class="fa-regular fa-trash-can"></i>
             <% end %>
             <%= link_to("Manage Users", organization_users_admin_account_path(resource), class: "") %>
+            <%= link_to("Manage Teams", "#", class: "") %>
+            <%= link_to("Manage Access", manage_access_admin_account_path(resource), 
+              method: :patch, data: { confirm: "This will #{access_state_of_account(resource)} the account. Are you sure?" }, class: "") %>
           </div>
         </td>
       </tr>
