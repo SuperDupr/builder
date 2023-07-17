@@ -21,7 +21,11 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts
+      resources :accounts  do
+        member do
+          get :organization_users, as: :organization_users
+        end
+      end
       resources :account_users
       resources :plans
       namespace :pay do
