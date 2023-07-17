@@ -37,6 +37,8 @@ class Account < ApplicationRecord
   has_one :billing_address, -> { where(address_type: :billing) }, class_name: "Address", as: :addressable
   has_one :shipping_address, -> { where(address_type: :shipping) }, class_name: "Address", as: :addressable
 
+  has_many :teams, dependent: :destroy
+
   scope :personal, -> { where(personal: true) }
   scope :impersonal, -> { where(personal: false) }
   scope :sorted, -> { order(personal: :desc, name: :asc) }

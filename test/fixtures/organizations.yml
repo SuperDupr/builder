@@ -23,7 +23,6 @@
 #
 #  fk_rails_...  (owner_id => users.id)
 #
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 # This model initially had no columns defined. If you add columns to the
 # model remove the "{}" from the fixture names and add the columns immediately
