@@ -36,6 +36,8 @@ Rails.application.routes.draw do
         resources :subscriptions
       end
 
+      resources :teams
+
       root to: "dashboard#show"
     end
   end

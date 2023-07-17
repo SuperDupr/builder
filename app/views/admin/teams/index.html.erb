@@ -1,0 +1,13 @@
+<h1>Teams#index</h1>
+
+<%= link_to("Add New Team", new_admin_team_path(account_id: @account.id)) %>
+
+<%= @teams.count %>
+
+<% @teams.each do |team| %>
+  <%= team.name %>
+  <%= @account.name %>
+  <%= link_to("Show", admin_team_path(team, account_id: @account.id), class: "") %>
+  <%= link_to("Edit", edit_admin_team_path(team, account_id: @account.id), class: "") %>
+  <%= link_to("Destroy", admin_team_path(team, account_id: @account.id), class: "") %>
+<% end %>
