@@ -72,6 +72,7 @@ to display a collection of resources in an HTML table.
             <%= link_to(admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger") do %>
               <i class="fa-regular fa-trash-can"></i>
             <% end %>
+            <%= link_to("Manage Users", organization_users_admin_account_path(resource), class: "") %>
           </div>
         </td>
       </tr>

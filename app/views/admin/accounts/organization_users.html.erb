@@ -1,0 +1,11 @@
+Organization Name: <%= @account.name %><br><br>
+
+Users Count: <%= @account_users.count %><br><br>
+
+<% @account_users.each do |account_user| %>
+  <%= account_user.user.first_name %>
+  <%= account_user.user.last_name %>
+  <%= account_user.user.email %>
+  <!-- Run User.attribute_names inside rails c to get all attribute names -->
+  <!-- Use required ones accordingly -->
+<% end %>
