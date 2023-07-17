@@ -4,6 +4,7 @@
 #
 #  id                  :bigint           not null, primary key
 #  account_users_count :integer          default(0)
+#  active              :boolean          default(TRUE)
 #  billing_email       :string
 #  domain              :string
 #  extra_billing_info  :text
