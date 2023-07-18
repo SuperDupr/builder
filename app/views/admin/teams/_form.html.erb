@@ -1,0 +1,6 @@
+<%= form_for(team, url: admin_teams_path) do |f| %>
+  <%= f.label("Name") %>
+  <%= f.text_field(:name, required: true, class: "form-control") %>
+
+  <%= f.submit("Save", class: "btn btn-primary") %>
+<% end %>
