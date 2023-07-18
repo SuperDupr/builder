@@ -1,6 +1,7 @@
-<%= form_for(team, url: admin_teams_path) do |f| %>
+<%= form_for(team, url: url) do |f| %>
   <%= f.label("Name") %>
   <%= f.text_field(:name, required: true, class: "form-control") %>
 
+  <%= f.hidden_field(:account_id, value: params[:account_id]) %>
   <%= f.submit("Save", class: "btn btn-primary") %>
 <% end %>
