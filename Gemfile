@@ -84,3 +84,5 @@ eval_gemfile "Gemfile.jumpstart"
 
 # We recommend using strong migrations when your app is in production
 # gem "strong_migrations", "~> 0.7.6"
+
+gem "devise_invitable", "~> 2.0"
