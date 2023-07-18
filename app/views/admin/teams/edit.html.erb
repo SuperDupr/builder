@@ -1,5 +1,11 @@
-<h1>Teams#edit</h1>
+<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4>Edit Team</h4>
+  <%= link_to("Back to Teams", admin_teams_path(account_id: @account.id), class: 'btn btn-primary') %>
+</header>
 
+<div class='px-4'>
+<%= render("form", team: @team, url: admin_team_path) %>
+</div>
+<!--
 <h2>Adding new team for <%= @account.name %></h2>
-
-<%= render("form", team: @team) %>
+-->
