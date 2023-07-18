@@ -10,7 +10,9 @@
     <a  href="/"><img src="/logo.svg" alt="logo.svg" width="100" class="ml-4"></a>
    </div>
    <div>
-   <a href="">Logout <i class="fa-solid fa-right-from-bracket ml-1"></i></a>
+   <%= link_to destroy_user_session_path, method: :delete do %>
+     Logout <i class="fas fa-sign-out-alt"></i>
+   <% end %>
    </div>
   </div>
 </header>

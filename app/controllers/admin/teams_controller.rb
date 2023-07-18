@@ -39,7 +39,6 @@ module Admin
       @team.destroy ?
         flash[:notice] = "Team was deleted successfully!" :
         flash[:alert] = "Unable to delete team!"
-
       redirect_to(admin_teams_path(account_id: @account.id))
     end
 

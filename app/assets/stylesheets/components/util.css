@@ -22,3 +22,10 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+input:checked ~ .dot  {
+  transform: translateX(100%);
+  background: #021642;
+}
+input:checked ~ .line {
+  background-color: #021642a8;
+}
