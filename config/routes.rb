@@ -21,7 +21,12 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts
+      resources :accounts do
+        member do
+          get :organization_users, as: :organization_users
+          patch :manage_access, as: :manage_access
+        end
+      end
       resources :account_users
       resources :plans
       namespace :pay do
@@ -30,6 +35,8 @@ Rails.application.routes.draw do
         resources :payment_methods
         resources :subscriptions
       end
+
+      resources :teams
 
       root to: "dashboard#show"
     end
