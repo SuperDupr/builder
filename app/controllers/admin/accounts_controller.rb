@@ -8,7 +8,7 @@ module Admin
 
     # Callbacks
     before_action :set_account, only: [:organization_users, :manage_access]
-    
+
     def create
       super
       flash[:notice] = "Organization was created successfully!"
@@ -34,9 +34,9 @@ module Admin
         flash[:alert] = "Something went wrong while updating organization's access: #{@account.errors.full_messages.join(", ")}"
       redirect_to(admin_accounts_path)
     end
-    
+
     private
-    
+
     def set_account
       @account = Account.find(params[:id])
     end
@@ -44,7 +44,7 @@ module Admin
     def organization_status(active)
       active ? "activated" : "inactivated"
     end
-    
+
     # Override this method to specify custom lookup behavior.
     # This will be used to set the resource for the `show`, `edit`, and `update`
     # actions.

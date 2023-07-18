@@ -21,7 +21,7 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts  do
+      resources :accounts do
         member do
           get :organization_users, as: :organization_users
           patch :manage_access, as: :manage_access
