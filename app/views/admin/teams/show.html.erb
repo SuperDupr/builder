@@ -2,9 +2,17 @@
   <h4>Show Team</h4>
   <%= link_to("Back to Teams", admin_teams_path(account_id: @account.id), class: 'btn btn-primary') %>
 </header>
-<div class="px-4">
-  <h3 class="mb-2"><span class="text-gray-400">Team Name:</span> <%= @team.name %></h3>
-  <h5 class="lowercase"> <span class="text-gray-400">Organization Name:</span> <%= @account.name %></h5>
+<div class="container mx-auto py-4">
+  <table class="border">
+    <tr>
+      <th>Team Name</th>
+      <td><%= @team.name %></td>
+    </tr>
+    <tr>
+      <th>Organization Name</th>
+      <td><%= @account.name %></td>
+    </tr>
+  </table>
 </div>
 
 
