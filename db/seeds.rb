@@ -27,7 +27,7 @@ puts "*** #{organizations.count} organizations created! ***"
 
 # Create teams
 organizations.each do |organization|
-  3.times { teams << organization.teams.create!(name: team_names.sample) } 
+  3.times { teams << organization.teams.create!(name: team_names.sample) }
 end
 
 puts "*** #{teams.count} teams created! ***"
