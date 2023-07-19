@@ -4,11 +4,30 @@
 # Examples:
 #
 # Uncomment the following to create an Admin user for Production in Jumpstart Pro
-user = User.create(
-  name: "Admin User",
-  email: "admin@test.com",
-  password: "admin123",
-  password_confirmation: "admin123",
-  terms_of_service: true
-)
-Jumpstart.grant_system_admin!(user)
+# user = User.create(
+#   name: "Admin User",
+#   email: "admin@test.com",
+#   password: "admin123",
+#   password_confirmation: "admin123",
+#   terms_of_service: true
+# )
+# Jumpstart.grant_system_admin!(user)
+
+# Create Organizations
+organizations = []
+teams = []
+organization_names = ["Beyond Code", "Drifting Ruby", "Go Rails", "Railscasts", "Deanin", "Brad Traversy", "Level Up Coding", "WebCrunch", "Avdi Grimm", "Beyond Science"]
+team_names = ["Sales", "Marketing", "Admin", "HR", "Content Writing", "Development", "Design"]
+
+10.times do |i|
+  organizations << Organization.create!(name: organization_names.sample)
+end
+
+puts "*** #{organizations.count} organizations created! ***"
+
+# Create teams
+organizations.each do |organization|
+  3.times { teams << organization.teams.create!(name: team_names.sample) } 
+end
+
+puts "*** #{teams.count} teams created! ***"
