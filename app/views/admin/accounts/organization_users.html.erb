@@ -1,6 +1,9 @@
 <header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
- <h4>Organization Name: <%= @account.name %></h4>
- <%= render partial: 'admin/accounts/import' %>
+ <h4>Manage Users in <%= @account.name %></h4>
+ <div class="flex gap-2">
+   <a href="#" class="btn btn-primary">Invite User</a>
+   <%= render partial: 'admin/accounts/import' %>
+ </div>
 </header>
 <div class="container mx-auto px-4">
   <%#= @account_users.count %>
@@ -11,6 +14,7 @@
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
+          <th>Team</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -22,6 +26,7 @@
               <td><%= account_user.user.first_name %></td>
               <td><%= account_user.user.last_name %></td>
               <td><%= account_user.user.email %></td>
+              <td>----</td>
               <td>
                 <span class="inline-flex items-center justify-center rounded-full bg-green-500 text-white p-2">
                   Accepted
@@ -30,7 +35,10 @@
                   Pending
                 </span>
               </td>
-              <td><a href="" class="btn btn-primary">Resend Invitation</a></td>
+              <td>
+                <a href="" class="btn btn-primary">Resend Invitation</a>
+                ----
+              </td>
             </tr>
           <% end %>
         <% else %>
