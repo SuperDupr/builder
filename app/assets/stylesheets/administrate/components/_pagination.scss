@@ -9,10 +9,17 @@
   .page,
   .next,
   .last {
-    margin: $small-spacing;
+    margin: 5px 0px;
+  }
+  .prev a, .next a {
+    padding: 9px 12px;
   }
 
   .current {
     font-weight: $bold-font-weight;
+    padding: 6px 12px;
+    background-color: #021642;
+    border: 1px solid #021642;
+    color: #fff;
   }
 }

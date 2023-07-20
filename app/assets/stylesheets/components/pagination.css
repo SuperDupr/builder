@@ -1,7 +1,7 @@
 /* Light Jumpstart theme for Pagy's default renderer */
 
 .pagination {
-  @apply inline-flex flex-wrap items-center justify-start;
+  @apply inline-flex flex-wrap items-center justify-start float-right mb-5;
 
   .page {
     &:first-child a, &:first-child {

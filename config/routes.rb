@@ -25,6 +25,8 @@ Rails.application.routes.draw do
         member do
           get :organization_users, as: :organization_users
           patch :manage_access, as: :manage_access
+          get :adduser, as: :adduser
+          get :setpassword, as: :setpassowrd
         end
       end
       resources :account_users
