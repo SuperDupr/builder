@@ -17,106 +17,125 @@ to display a collection of resources in an HTML table.
 
 [1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Collection
 %>
-
-<table aria-labelledby="<%= table_title %>"  class="border border-collapse mt-5">
-  <thead>
-    <tr>
-      <th>Organization ID</th>
-      <th>Organization Name</th>
-      <th>Actions</th>
-      <%# collection_presenter.attribute_types.each do |attr_name, attr_type| %>
-        <!-- <th class="cell-label
-        cell-label--<%#= attr_type.html_class %>
-        cell-label--<%#= collection_presenter.ordered_html_class(attr_name) %>
-        cell-label--<%#= "#{collection_presenter.resource_name}_#{attr_name}" %>"
-        scope="col"
-        aria-sort="<%#= sort_order(collection_presenter.ordered_html_class(attr_name)) %>"> -->
-        <%#= link_to(sanitized_order_params(page, collection_field_name).merge(
-          collection_presenter.order_params_for(attr_name, key: collection_field_name)
-        )) do %>
-        <%#= t(
-          "helpers.label.#{collection_presenter.resource_name}.#{attr_name}",
-          default: resource_class.human_attribute_name(attr_name).titleize,
-        ) %>
-            <%# if collection_presenter.ordered_by?(attr_name) %>
-              <!-- <span class="cell-label__sort-indicator cell-label__sort-indicator--<%#= collection_presenter.ordered_html_class(attr_name) %>">
-                <svg aria-hidden="true">
-                  <use xlink:href="#icon-up-caret" />
-                </svg>
-              </span> -->
+<div class="overflow-x-auto">
+  <table aria-labelledby="<%= table_title %>"  class="border border-collapse mt-5">
+    <thead>
+      <tr>
+        <th>Organization ID</th>
+        <th>Organization Name</th>
+        <th>Manage Access</th>
+        <th>Actions</th>
+        <%# collection_presenter.attribute_types.each do |attr_name, attr_type| %>
+          <!-- <th class="cell-label
+          cell-label--<%#= attr_type.html_class %>
+          cell-label--<%#= collection_presenter.ordered_html_class(attr_name) %>
+          cell-label--<%#= "#{collection_presenter.resource_name}_#{attr_name}" %>"
+          scope="col"
+          aria-sort="<%#= sort_order(collection_presenter.ordered_html_class(attr_name)) %>"> -->
+          <%#= link_to(sanitized_order_params(page, collection_field_name).merge(
+            collection_presenter.order_params_for(attr_name, key: collection_field_name)
+          )) do %>
+          <%#= t(
+            "helpers.label.#{collection_presenter.resource_name}.#{attr_name}",
+            default: resource_class.human_attribute_name(attr_name).titleize,
+          ) %>
+              <%# if collection_presenter.ordered_by?(attr_name) %>
+                <!-- <span class="cell-label__sort-indicator cell-label__sort-indicator--<%#= collection_presenter.ordered_html_class(attr_name) %>">
+                  <svg aria-hidden="true">
+                    <use xlink:href="#icon-up-caret" />
+                  </svg>
+                </span> -->
+              <%# end %>
             <%# end %>
-          <%# end %>
-        <!-- </th> -->
-      <%# end %>
-      <%#= render(
-        "collection_header_actions",
-        collection_presenter: collection_presenter,
-        page: page,
-        resources: resources,
-        table_title: "page-title"
-      ) %>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% if resources.present? %>
-    <% resources.each do |resource| %>
-      <tr>
-        <td><%= resource.id %></td>
-        <td><%= resource.name %></td>
-        <td>
-          <div class="flex items-center gap-2">
-            <%= link_to(edit_admin_account_path(resource), class: "btn btn-primary") do %>
-              <i class="fa-solid fa-pen"></i>
-            <% end %>
-            <%= link_to(admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger") do %>
-              <i class="fa-regular fa-trash-can"></i>
-            <% end %>
-            <%= link_to("Manage Users", organization_users_admin_account_path(resource), class: "") %>
-            <%= link_to("Manage Teams", admin_teams_path(account_id: resource.id), class: "") %>
-            <%= link_to("Manage Access", manage_access_admin_account_path(resource), 
-              method: :patch, data: { confirm: "This will #{access_state_of_account(resource)} the account. Are you sure?" }, class: "") %>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-    <% else %>
-      <tr>
-        <td colspan="3">No Organizations found</td>
-      </tr>
-    <% end %>
-
-    <%# resources.each do |resource| %>
-      <!-- <tr class="js-table-row"
-          <%# if accessible_action?(resource, :show) %>
-            <%#= %(tabindex=0 role=link data-url=#{polymorphic_path([namespace, resource])}) %>
-          <%# end %>
-          >
-        <%# collection_presenter.attributes_for(resource).each do |attribute| %>
-          <td class="cell-data cell-data--<%#= attribute.html_class %>">
-            <%# if accessible_action?(resource, :show) -%>
-              <a href="<%#= polymorphic_path([namespace, resource]) -%>"
-                 tabindex="-1"
-                 class="action-show"
-                 >
-                <%#= render_field attribute %>
-              </a>
-            <%# else %>
-              <%#= render_field attribute %>
-            <%# end -%>
-          </td>
+          <!-- </th> -->
         <%# end %>
-
         <%#= render(
-          "collection_item_actions",
+          "collection_header_actions",
           collection_presenter: collection_presenter,
-          collection_field_name: collection_field_name,
           page: page,
-          namespace: namespace,
-          resource: resource,
+          resources: resources,
           table_title: "page-title"
         ) %>
-      </tr> -->
-    <%# end %>
-  </tbody>
-</table>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if resources.present? %>
+      <% resources.reverse_each do |resource| %>
+        <tr>
+          <td><%= resource.id %></td>
+          <td><%= resource.name %></td>
+          <td> 
+          <div class="flex items-center w-full">
+            <label for="access<%= resource.id %>" class="flex items-center cursor-pointer">
+              <div class="relative" data-controller="tooltip" data-tippy-content="Suspend/Un-suspend the organization's access">
+                <input id="access<%= resource.id %>" type="checkbox" class="sr-only" 
+                  data-id="<%= resource.id %>" data-action="click->accounts#toggleSwitchListener" <%= resource.active ? "checked" : "" %>>
+                <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+              </div>
+              <div class="ml-3 text-gray-700 font-medium"></div>
+            </label>
+          </div>
+            <%#= link_to("Manage Access", manage_access_admin_account_path(resource), 
+            method: :patch, data: { confirm: "This will #{access_state_of_account(resource)} the account. Are you sure?" }, class: "") %>
+          </td>
+          <td>
+            <div class="flex items-center gap-2">
+              <%= link_to(organization_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Users" }) do %>
+                <i class="fa-solid fa-users-gear"></i>
+              <% end %>
+              <%= link_to(admin_teams_path(account_id: resource.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Teams" }) do %>
+                <i class="fa-solid fa-people-group"></i>
+              <% end %>
+              <%= link_to(edit_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit Organization" }) do %>
+                <i class="fa-solid fa-pen"></i>
+              <% end %>
+              <%= link_to(admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger", data: { controller: "tooltip", tippy_content: "Delete Organization" }) do %>
+                <i class="fa-regular fa-trash-can"></i>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      <% else %>
+        <tr>
+          <td colspan="3">No Organizations found</td>
+        </tr>
+      <% end %>
+
+      <%# resources.each do |resource| %>
+        <!-- <tr class="js-table-row"
+            <%# if accessible_action?(resource, :show) %>
+              <%#= %(tabindex=0 role=link data-url=#{polymorphic_path([namespace, resource])}) %>
+            <%# end %>
+            >
+          <%# collection_presenter.attributes_for(resource).each do |attribute| %>
+            <td class="cell-data cell-data--<%#= attribute.html_class %>">
+              <%# if accessible_action?(resource, :show) -%>
+                <a href="<%#= polymorphic_path([namespace, resource]) -%>"
+                  tabindex="-1"
+                  class="action-show"
+                  >
+                  <%#= render_field attribute %>
+                </a>
+              <%# else %>
+                <%#= render_field attribute %>
+              <%# end -%>
+            </td>
+          <%# end %>
+
+          <%#= render(
+            "collection_item_actions",
+            collection_presenter: collection_presenter,
+            collection_field_name: collection_field_name,
+            page: page,
+            namespace: namespace,
+            resource: resource,
+            table_title: "page-title"
+          ) %>
+        </tr> -->
+      <%# end %>
+    </tbody>
+  </table>
+</div>

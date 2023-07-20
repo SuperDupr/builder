@@ -1,14 +1,47 @@
-<h1>Teams#index</h1>
+<div class='flex justify-between items-center mb-4 px-4 shadow-md py-4'>
+  <h4>Teams</h4>
+  <%= link_to("New Team", new_admin_team_path(account_id: @account.id), class: 'btn btn-primary') %>
+</div>
+<div class="container mx-auto py-4">
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th>Team Name</th>
+          <th>Organization Name</th>
+          <th>Actions</th>
+        </tr>
+      <thead>
+      <tbody>
+        <% if @teams.present? %>
+          <% @teams.each do |team| %>
+            <tr>
+              <td><%= team.name %></td>
+              <td><%= @account.name %></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <%= link_to(admin_team_path(team, account_id: @account.id), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-eye"></i>
+                  <% end %>
+                  <%= link_to(edit_admin_team_path(team, account_id: @account.id), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-pencil"></i>
+                  <% end %>
+                  <%= link_to(admin_team_path(team, account_id: @account.id), class: "btn btn-danger", method: :delete,
+                  data: { confirm: "This will delete the team from the organization. Are you sure?" }) do %>
+                    <i class="fa-solid fa-trash"></i>
+                  <% end %>
 
-<%= link_to("Add New Team", new_admin_team_path(account_id: @account.id)) %>
-
-<%= @teams.count %>
-
-<% @teams.each do |team| %>
-  <%= team.name %>
-  <%= @account.name %>
-  <%= link_to("Show", admin_team_path(team, account_id: @account.id), class: "") %>
-  <%= link_to("Edit", edit_admin_team_path(team, account_id: @account.id), class: "") %>
-  <%= link_to("Delete", admin_team_path(team, account_id: @account.id), class: "", 
-    method: :delete, data: { confirm: "This will delete the team from organization. Are you sure?" }) %>
-<% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="4">No Teams found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%#= @teams.count %>
