@@ -29,10 +29,9 @@ module Admin
     end
 
     def manage_access
-      @account.toggle!(:active) ?
-        flash[:notice] = "Organization's access was #{organization_status(@account.active)} successfully!" :
-        flash[:alert] = "Something went wrong while updating organization's access: #{@account.errors.full_messages.join(", ")}"
-      redirect_to(admin_accounts_path)
+      @account.toggle!(:active)
+      
+      render json: { access: @account.active }
     end
 
     private
