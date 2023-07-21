@@ -1,8 +1,29 @@
 module Admin
   class AccountInvitationsController < Admin::ApplicationController
+    before_action :set_account
     # Overwrite any of the RESTful controller actions to implement custom behavior
     # For example, you may want to send an email after a foo is updated.
     #
+
+    def new
+      @account_invitation = @account.account_invitations.new
+      @teams = @account.teams
+    end
+
+    def create
+      @account_invitation = @account.account_invitations.new(account_invitation_params)
+      @account_invitation.roles[params[:roles]] = true
+      @account_invitation.invited_by_id = @account.owner.id
+      @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
+
+      if @account_invitation.save_and_send_invite
+        redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
+      else
+        redirect_to(invited_users_admin_account_path(@account.id), 
+          alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
+      end
+    end
+
     # def update
     #   foo = Foo.find(params[:id])
     #   foo.update(params[:foo])
@@ -30,5 +51,19 @@ module Admin
 
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
     # for more information
+
+    private
+
+    def set_account
+      @account = Account.find(params[:id])      
+    end
+
+    def get_team_name
+      Team.find_by(id: params[:account_invitation][:team_id])&.name
+    end
+
+    def account_invitation_params
+      params.require(:account_invitation).permit(:email, :first_name, :last_name, :team_id)
+    end
   end
 end
