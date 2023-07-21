@@ -4,13 +4,17 @@
 #
 #  id            :bigint           not null, primary key
 #  email         :string           not null
-#  name          :string           not null
+#  first_name    :string
+#  last_name     :string
+#  name          :string
 #  roles         :jsonb            not null
+#  team_name     :string
 #  token         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  account_id    :bigint           not null
 #  invited_by_id :bigint
+#  team_id       :integer
 #
 # Indexes
 #
@@ -28,12 +32,14 @@ one:
   account: company
   invited_by: one
   token: <%= AccountInvitation.generate_unique_secure_token %>
-  name: Invited User
-  email: invited@example.com
+  first_name: Invited
+  last_name: User
+  email: invited@example.comwww
 
 two:
   account: company
   invited_by: two
   token: <%= AccountInvitation.generate_unique_secure_token %>
-  name: Second Invited User
+  first_name: Second 
+  last_name: Invited User
   email: invited2@example.com

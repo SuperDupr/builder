@@ -4,13 +4,17 @@
 #
 #  id            :bigint           not null, primary key
 #  email         :string           not null
-#  name          :string           not null
+#  first_name    :string
+#  last_name     :string
+#  name          :string
 #  roles         :jsonb            not null
+#  team_name     :string
 #  token         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  account_id    :bigint           not null
 #  invited_by_id :bigint
+#  team_id       :integer
 #
 # Indexes
 #
@@ -32,7 +36,7 @@ class AccountInvitation < ApplicationRecord
   belongs_to :invited_by, class_name: "User", optional: true
   has_secure_token
 
-  validates :name, :email, presence: true
+  # validates :name, :email, presence: true
   validates :email, uniqueness: {scope: :account_id, message: :invited}
 
   def save_and_send_invite
@@ -44,6 +48,9 @@ class AccountInvitation < ApplicationRecord
   end
 
   def accept!(user)
+    user.team_id = team_id if team_id.present?
+    user.invitation_accepted_at = DateTime.now
+
     account_user = account.account_users.new(user: user, roles: roles)
     if account_user.valid?
       ApplicationRecord.transaction do
@@ -68,5 +75,9 @@ class AccountInvitation < ApplicationRecord
 
   def to_param
     token
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end

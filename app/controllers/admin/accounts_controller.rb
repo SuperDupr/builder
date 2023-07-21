@@ -5,8 +5,10 @@
 module Admin
   class AccountsController < Admin::ApplicationController
     # Overwrite any of the RESTful controller actions to implement custom behavior
-    # For example, you may want to send an email after a foo is updated.
-    #
+
+    # Callbacks
+    before_action :set_account, only: [:organization_users, :invited_users, :manage_access]
+
     def create
       super
       flash[:notice] = "Organization was created successfully!"
@@ -20,6 +22,30 @@ module Admin
     def destroy
       super
       flash[:notice] = "Organization was deleted successfully!"
+    end
+
+    def organization_users
+      @account_users = @account.account_users.includes(:user)
+    end
+
+    def invited_users
+      @account_invitations = @account.account_invitations
+    end
+
+    def manage_access
+      @account.toggle!(:active)
+
+      render json: {access: @account.active}
+    end
+
+    private
+
+    def set_account
+      @account = Account.find(params[:id])
+    end
+
+    def organization_status(active)
+      active ? "activated" : "inactivated"
     end
 
     # Override this method to specify custom lookup behavior.

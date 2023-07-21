@@ -7,10 +7,12 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
-    <a  href="/"><img src="/logo.svg" alt="logo.svg" width="100" class="ml-4"></a>
+    <a  href="/"><img src="<%= asset_path('logo.svg') %>" alt="logo" class="ml-3"></a>
    </div>
    <div>
-   <a href="">Logout <i class="fa-solid fa-right-from-bracket ml-1"></i></a>
+   <%= link_to destroy_user_session_path, method: :delete do %>
+     Logout <i class="fas fa-sign-out-alt"></i>
+   <% end %>
    </div>
   </div>
 </header>

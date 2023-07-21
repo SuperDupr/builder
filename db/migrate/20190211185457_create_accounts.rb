@@ -4,6 +4,7 @@ class CreateAccounts < ActiveRecord::Migration[6.0]
       t.string :name
       t.belongs_to :owner, foreign_key: {to_table: :users}
       t.boolean :personal, default: false
+      t.boolean :active, default: true
 
       t.timestamps
     end

@@ -21,7 +21,13 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts
+      resources :accounts do
+        member do
+          get :organization_users, as: :organization_users
+          get :invited_users, as: :invited_users
+          patch :manage_access, as: :manage_access
+        end
+      end
       resources :account_users
       resources :plans
       namespace :pay do
@@ -31,8 +37,13 @@ Rails.application.routes.draw do
         resources :subscriptions
       end
 
+      resources :teams
+
       root to: "dashboard#show"
     end
+
+    get "/admin/accounts/:id/invitations/new", to: "admin/account_invitations#new", as: :new_account_user_invitation
+    post "/admin/accounts/:id/invitations", to: "admin/account_invitations#create", as: :create_account_user_invitation
   end
 
   # API routes

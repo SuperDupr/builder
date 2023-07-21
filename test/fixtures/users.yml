@@ -34,6 +34,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  invited_by_id          :bigint
+#  team_id                :integer
 #
 # Indexes
 #

@@ -1,0 +1,49 @@
+<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+ <h4>Invited Users in <%= @account.name %></h4>
+ <div class="flex gap-2">
+   <a href="<%= new_account_user_invitation_path(@account.id) %>" class="btn btn-primary">Invite User</a>
+   <%= render partial: 'admin/accounts/import' %>
+ </div>
+</header>
+<div class="container mx-auto px-4">
+  <%#= @account_users.count %>
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Team</th>
+          <th>Status</th>
+          <!-- <th>Actions</th> -->
+        </tr>
+      </thead>
+      <tbody>
+      <% if @account_invitations.present? %>
+          <% @account_invitations.each do |account_invitation| %>
+            <tr>
+              <td><%= account_invitation.first_name %></td>
+              <td><%= account_invitation.last_name %></td>
+              <td><%= account_invitation.email %></td>
+              <td><%= account_invitation.roles.first[0].humanize %></td>
+              <td>
+                <%= account_invitation.team_name || "----" %>
+              </td>
+              <td>
+                <span class="inline-flex items-center justify-center rounded-full bg-yellow-500 text-white p-2">
+                  Pending
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+        <tr>
+          <td colspan="3">No Invitees found. Only users that have pending invitation will appear here!</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
