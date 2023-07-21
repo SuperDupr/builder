@@ -20,7 +20,7 @@ class Team < ApplicationRecord
   # Associations
   belongs_to :account
   has_many :users
-  
+
   # Broadcast changes in realtime with Hotwire
   # after_create_commit -> { broadcast_prepend_later_to :teams, partial: "teams/index", locals: {team: self} }
   # after_update_commit -> { broadcast_replace_later_to self }

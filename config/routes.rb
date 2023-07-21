@@ -38,11 +38,11 @@ Rails.application.routes.draw do
       end
 
       resources :teams
-      
+
       root to: "dashboard#show"
     end
 
-    get "/admin/accounts/:id/invitations/new", to: "admin/account_invitations#new" , as: :new_account_user_invitation
+    get "/admin/accounts/:id/invitations/new", to: "admin/account_invitations#new", as: :new_account_user_invitation
     post "/admin/accounts/:id/invitations", to: "admin/account_invitations#create", as: :create_account_user_invitation
   end
 

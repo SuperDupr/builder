@@ -19,7 +19,7 @@ module Admin
       if @account_invitation.save_and_send_invite
         redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
       else
-        redirect_to(invited_users_admin_account_path(@account.id), 
+        redirect_to(invited_users_admin_account_path(@account.id),
           alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
       end
     end
@@ -55,7 +55,7 @@ module Admin
     private
 
     def set_account
-      @account = Account.find(params[:id])      
+      @account = Account.find(params[:id])
     end
 
     def get_team_name

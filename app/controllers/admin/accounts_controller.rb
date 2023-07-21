@@ -29,13 +29,13 @@ module Admin
     end
 
     def invited_users
-      @account_invitations = @account.account_invitations      
+      @account_invitations = @account.account_invitations
     end
 
     def manage_access
       @account.toggle!(:active)
-      
-      render json: { access: @account.active }
+
+      render json: {access: @account.active}
     end
 
     private
