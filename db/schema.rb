@@ -16,10 +16,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
 
   create_table "account_invitations", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "invited_by_id"
+    t.bigint "invited_by_id", null: false
     t.string "token", null: false
-    t.string "name", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.string "email", null: false
+    t.string "team_name"
+    t.integer "team_id"
     t.jsonb "roles", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -306,6 +309,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
     t.datetime "accepted_privacy_at", precision: nil
     t.datetime "announcements_read_at", precision: nil
     t.boolean "admin"
+    t.integer "team_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "invitation_token"
@@ -336,6 +340,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
