@@ -31,12 +31,14 @@ one:
   account: company
   invited_by: one
   token: <%= AccountInvitation.generate_unique_secure_token %>
-  name: Invited User
+  first_name: Invited
+  last_name: User
   email: invited@example.com
 
 two:
   account: company
   invited_by: two
   token: <%= AccountInvitation.generate_unique_secure_token %>
-  name: Second Invited User
+  first_name: Second 
+  last_name: Invited User
   email: invited2@example.com

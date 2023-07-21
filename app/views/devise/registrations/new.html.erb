@@ -28,12 +28,12 @@
 
     <div class="form-group">
       <%= f.label :name %>
-      <%= f.text_field :name, value: @account_invitation.full_name, autocomplete: "name", placeholder: true, class: "form-control" %>
+      <%= f.text_field :name, value: @account_invitation&.full_name, autocomplete: "name", placeholder: true, class: "form-control" %>
     </div>
 
     <div class="form-group">
       <%= f.label :email %>
-      <%= f.email_field :email, value: @account_invitation.email, autocomplete: "email", placeholder: true, class: "form-control" %>
+      <%= f.email_field :email, value: @account_invitation&.email, autocomplete: "email", placeholder: true, class: "form-control" %>
     </div>
 
     <div class="form-group">
