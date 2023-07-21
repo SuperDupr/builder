@@ -14,6 +14,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:invite] && (invite = AccountInvitation.find_by(token: params[:invite]))
       @account_invitation = invite
       resource.skip_default_account = true
+      resource.team_id = invite.team_id if @account_invitation.team_id.present?
 
     # Build and display account fields in registration form if enabled
     elsif Jumpstart.config.register_with_account?

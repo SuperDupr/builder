@@ -34,6 +34,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  invited_by_id          :bigint
+#  team_id                :integer
 #
 # Indexes
 #
@@ -69,6 +70,7 @@ class User < ApplicationRecord
   has_many :connected_accounts, as: :owner, dependent: :destroy
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :notification_tokens, dependent: :destroy
+  belongs_to :team, optional: true
 
   # We don't need users to confirm their email address on create,
   # just when they change it
