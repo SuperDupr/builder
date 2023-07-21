@@ -4,13 +4,16 @@
 #
 #  id            :bigint           not null, primary key
 #  email         :string           not null
-#  name          :string           not null
+#  first_name    :string           not null
+#  last_name     :string           not null
 #  roles         :jsonb            not null
+#  team_name     :string
 #  token         :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  account_id    :bigint           not null
-#  invited_by_id :bigint
+#  invited_by_id :bigint           not null
+#  team_id       :integer
 #
 # Indexes
 #
