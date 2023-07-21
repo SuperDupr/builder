@@ -16,10 +16,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
 
   create_table "account_invitations", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "invited_by_id", null: false
+    t.bigint "invited_by_id"
     t.string "token", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "name"
     t.string "email", null: false
     t.string "team_name"
     t.integer "team_id"
