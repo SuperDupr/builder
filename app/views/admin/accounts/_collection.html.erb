@@ -77,13 +77,14 @@ to display a collection of resources in an HTML table.
               <div class="ml-3 text-gray-700 font-medium"></div>
             </label>
           </div>
-            <%#= link_to("Manage Access", manage_access_admin_account_path(resource), 
-            method: :patch, data: { confirm: "This will #{access_state_of_account(resource)} the account. Are you sure?" }, class: "") %>
           </td>
           <td>
             <div class="flex items-center gap-2">
-              <%= link_to(organization_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Users" }) do %>
+              <%= link_to(organization_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Users" }) do %>
                 <i class="fa-solid fa-users-gear"></i>
+              <% end %>
+              <%= link_to(invited_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Invitations" }) do %>
+                <i class="fa-solid fa-user-plus"></i>
               <% end %>
               <%= link_to(admin_teams_path(account_id: resource.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Teams" }) do %>
                 <i class="fa-solid fa-people-group"></i>
