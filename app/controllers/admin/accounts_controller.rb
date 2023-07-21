@@ -7,7 +7,7 @@ module Admin
     # Overwrite any of the RESTful controller actions to implement custom behavior
 
     # Callbacks
-    before_action :set_account, only: [:organization_users, :manage_access]
+    before_action :set_account, only: [:organization_users, :invited_users, :manage_access]
 
     def create
       super
@@ -26,6 +26,10 @@ module Admin
 
     def organization_users
       @account_users = @account.account_users.includes(:user)
+    end
+
+    def invited_users
+      @account_invitations = @account.account_invitations      
     end
 
     def manage_access
