@@ -1,0 +1,42 @@
+<header class="flex justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4 class="">New User</h4>
+  <%= link_to("Back", invited_users_admin_account_path, class: "btn btn-primary") %>
+</header>
+
+<div class="container mx-auto py-4">
+  <div class='w-5/12 mx-auto border shadow-md rounded-lg p-5'>
+    <h3 class="mb-3 text-center">Invite New User in <%= @account.name %></h3>
+    <%= form_for(@account_invitation, url: create_account_user_invitation_path(@account.id)) do |f| %>
+      <div class="form-group mb-3">
+        <label>Email</label>
+        <%= f.email_field(:email, class: "form-control", required: true) %>
+      </div>
+      <div class="form-group mb-3">
+        <label>First Name</label>
+        <%= f.text_field(:first_name, class: "form-control", required: true) %>
+      </div>
+      <div class="form-group mb-3">
+        <label>Last Name</label>
+        <%= f.text_field(:last_name, class: "form-control", required: true) %>
+      </div>
+      <div class="form-group mb-3">
+        <label>Team</label>
+        <%= f.select(:team_id, options_for_select([['Select Team'], *@teams.map { |team| [team.name, team.id] }])) %>
+      </div>
+      <h5 class="mb-2">Role</h5> 
+      <div class="form-group">
+        <div>
+          <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio mr-1', checked: true %>
+          <%= label_tag :user, 'Member', class: 'inline-block' %>
+        </div>
+        <div>
+          <%= radio_button_tag :roles, :admin, id: 'admin', class: 'form-radio mr-1' %>
+          <%= label_tag :admin, 'Admin', class: 'inline-block' %>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <%= f.submit("Send", class: "btn btn-primary") %>
+      </div>
+    <% end %>
+  </div>
+</div>
