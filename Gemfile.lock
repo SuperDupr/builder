@@ -162,9 +162,6 @@ GEM
       warden (~> 1.2.3)
     devise-i18n (1.11.0)
       devise (>= 4.9.0)
-    devise_invitable (2.0.8)
-      actionmailer (>= 5.0)
-      devise (>= 4.6)
     diff-lcs (1.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -515,7 +512,6 @@ DEPENDENCIES
   cssbundling-rails (~> 1.2.0)
   devise (~> 4.9.0)
   devise-i18n (~> 1.10)
-  devise_invitable (~> 2.0)
   erb_lint
   image_processing (~> 1.12)
   inline_svg (~> 1.6)
