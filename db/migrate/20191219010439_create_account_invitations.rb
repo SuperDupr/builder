@@ -10,6 +10,7 @@ class CreateAccountInvitations < ActiveRecord::Migration[6.0]
       t.string :email, null: false
       t.string :team_name
       t.integer :team_id
+      t.boolean :imported, default: false
       t.jsonb :roles, null: false, default: {}
 
       t.timestamps
