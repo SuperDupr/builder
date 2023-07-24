@@ -52,7 +52,7 @@ module.exports = {
       // ...
     },
       fontFamily: {
-        lato: ['Lato', 'sans-serif'],
+        sans: ['Lato', ...defaultTheme.fontFamily.sans],
       },
     },
   },
