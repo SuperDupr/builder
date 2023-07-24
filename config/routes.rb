@@ -76,6 +76,8 @@ Rails.application.routes.draw do
   resources :accounts do
     member do
       patch :switch
+      get :organization_users, as: :organization_users
+      get :invited_users, as: :invited_users
     end
 
     resource :transfer, module: :accounts
