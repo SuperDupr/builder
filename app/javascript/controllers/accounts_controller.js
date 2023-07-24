@@ -7,6 +7,12 @@ export default class extends Controller {
   toggleSwitchListener(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const organizationId = event.target.dataset.id
+    const isConfirmed = confirm("This will change the organization access. Are you sure to continue?");
+    
+    if (!isConfirmed) {
+      event.preventDefault();
+      return;
+    }
 
     fetch(`/admin/accounts/${organizationId}/manage_access`, { 
       method: "PATCH",
