@@ -50,5 +50,8 @@
         <p class="text-3xl font-bold">0<%#= @subscriptions %></p>
       </div>
     </div>
+
+    <%= link_to("View Users", organization_users_account_path(current_account), class: "btn btn-primary") %>
+    <%= link_to("View Invitations", invited_users_account_path(current_account), class: "btn btn-primary") %>
   <% end %>
 </section>

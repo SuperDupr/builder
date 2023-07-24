@@ -1,7 +1,7 @@
 class AccountsController < Accounts::BaseController
   before_action :authenticate_user!
   before_action :set_account, only: [:show, :edit, :update, :destroy, :switch, :organization_users, :invited_users]
-  before_action :require_account_admin, only: [:edit, :update, :destroy]
+  before_action :require_account_admin, only: [:edit, :update, :destroy, :organization_users, :invited_users]
   before_action :prevent_personal_account_deletion, only: [:destroy]
 
   # GET /accounts
