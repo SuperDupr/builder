@@ -90,6 +90,8 @@ Rails.application.routes.draw do
   end
   resources :account_invitations
 
+  post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations
+
   # Payments
   resource :billing_address
   namespace :payment_methods do

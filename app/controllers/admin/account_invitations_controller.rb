@@ -31,7 +31,7 @@ module Admin
       begin
         AccountInvitation.import_file(file_name, @account)
         redirect_to(invited_users_admin_account_path(@account.id), notice: "Import process has been started. We'll email you about the progress sooner!")
-      rescue => e
+      rescue StandardError => e
         redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to process your request. Errors: #{e.message}")
       end
     end
