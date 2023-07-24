@@ -41,6 +41,18 @@ class Accounts::AccountInvitationsController < Accounts::BaseController
     redirect_to @account, status: :see_other, notice: t(".sent", email: @account_invitation.email)
   end
 
+  def bulk_import
+    @account.users_file_upload.attach(params[:file])
+    file_name = @account.users_uploaded_file_name
+    
+    begin
+      AccountInvitation.import_file(file_name, @account)
+      redirect_to(invited_users_account_path(@account), notice: "Import process has been started. We'll email you about the progress sooner!")
+    rescue StandardError => e
+      redirect_to(invited_users_account_path(@account.id), alert: "Unable to process your request. Errors: #{e.message}")
+    end
+  end
+
   private
 
   def set_account

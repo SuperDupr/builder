@@ -2,7 +2,7 @@
  <h4>Invited Users in <%= @account.name %></h4>
  <div class="flex gap-2">
    <a href="<%= new_account_account_invitation_path(@account.id) %>" class="btn btn-primary">Invite User</a>
-   <%= render partial: 'admin/accounts/import' %>
+   <%= render partial: 'admin/accounts/import', locals: { url: bulk_import_org_account_invitations_path(account_id: @account.id) } %>
  </div>
 </header>
 <div class="container mx-auto px-4">
