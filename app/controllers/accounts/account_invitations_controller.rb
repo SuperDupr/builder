@@ -5,12 +5,16 @@ class Accounts::AccountInvitationsController < Accounts::BaseController
 
   def new
     @account_invitation = AccountInvitation.new
+    @teams = @account.teams
   end
 
   def create
-    @account_invitation = AccountInvitation.new(invitation_params)
+    @account_invitation = @account.account_invitations.new(invitation_params)
+    @account_invitation.roles[params[:roles]] = true
+    @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
+
     if @account_invitation.save_and_send_invite
-      redirect_to @account, notice: t(".sent", email: @account_invitation.email)
+      redirect_to(invited_users_account_path(@account), notice: t(".sent", email: @account_invitation.email))
     else
       render :new, status: :unprocessable_entity
     end
@@ -47,10 +51,14 @@ class Accounts::AccountInvitationsController < Accounts::BaseController
     @account_invitation = @account.account_invitations.find_by!(token: params[:id])
   end
 
+  def get_team_name
+    Team.find_by(id: params[:account_invitation][:team_id])&.name
+  end
+
   def invitation_params
     params
       .require(:account_invitation)
-      .permit(:name, :email, AccountUser::ROLES)
+      .permit(:email, :first_name, :last_name, :team_name, :team_id, roles: {})
       .merge(account: @account, invited_by: current_user)
   end
 end
