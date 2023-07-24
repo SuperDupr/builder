@@ -42,8 +42,10 @@ Rails.application.routes.draw do
       root to: "dashboard#show"
     end
 
+    # Account invitations routes
     get "/admin/accounts/:id/invitations/new", to: "admin/account_invitations#new", as: :new_account_user_invitation
     post "/admin/accounts/:id/invitations", to: "admin/account_invitations#create", as: :create_account_user_invitation
+    post "/admin/accounts/:id/invitations/bulk_import", to: "admin/account_invitations#bulk_import", as: :bulk_import_account_invitations
   end
 
   # API routes
