@@ -138,10 +138,10 @@ class Account < ApplicationRecord
     last_row = spreadsheet.last_row
     init_account_invitations = []
     valid_teams = account.teams.pluck(:name, :id).to_h
-    valid_roles = [{ "member" => true }, { "admin" => true }]
+    valid_roles = [{"member" => true}, {"admin" => true}]
 
     (2..last_row).each_with_index do |r, i|
-      row = Hash[[AccountInvitation.accessible_attributes, spreadsheet.row(r).first(5)].transpose]
+      row = [AccountInvitation.accessible_attributes, spreadsheet.row(r).first(5)].transpose.to_h
 
       hashed_row = AccountInvitation.sanitize_row_data(row, valid_teams, valid_roles)
 

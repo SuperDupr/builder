@@ -86,17 +86,15 @@ class AccountInvitation < ApplicationRecord
     ["email", "first_name", "last_name", "team_name", "roles"]
   end
 
-  def self.sanitize_row_data(row, teams ,roles)
+  def self.sanitize_row_data(row, teams, roles)
     hashed_row = row.to_h
-    
+
     teams.has_key?(hashed_row["team_name"]) ?
       hashed_row["team_id"] = teams[hashed_row["team_name"]] :
       hashed_row["team_name"] = nil
 
-    roles.map { |e| e.keys }.flatten.include?(hashed_row["roles"]) ?
-      hashed_row["roles"] = { hashed_row["roles"] => true } :
-      hashed_row["roles"] = { "member" => true }
-    
+    hashed_row["roles"] = roles.map { |e| e.keys }.flatten.include?(hashed_row["roles"]) ? {hashed_row["roles"] => true} : {"member" => true}
+
     hashed_row
   end
 

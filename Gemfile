@@ -86,6 +86,5 @@ eval_gemfile "Gemfile.jumpstart"
 # gem "strong_migrations", "~> 0.7.6"
 
 gem "roo", "~> 2.10.0"
-gem 'roo-xls'
+gem "roo-xls"
 # gem 'activerecord-import', '~> 0.15.0'
-
