@@ -8,7 +8,7 @@
           <h3>Import Users</h3>
         </div>
       </header>
-      <form>
+      <%= form_with(url: bulk_import_account_invitations_path, local: true) do |f| %>
         <div class="py-6 px-4">
           <div class="mb-5">
             <h5 class="mb-2">Instructions</h5>
@@ -22,14 +22,14 @@
           </div>
             <div class="form-group">
               <label>Choose File</label>
-              <input type="file" required class="form-control" accept=".xlsx, .xls">
+              <%= f.file_field(:file, class: "form-control", accept: ".xlsx, .xls", required: true) %>
             </div>
           <div class="flex justify-end gap-3  items-center flex-wrap mt-10">
             <button class="btn btn-gray" data-action="click->modal#close">Close</button>
             <button class="btn btn-primary" type="submit">Import</button>
           </div>
         </div>
-      </form>
+      <% end %>
       </div>
     </div>
   </div>
