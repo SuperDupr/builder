@@ -45,6 +45,8 @@ class Account < ApplicationRecord
 
   has_noticed_notifications
   has_one_attached :avatar
+  # ActiveStorage attachment for handling users file upload
+  has_one_attached :users_file_upload
   pay_customer stripe_attributes: :stripe_attributes
 
   validates :avatar, resizable_image: true
@@ -108,6 +110,50 @@ class Account < ApplicationRecord
   # Returns the quantity that should be on the subscription
   def per_unit_quantity
     account_users_count
+  end
+
+  def users_uploaded_file_name
+    users_file_upload.filename.to_json
+  end
+
+  def users_uploaded_file_path
+    ActiveStorage::Blob.service.send(:path_for, users_file_upload.key)
+  end
+
+  def self.open_spreadsheet(file_stream_or_path, file_name)
+    if Rails.env.production?
+    else
+      case File.extname(file_name)
+      when ".xls"
+        Roo::Excel.new(file_stream_or_path, packed: nil, file_warning: :ignore)
+      when ".xlsx"
+        Roo::Excelx.new(file_stream_or_path, packed: nil, file_warning: :ignore)
+      else
+        raise "Unknown file type: #{file_name}"
+      end
+    end
+  end
+
+  def self.parse_spreadsheet(spreadsheet, file_name, account)
+    last_row = spreadsheet.last_row
+    init_account_invitations = []
+    valid_teams = account.teams.pluck(:name, :id).to_h
+    valid_roles = [{ "member" => true }, { "admin" => true }]
+
+    (2..last_row).each_with_index do |r, i|
+      row = Hash[[AccountInvitation.accessible_attributes, spreadsheet.row(r).first(5)].transpose]
+
+      hashed_row = AccountInvitation.sanitize_row_data(row, valid_teams, valid_roles)
+
+      account_invitation = account.account_invitations.new
+      account_invitation.attributes = hashed_row
+      account_invitation.invited_by = account.owner
+      account_invitation.imported = true
+
+      init_account_invitations << account_invitation if account_invitation.valid?
+    end
+
+    AccountInvitation.persist_records(init_account_invitations)
   end
 
   private
