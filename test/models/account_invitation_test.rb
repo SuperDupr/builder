@@ -5,6 +5,7 @@
 #  id            :bigint           not null, primary key
 #  email         :string           not null
 #  first_name    :string
+#  imported      :boolean          default(FALSE)
 #  last_name     :string
 #  name          :string
 #  roles         :jsonb            not null
