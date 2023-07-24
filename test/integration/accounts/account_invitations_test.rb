@@ -28,7 +28,7 @@ class Jumpstart::AccountsAccountInvitationsTest < ActionDispatch::IntegrationTes
     test "can invite account members with roles" do
       name, email = "Account Member", "new-member@example.com"
       assert_difference "@account.account_invitations.count" do
-        post account_account_invitations_path(@account), params: {account_invitation: {name: name, email: email, admin: "1"}}
+        post account_account_invitations_path(@account), params: {account_invitation: {name: name, email: email, roles: { "admin" => true }}}
       end
       assert @account.account_invitations.last.admin?
     end
