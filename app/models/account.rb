@@ -63,7 +63,7 @@ class Account < ApplicationRecord
   # Email address used for Pay customers and receipts
   # Defaults to billing_email if defined, otherwise uses the account owner's email
   def email
-    billing_email? ? billing_email : owner.email
+    billing_email? ? billing_email : owner&.email
   end
 
   def impersonal?
