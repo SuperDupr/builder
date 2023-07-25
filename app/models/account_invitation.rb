@@ -5,6 +5,7 @@
 #  id            :bigint           not null, primary key
 #  email         :string           not null
 #  first_name    :string
+#  imported      :boolean          default(FALSE)
 #  last_name     :string
 #  name          :string
 #  roles         :jsonb            not null
@@ -79,5 +80,38 @@ class AccountInvitation < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def self.accessible_attributes
+    ["email", "first_name", "last_name", "team_name", "roles"]
+  end
+
+  def self.sanitize_row_data(row, teams, roles)
+    hashed_row = row.to_h
+
+    teams.has_key?(hashed_row["team_name"]) ?
+      hashed_row["team_id"] = teams[hashed_row["team_name"]] :
+      hashed_row["team_name"] = nil
+
+    hashed_row["roles"] = roles.map { |e| e.keys }.flatten.include?(hashed_row["roles"]) ? {hashed_row["roles"] => true} : {"member" => true}
+
+    hashed_row
+  end
+
+  def self.persist_records(records)
+    records.each_slice(5) do |slice|
+      slice.each do |object|
+        object.save_and_send_invite
+      end
+      sleep(3)
+    end
+  end
+
+  def self.import_file(file_name, account)
+    if Rails.env.production?
+    else
+      # file_stream_or_path = account.users_uploaded_file_path
+      BulkImportUsersJob.perform_later(file_name, account)
+    end
   end
 end

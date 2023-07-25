@@ -13,7 +13,7 @@ module Admin
     def create
       @account_invitation = @account.account_invitations.new(account_invitation_params)
       @account_invitation.roles[params[:roles]] = true
-      @account_invitation.invited_by_id = @account.owner.id
+      @account_invitation.invited_by_id = current_user.id
       @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
 
       if @account_invitation.save_and_send_invite
@@ -21,6 +21,18 @@ module Admin
       else
         redirect_to(invited_users_admin_account_path(@account.id),
           alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
+      end
+    end
+
+    def bulk_import
+      @account.users_file_upload.attach(params[:file])
+      file_name = @account.users_uploaded_file_name
+
+      begin
+        AccountInvitation.import_file(file_name, @account)
+        redirect_to(invited_users_admin_account_path(@account.id), notice: "Import process has been started. We'll email you about the progress sooner!")
+      rescue => e
+        redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to process your request. Errors: #{e.message}")
       end
     end
 

@@ -42,8 +42,10 @@ Rails.application.routes.draw do
       root to: "dashboard#show"
     end
 
+    # Account invitations routes
     get "/admin/accounts/:id/invitations/new", to: "admin/account_invitations#new", as: :new_account_user_invitation
     post "/admin/accounts/:id/invitations", to: "admin/account_invitations#create", as: :create_account_user_invitation
+    post "/admin/accounts/:id/invitations/bulk_import", to: "admin/account_invitations#bulk_import", as: :bulk_import_account_invitations
   end
 
   # API routes
@@ -74,6 +76,8 @@ Rails.application.routes.draw do
   resources :accounts do
     member do
       patch :switch
+      get :organization_users, as: :organization_users
+      get :invited_users, as: :invited_users
     end
 
     resource :transfer, module: :accounts
@@ -85,6 +89,8 @@ Rails.application.routes.draw do
     end
   end
   resources :account_invitations
+
+  post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations
 
   # Payments
   resource :billing_address
