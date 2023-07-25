@@ -1,3 +1,65 @@
+<div class="overflow-x-auto">
+  <table aria-labelledby="<%= table_title %>"  class="border border-collapse mt-5">
+    <thead>
+      <tr>
+        <th class="w-1/3">Organization ID</th>
+        <th class="w-1/3">Organization Name</th>
+        <th class="w-1/3">Manage Access</th>
+        <th class="text-right w-1/3">Actions</th>
+         </tr>
+    </thead>
+    <tbody>
+      <% if resources.present? %>
+      <% resources.reverse_each do |resource| %>
+        <tr>
+          <td><%= resource.id %></td>
+          <td><%= resource.name %></td>
+          <td> 
+            <div class="flex items-center w-full">
+              <label for="access<%= resource.id %>" class="flex items-center cursor-pointer">
+                <div class="relative" data-controller="tooltip" data-tippy-content="Suspend/Un-suspend the organization's access">
+                  <input id="access<%= resource.id %>" type="checkbox" class="sr-only"  
+                    data-id="<%= resource.id %>" data-action="click->accounts#toggleSwitchListener" <%= resource.active ? "checked" : "" %>>
+                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                </div>
+                <div class="ml-3 text-gray-700 font-medium"></div>
+              </label>
+            </div>
+          </td>
+          <td>
+            <div class="flex items-center gap-2 justify-end" >
+              <%= link_to(organization_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Users" }) do %>
+                <i class="fa-solid fa-users-gear"></i>
+              <% end %>
+              <%= link_to(invited_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Invitations" }) do %>
+                <i class="fa-solid fa-users-viewfinder"></i>
+              <% end %>
+              <%= link_to(admin_teams_path(account_id: resource.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Teams" }) do %>
+                <i class="fa-solid fa-people-group"></i>
+              <% end %>
+              <%= link_to(admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Show Organization" }) do %>
+                <i class="fa-solid fa-eye"></i>
+              <% end %>
+              <%= link_to(edit_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit Organization" }) do %>
+                <i class="fa-solid fa-pen"></i>
+              <% end %>
+              <%= link_to(admin_account_path(resource), method: :delete, class: "btn btn-danger", data: { controller: "tooltip", tippy_content: "Delete Organization", confirm: "Are you sure?" }) do %>
+                <i class="fa-regular fa-trash-can"></i>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      <% else %>
+        <tr>
+          <td colspan="4" class="text-center">No Organizations found</td>
+        </tr>
+      <% end %>
+   </tbody>
+  </table>
+</div>
+
 <%#
 # Collection
 
@@ -17,14 +79,7 @@ to display a collection of resources in an HTML table.
 
 [1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Collection
 %>
-<div class="overflow-x-auto">
-  <table aria-labelledby="<%= table_title %>"  class="border border-collapse mt-5">
-    <thead>
-      <tr>
-        <th>Organization ID</th>
-        <th>Organization Name</th>
-        <th>Manage Access</th>
-        <th>Actions</th>
+
         <%# collection_presenter.attribute_types.each do |attr_name, attr_type| %>
           <!-- <th class="cell-label
           cell-label--<%#= attr_type.html_class %>
@@ -56,54 +111,7 @@ to display a collection of resources in an HTML table.
           resources: resources,
           table_title: "page-title"
         ) %>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% if resources.present? %>
-      <% resources.reverse_each do |resource| %>
-        <tr>
-          <td><%= resource.id %></td>
-          <td><%= resource.name %></td>
-          <td> 
-          <div class="flex items-center w-full">
-            <label for="access<%= resource.id %>" class="flex items-center cursor-pointer">
-              <div class="relative" data-controller="tooltip" data-tippy-content="Suspend/Un-suspend the organization's access">
-                <input id="access<%= resource.id %>" type="checkbox" class="sr-only" 
-                  data-id="<%= resource.id %>" data-action="click->accounts#toggleSwitchListener" <%= resource.active ? "checked" : "" %>>
-                <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-              </div>
-              <div class="ml-3 text-gray-700 font-medium"></div>
-            </label>
-          </div>
-          </td>
-          <td>
-            <div class="flex items-center gap-2">
-              <%= link_to(organization_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Users" }) do %>
-                <i class="fa-solid fa-users-gear"></i>
-              <% end %>
-              <%= link_to(invited_users_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "View Invitations" }) do %>
-                <i class="fa-solid fa-user-plus"></i>
-              <% end %>
-              <%= link_to(admin_teams_path(account_id: resource.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Manage Teams" }) do %>
-                <i class="fa-solid fa-people-group"></i>
-              <% end %>
-              <%= link_to(edit_admin_account_path(resource), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit Organization" }) do %>
-                <i class="fa-solid fa-pen"></i>
-              <% end %>
-              <%= link_to(admin_account_path(resource), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger", data: { controller: "tooltip", tippy_content: "Delete Organization" }) do %>
-                <i class="fa-regular fa-trash-can"></i>
-              <% end %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-      <% else %>
-        <tr>
-          <td colspan="3">No Organizations found</td>
-        </tr>
-      <% end %>
+     
 
       <%# resources.each do |resource| %>
         <!-- <tr class="js-table-row"
@@ -137,6 +145,4 @@ to display a collection of resources in an HTML table.
           ) %>
         </tr> -->
       <%# end %>
-    </tbody>
-  </table>
-</div>
+ 
