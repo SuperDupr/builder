@@ -33,7 +33,7 @@ class TeamsController < Accounts::BaseController
     redirect_to(teams_path)
   end
 
-  def show    
+  def show
   end
 
   def destroy
@@ -50,7 +50,7 @@ class TeamsController < Accounts::BaseController
   end
 
   def set_team
-    @team = Team.find(params[:id])    
+    @team = Team.find(params[:id])
   end
 
   def team_params
