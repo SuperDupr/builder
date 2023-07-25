@@ -11,6 +11,7 @@ class Accounts::AccountInvitationsController < Accounts::BaseController
   def create
     @account_invitation = @account.account_invitations.new(invitation_params)
     @account_invitation.roles[params[:roles]] = true
+    @account_invitation.invited_by_id = current_user.id
     @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
 
     if @account_invitation.save_and_send_invite
