@@ -31,20 +31,8 @@ module Admin
           @account.update(owner_id: user.id)
           FollowUpsMailer.account_owner_setup(@account, temp_password).deliver_later
         rescue => e
-          redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to create user invitation!")
+          redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to create user invitation. Error: #{e.message}")
         end
-      end
-    end
-
-    def bulk_import
-      @account.users_file_upload.attach(params[:file])
-      file_name = @account.users_uploaded_file_name
-
-      begin
-        AccountInvitation.import_file(file_name, @account)
-        redirect_to(invited_users_admin_account_path(@account.id), notice: "Import process has been started. We'll email you about the progress sooner!")
-      rescue => e
-        redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to process your request. Errors: #{e.message}")
       end
     end
 
