@@ -62,7 +62,7 @@ class AccountInvitation < ApplicationRecord
 
     user.skip_default_account = true
     user.save
-    
+
     [user, random_password]
   end
 
@@ -71,7 +71,7 @@ class AccountInvitation < ApplicationRecord
     user.invitation_accepted_at = DateTime.now
   end
 
-  def create_account_user(user, skip_invitation=false)
+  def create_account_user(user, skip_invitation = false)
     account_user = account.account_users.new(user: user, roles: roles)
 
     if account_user.valid?
@@ -93,7 +93,7 @@ class AccountInvitation < ApplicationRecord
     end
   end
 
-  def accept!(user, skip_invitation=false)
+  def accept!(user, skip_invitation = false)
     associate_objects_with_user(user)
     create_account_user(user, skip_invitation)
   end

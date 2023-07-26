@@ -7,6 +7,6 @@ class FollowUpsMailer < ApplicationMailer
       to: @account.owner.email,
       from: email_address_with_name(Jumpstart.config.support_email, "Feed The Elephant - Team"),
       subject: "Admin Account setup for Organization: - #{@account.name}"
-    )   
+    )
   end
 end

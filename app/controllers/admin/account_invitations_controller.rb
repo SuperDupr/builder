@@ -16,22 +16,22 @@ module Admin
       @account_invitation.invited_by_id = current_user.id
       @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
 
-      unless @account.owner.present?
+      if @account.owner.present?
+        if @account_invitation.save_and_send_invite
+          redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
+        else
+          redirect_to(invited_users_admin_account_path(@account.id),
+            alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
+        end
+      else
         begin
           @account_invitation.save
           user, temp_password = @account_invitation.create_user_reflection
           @account_invitation.accept!(user, true)
           @account.update(owner_id: user.id)
           FollowUpsMailer.account_owner_setup(@account, temp_password).deliver_later
-        rescue StandardError => e
+        rescue => e
           redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to create user invitation!")
-        end
-      else
-        if @account_invitation.save_and_send_invite
-          redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
-        else
-          redirect_to(invited_users_admin_account_path(@account.id),
-            alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
         end
       end
     end
@@ -43,7 +43,7 @@ module Admin
       begin
         AccountInvitation.import_file(file_name, @account)
         redirect_to(invited_users_admin_account_path(@account.id), notice: "Import process has been started. We'll email you about the progress sooner!")
-      rescue StandardError => e
+      rescue => e
         redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to process your request. Errors: #{e.message}")
       end
     end
