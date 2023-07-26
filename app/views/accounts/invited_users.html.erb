@@ -11,12 +11,12 @@
     <table class="border border-collapse mt-5">
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Team</th>
-          <th>Status</th>
+          <th class="w-1/5">First Name</th>
+          <th class="w-1/5">Last Name</th>
+          <th class="w-1/5">Email</th>
+          <th class="w-1/5">Role</th>
+          <th class="w-1/5">Team</th>
+          <th class="w-1/5 text-right">Status</th>
           <!-- <th>Actions</th> -->
         </tr>
       </thead>
@@ -40,7 +40,7 @@
           <% end %>
         <% else %>
         <tr>
-          <td colspan="3">No Invitees found. Only users that have pending invitation will appear here!</td>
+          <td colspan="5" class="text-center">No Invitees found. Only users that have pending invitation will appear here!</td>
         </tr>
         <% end %>
       </tbody>

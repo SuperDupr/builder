@@ -15,12 +15,12 @@ thead {
 }
 
 tr {
-  border-bottom: $base-border;
+  border-bottom: 1px solid #dfe0e1;
 }
 
 tbody tr {
   &:hover {
-    background-color: $base-background-color;
+    background-color: #f6f7f7 !important;
   }
 
   &:focus {

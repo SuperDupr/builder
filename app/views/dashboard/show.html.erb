@@ -16,7 +16,7 @@
     </h3>
   </header>
 
-  <section class="main-content__body">
+  <section class="container p-4 mx-auto">
     <% if current_roles.include?(:admin) %>
       <div class="flex">
         <div class="flex-1 shadow rounded p-4 m-4 text-center">
@@ -51,9 +51,6 @@
           <p class="text-3xl font-bold">0<%#= @subscriptions %></p>
         </div>
       </div>
-
-      <%= link_to("View Users", organization_users_account_path(current_account), class: "btn btn-primary") %>
-      <%= link_to("View Invitations", invited_users_account_path(current_account), class: "btn btn-primary") %>
     <% end %>
   </section>
 <% end %>
