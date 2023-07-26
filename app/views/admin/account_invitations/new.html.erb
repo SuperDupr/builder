@@ -27,7 +27,12 @@
       <!-- F.E. todo: Use this condition to control behaviour of disabled member role with tooltip added -->
       <%# @account.owner.present? %>
       
-      <!-- Tooltip content: The first invited user must be an admin to the organization. This will get enabled once you complete the action! -->
+      <!-- Tooltip content: 
+      
+      The first invited user must be an admin to the organization. 
+      Provided user will act as the organization's owner. 
+      This option will be enabled once you complete the action! -->
+
       <div class="form-group flex">
         <div class="mr-7">
           <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio mr-1', checked: true %>
