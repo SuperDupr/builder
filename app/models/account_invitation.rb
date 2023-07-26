@@ -48,19 +48,42 @@ class AccountInvitation < ApplicationRecord
     AccountInvitationsMailer.with(account_invitation: self).invite.deliver_later
   end
 
-  def accept!(user)
+  def create_user_reflection
+    random_password = SecureRandom.hex(3)
+
+    user = User.new(
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: random_password,
+      password_confirmation: random_password,
+      terms_of_service: true
+    )
+
+    user.skip_default_account = true
+    user.save
+
+    [user, random_password]
+  end
+
+  def associate_objects_with_user(user)
     user.team_id = team_id if team_id.present?
     user.invitation_accepted_at = DateTime.now
+  end
 
+  def create_account_user(user, skip_invitation = false)
     account_user = account.account_users.new(user: user, roles: roles)
+
     if account_user.valid?
       ApplicationRecord.transaction do
         account_user.save!
         destroy!
       end
 
-      [account.owner, invited_by].uniq.each do |recipient|
-        AcceptedInvite.with(account: account, user: user).deliver_later(recipient)
+      unless skip_invitation
+        [account.owner, invited_by].uniq.each do |recipient|
+          AcceptedInvite.with(account: account, user: user).deliver_later(recipient)
+        end
       end
 
       account_user
@@ -68,6 +91,11 @@ class AccountInvitation < ApplicationRecord
       errors.add(:base, account_user.errors.full_messages.first)
       nil
     end
+  end
+
+  def accept!(user, skip_invitation = false)
+    associate_objects_with_user(user)
+    create_account_user(user, skip_invitation)
   end
 
   def reject!
