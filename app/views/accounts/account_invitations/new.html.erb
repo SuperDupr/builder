@@ -1,5 +1,5 @@
 <header class="flex justify-between items-center mb-4 px-4 shadow-md py-4">
-  <h4 class="">New User</h4>
+  <h4 class="">Invite User</h4>
   <%= link_to("Back", invited_users_account_path(@account), class: "btn btn-primary") %>
 </header>
 
@@ -24,14 +24,14 @@
         <%= f.select(:team_id, options_from_collection_for_select(@teams, 'id', 'name'), prompt: "Select Team") %>
       </div>
       <h5 class="mb-2">Role</h5> 
-      <div class="form-group">
-        <div>
-          <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio mr-1', checked: true %>
-          <%= label_tag :user, 'Member', class: 'inline-block' %>
+      <div class="form-group flex">
+        <div class="mr-7">
+          <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio', checked: true %>
+          <%= label_tag :user, 'Member', class: 'inline-block ms-2', for: 'roles_member' %>
         </div>
         <div>
-          <%= radio_button_tag :roles, :admin, id: 'admin', class: 'form-radio mr-1' %>
-          <%= label_tag :admin, 'Admin', class: 'inline-block' %>
+          <%= radio_button_tag :roles, :admin, id: 'admin', class: 'form-radio' %>
+          <%= label_tag :admin, 'Admin', class: 'inline-block ms-2', for: 'roles_admin' %>
         </div>
       </div>
       <div class="text-center mt-4">

@@ -1,0 +1,12 @@
+<div style="text-align: center;">
+  <h1 style="font-weight:400;line-height: 1.25;">
+    You are added as an owner/admin inside organization: <%= @account.name %>
+  </h1>
+  
+  <p style="margin-bottom:2rem;">
+    Credentials:
+  </p>
+
+  <p>Email: <%= @account.owner.email %></p>
+  <p>Password: <%= @temp_password %></p>
+</div>
