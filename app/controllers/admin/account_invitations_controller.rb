@@ -16,11 +16,23 @@ module Admin
       @account_invitation.invited_by_id = current_user.id
       @account_invitation.team_name = get_team_name if params[:account_invitation][:team_id].present?
 
-      if @account_invitation.save_and_send_invite
-        redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
+      unless @account.owner.present?
+        begin
+          @account_invitation.save
+          user, temp_password = @account_invitation.create_user_reflection
+          @account_invitation.accept!(user, true)
+          @account.update(owner_id: user.id)
+          FollowUpsMailer.account_owner_setup(@account, temp_password).deliver_later
+        rescue StandardError => e
+          redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to create user invitation!")
+        end
       else
-        redirect_to(invited_users_admin_account_path(@account.id),
-          alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
+        if @account_invitation.save_and_send_invite
+          redirect_to(invited_users_admin_account_path(@account.id), notice: "User invitation created successfully!")
+        else
+          redirect_to(invited_users_admin_account_path(@account.id),
+            alert: "Unable to create user invitation. Errors: #{@account_invitation.errors.full_messages.join(", ")}")
+        end
       end
     end
 
