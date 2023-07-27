@@ -1,0 +1,16 @@
+<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4>Show Team</h4>
+  <%= link_to("Back to Teams", teams_path, class: 'btn btn-primary') %>
+</header>
+<div class="container mx-auto py-4">
+  <table class="border">
+    <tr>
+      <th>Team Name</th>
+      <td><%= @team.name %></td>
+    </tr>
+    <tr>
+      <th>Organization Name</th>
+      <td><%= @account.name %></td>
+    </tr>
+  </table>
+</div>
