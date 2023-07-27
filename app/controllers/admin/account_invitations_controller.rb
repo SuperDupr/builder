@@ -30,6 +30,7 @@ module Admin
           @account_invitation.accept!(user, true)
           @account.update(owner_id: user.id)
           FollowUpsMailer.account_owner_setup(@account, temp_password).deliver_later
+          redirect_to(invited_users_admin_account_path(@account.id), notice: "Organization owner has been added successfully!")
         rescue => e
           redirect_to(invited_users_admin_account_path(@account.id), alert: "Unable to create user invitation. Error: #{e.message}")
         end
