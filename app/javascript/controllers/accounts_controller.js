@@ -4,6 +4,17 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
+  connect() {
+    const importBtn = document.getElementById("importUsers")
+    if (importBtn) {
+      const accountOwnerPresent = importBtn.dataset.accountOwnerPresence === "true"
+
+      if (!accountOwnerPresent) {
+        importBtn.setAttribute("disabled", true)
+      }
+    }
+  }
+
   toggleSwitchListener(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const organizationId = event.target.dataset.id
