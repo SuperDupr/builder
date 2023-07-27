@@ -40,3 +40,6 @@ ol {
 .table-responsive {
   @apply block w-full overflow-x-auto;
 }
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}

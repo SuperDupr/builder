@@ -2,6 +2,7 @@
  <h4>Invited Users in <%= @account.name %></h4>
  <div class="flex gap-2">
    <a href="<%= new_account_user_invitation_path(@account.id) %>" class="btn btn-primary">Invite User</a>
+    <button type="button" class="btn btn-primary opacity-40 cursor-not-allowed" data-controller="tooltip" data-tippy-content="Hello world">Import Users</button>
    <%= render partial: 'admin/accounts/import', locals: { url: bulk_import_account_invitations_path(@account.id) } %>
  </div>
 </header>
