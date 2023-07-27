@@ -4,6 +4,9 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
+  // connect() {
+  // }
+
   toggleSwitchListener(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const organizationId = event.target.dataset.id
