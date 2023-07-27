@@ -6,5 +6,10 @@
     <%= nav_link_to t(".billing"), subscriptions_path, class: "block no-underline p-3 px-6", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: ["/subscriptions", "/payment_methods"] if Jumpstart.config.payments_enabled? %>
   <% end %>
   <%= nav_link_to t(".accounts"), accounts_path, class: "block no-underline p-3 px-6", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: "/accounts" %>
-  <%= nav_link_to t(".api_tokens"), api_tokens_path, class: "block no-underline p-3 px-6 rounded-b", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: "/api_tokens" %>
+  <%= nav_link_to "View Users", organization_users_account_path(current_account), class: "block no-underline p-3 px-6", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: organization_users_account_path(current_account) %>
+  <%= nav_link_to "View Invitations", invited_users_account_path(current_account), class: "block no-underline p-3 px-6", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: invited_users_account_path(current_account) %>
+
+
+
+  <%= nav_link_to t(".api_tokens"), api_tokens_path, class: "block no-underline p-3 px-6 rounded-b hidden", active_class: "bg-blue-600 text-white hover:text-white", inactive_class: "text-gray-700 hover:text-gray-700 hover:bg-gray-100", starts_with: "/api_tokens" %>
 </div>
