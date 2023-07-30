@@ -73,13 +73,18 @@
                 <!--
                 <div class="px-6 py-3 text-xs font-bold text-gray-800 uppercase bg-white border-t border-gray-200">Accounts</div>
                 -->
-                <div class="px-6 pt-3 pb-1 text-xs font-bold text-gray-800 uppercase bg-white border-t border-gray-200">
-                  <%= link_to t(".accounts"), accounts_path, class: '' %>
-                </div>
-                 <%= link_to("Users", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
-                <%= link_to("Invitations", invited_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
-                <%= link_to("Teams", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
-                <%= link_to("Admins", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
+
+                <% unless current_user.admin? %>
+                  <%= link_to "Org. Settings", accounts_path, class: "no-underline block px-6 py-3 text-gray-800 bg-white  hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap" %>
+
+                  <%# if current_roles.include?(:admin) %>
+                    <%#= link_to("Users", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
+                    <%#= link_to("Invitations", invited_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
+                    <%#= link_to("Teams", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
+                  <%# end %>
+
+                  <%#= link_to("Admins", organization_users_account_path(current_account), class: 'no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-primary-50 transition ease-in-out duration-200 whitespace-nowrap') %>
+                <% end %>
 
                 <% if other_accounts.any? %>
                   <div class="px-6 py-3 text-xs font-bold text-gray-800 uppercase bg-white border-t border-gray-200">Switch Account</div>
