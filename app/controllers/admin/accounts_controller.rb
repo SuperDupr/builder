@@ -25,11 +25,11 @@ module Admin
     end
 
     def organization_users
-      @account_users = @account.account_users.includes(:user)
+      @pagy, @account_users = pagy(@account.account_users.includes(:user))
     end
 
     def invited_users
-      @account_invitations = @account.account_invitations
+      @pagy, @account_invitations = pagy(@account.account_invitations)
     end
 
     def manage_access

@@ -42,12 +42,18 @@
               </tr>
             <% end %>
           <% else %>
-          <tr>
-            <td colspan="5" class="text-center">No Invitees found. Only users that have pending invitation will appear here!</td>
-          </tr>
+            <tr>
+              <td colspan="5" class="text-center">No Invitees found. Only users that have pending invitation will appear here!</td>
+            </tr>
           <% end %>
         </tbody>
       </table>
+      
+      <% if @pagy.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -7,6 +7,7 @@ class AccountsController < Accounts::BaseController
   # GET /accounts
   def index
     @pagy, @accounts = pagy(current_user.accounts)
+    @pagy_2, @account_users = pagy(current_account.account_users.includes(:user))
   end
 
   # GET /accounts/1
@@ -84,11 +85,11 @@ class AccountsController < Accounts::BaseController
   end
 
   def organization_users
-    @account_users = @account.account_users.includes(:user)
+    @pagy, @account_users = pagy(@account.account_users.includes(:user))
   end
 
   def invited_users
-    @account_invitations = @account.account_invitations
+    @pagy, @account_invitations = pagy(@account.account_invitations)
   end
 
   private
