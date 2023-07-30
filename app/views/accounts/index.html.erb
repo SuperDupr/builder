@@ -53,4 +53,50 @@
 
     </div>
   </div>
+
+  <div>
+    <div>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Team</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @account_users.present? %>
+            <% @account_users.each do |account_user| %>
+              <tr>
+                <td><%= account_user.user.first_name %></td>
+                <td><%= account_user.user.last_name %></td>
+                <td><%= account_user.user.email %></td>
+                <td><%= account_user.roles.first[0].humanize %></td>
+                <td>
+                  <%= account_user.user.team.present? ? account_user.user.team.name : "---" %>
+                </td>
+                <td>
+                  <span class="inline-flex items-center justify-center rounded-full bg-green-500 text-white p-2">
+                    Active
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td>No Invitees found. Only users that have pending invitation will appear here!</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <% if @pagy_2.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy_2) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
