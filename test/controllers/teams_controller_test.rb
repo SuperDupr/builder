@@ -5,13 +5,12 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     sign_in(users(:one))
   end
 
-  test "GET :index" do 
+  test "GET :index" do
     get teams_path
 
     teams = controller.instance_variable_get(:@teams)
     pagy = controller.instance_variable_get(:@pagy)
 
-    
     assert_equal(teams.first.name, "MyString")
     assert_instance_of(Pagy, pagy)
     assert_response(:success)
@@ -28,7 +27,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "POST :create" do
-    post teams_path, params: { team: { name: "New Team" } }
+    post teams_path, params: {team: {name: "New Team"}}
 
     team = controller.instance_variable_get(:@team)
 
@@ -39,7 +38,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET :edit" do
     get edit_team_path(teams(:one))
-    
+
     team = controller.instance_variable_get(:@team)
 
     assert_equal(team.name, "MyString")
@@ -48,7 +47,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "PATCH :update" do
-    patch team_path(teams(:one)), params: { team: { name: "MyString edited" } }
+    patch team_path(teams(:one)), params: {team: {name: "MyString edited"}}
 
     team = controller.instance_variable_get(:@team)
 
@@ -67,11 +66,11 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "DELETE :destroy" do
-    team_1 = teams(:one)
-    team_2 = teams(:two)
+    teams(:one)
+    teams(:two)
 
     assert_equal(Team.count, 2)
-    
+
     delete team_path(teams(:one))
 
     assert_equal(Team.count, 1)

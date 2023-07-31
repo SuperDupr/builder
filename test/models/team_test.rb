@@ -26,7 +26,7 @@ class TeamTest < ActiveSupport::TestCase
   test "Associations" do
     assoc_classes = @associations_reflector.map { |assoc_ref| assoc_ref.class }
     assoc_names = @associations_reflector.map { |assoc_ref| assoc_ref.name }
-    
+
     assert_includes(assoc_classes, ActiveRecord::Reflection::BelongsToReflection)
     assert_includes(assoc_names, :account)
 
