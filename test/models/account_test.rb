@@ -26,6 +26,16 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
+  test "Associations" do
+    # Add more associations based assertions within this block
+    associations_reflector = Account.reflect_on_all_associations
+    assoc_classes = associations_reflector.map { |assoc_ref| assoc_ref.class }
+    assoc_names = associations_reflector.map { |assoc_ref| assoc_ref.name }
+
+    assert_includes(assoc_classes, ActiveRecord::Reflection::HasManyReflection)
+    assert_includes(assoc_names, :teams)
+  end
+
   test "validates uniqueness of domain" do
     account = accounts(:company).dup
     assert_not account.valid?
