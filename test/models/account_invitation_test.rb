@@ -41,12 +41,13 @@ class AccountInvitationTest < ActiveSupport::TestCase
     assert_not invitation.valid?
   end
 
-  test "accept" do
+  test "#create_account_user" do
     user = users(:invited)
     assert_difference "AccountUser.count" do
       account_user = @account_invitation.accept!(user)
       assert account_user.persisted?
       assert_equal user, account_user.user
+      assert_equal(@account_invitation.roles, account_user.roles)
     end
 
     assert_raises ActiveRecord::RecordNotFound do
@@ -66,5 +67,50 @@ class AccountInvitationTest < ActiveSupport::TestCase
     end
     assert_equal @account, Notification.last.account
     assert_equal users(:invited), Notification.last.params[:user]
+  end
+
+  test "#create_user_reflection" do
+    assert_difference("User.count", 1) do
+      user, random_password = @account_invitation.create_user_reflection
+
+      assert_instance_of(User, user)
+      assert_equal(@account_invitation.first_name, user.first_name)
+      assert_equal(@account_invitation.last_name, user.last_name)
+      assert_equal(@account_invitation.email, user.email)
+    end
+  end
+
+  test "#associate_objects_with_user" do
+    user = User.new
+    @account_invitation.update(team_id: teams(:one).id)
+    @account_invitation.associate_objects_with_user(user)
+
+    assert_equal(user.team_id, @account_invitation.team_id)
+    assert_not_nil(user.invitation_accepted_at)
+  end
+
+  test "#accept!" do
+    user = users(:invited)
+    account_user = @account_invitation.accept!(user, true)
+
+    assert_not_nil(user.invitation_accepted_at)
+    assert_equal(user, account_user.user)
+  end
+
+  test "#full_name" do
+    name = @account_invitation.full_name
+
+    assert_includes(name, @account_invitation.first_name)
+    assert_includes(name, @account_invitation.last_name)
+  end
+
+  test "self.accessible_attributes" do
+    attrs = AccountInvitation.accessible_attributes
+
+    assert_includes(attrs, "email")
+    assert_includes(attrs, "first_name")
+    assert_includes(attrs, "last_name")
+    assert_includes(attrs, "team_name")
+    assert_includes(attrs, "roles")
   end
 end
