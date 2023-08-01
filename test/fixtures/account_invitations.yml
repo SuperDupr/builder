@@ -36,6 +36,7 @@ one:
   first_name: Invited
   last_name: User
   email: invited@example.comwww
+  roles: '{ "admin" => true }'
 
 two:
   account: company
@@ -44,3 +45,4 @@ two:
   first_name: Second 
   last_name: Invited User
   email: invited2@example.com
+  roles: '{ "admin" => true }'
