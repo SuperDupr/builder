@@ -71,7 +71,7 @@ class AccountInvitationTest < ActiveSupport::TestCase
 
   test "#create_user_reflection" do
     assert_difference("User.count", 1) do
-      user, random_password = @account_invitation.create_user_reflection
+      user, _random_password = @account_invitation.create_user_reflection
 
       assert_instance_of(User, user)
       assert_equal(@account_invitation.first_name, user.first_name)

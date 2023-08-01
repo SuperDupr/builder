@@ -2,9 +2,9 @@ require "test_helper"
 
 class AccountControllerTest < ActionDispatch::IntegrationTest
   def setup
-    sign_in(users(:one))    
+    sign_in(users(:one))
   end
-  
+
   test "GET :index" do
     get accounts_path
 

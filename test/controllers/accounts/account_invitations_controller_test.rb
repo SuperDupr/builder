@@ -2,7 +2,7 @@ require "test_helper"
 
 class Accounts::AccountInvitationsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    sign_in(users(:one))    
+    sign_in(users(:one))
   end
 
   test "GET :new" do
@@ -36,9 +36,9 @@ class Accounts::AccountInvitationsControllerTest < ActionDispatch::IntegrationTe
 
   test "POST :bulk_import" do
     post bulk_import_org_account_invitations_path(
-      accounts(:one).id, 
+      accounts(:one).id,
       account_id: accounts(:one).id
-    ), params: { file: fixture_file_upload("fte_users_import.xlsx") }
+    ), params: {file: fixture_file_upload("fte_users_import.xlsx")}
 
     assert_enqueued_jobs(1)
     assert_response(:redirect)
