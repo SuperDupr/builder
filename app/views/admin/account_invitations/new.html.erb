@@ -25,7 +25,7 @@
       </div>
       <h5 class="mb-2">Role</h5>
       <!-- F.E. todo: Use this condition to control behaviour of disabled member role with tooltip added -->
-      <%# @account.owner.present? %>
+      
       
       <!-- Tooltip content: 
       
@@ -35,12 +35,15 @@
 
       <div class="form-group flex">
         <div class="mr-7">
-         <div class="opacity-40 flex items-center">
-             <input type="radio" id="member" disabled>
-            <label class="ml-1" data-controller="tooltip" data-tippy-content="Hello world">Member</label>
-          </div>
-          <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio mr-1', checked: true %>
-          <%= label_tag :user, 'Member', class: 'inline-block', for:'roles_member' %>
+          <% if !@account.owner.present? %>
+            <div class="opacity-40 flex items-center">
+              <input type="radio" id="member" disabled>
+              <label class="ml-1" data-controller="tooltip" data-tippy-content="The first invited user must be an admin to the organization. Provided user will act as the organization's owner. This option will be enabled once you complete the action!">Member</label>
+            </div>
+          <% else %>
+            <%= radio_button_tag :roles, :member, id: 'member', class: 'form-radio mr-1', checked: true %>
+            <%= label_tag :user, 'Member', class: 'inline-block', for:'roles_member' %>
+          <% end %>
         </div>
         <div>
           <%= radio_button_tag :roles, :admin, id: 'admin', class: 'form-radio mr-1' %>

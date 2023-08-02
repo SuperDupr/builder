@@ -1,0 +1,6 @@
+<div class="flex space-x-4 settings-tabs">
+  <a href="<%= accounts_path %>" class="nav-link <%= request.path == accounts_path ? 'active' : '' %>">Org. Settings</a>
+  <a href="<%= organization_users_account_path(current_account) %>" class="nav-link <%= request.path == organization_users_account_path(current_account) ? 'active' : '' %>">Users</a>
+  <a href="<%= invited_users_account_path(current_account) %>" class="nav-link <%= request.path == invited_users_account_path(current_account) ? 'active' : '' %>">Invitations</a>
+  <a href="<%= teams_path %>" class="nav-link <%= request.path == teams_path ? 'active' : '' %>">Teams</a>
+</div>
