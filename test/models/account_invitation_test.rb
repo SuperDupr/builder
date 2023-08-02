@@ -145,7 +145,7 @@ class AccountInvitationTest < ActiveSupport::TestCase
 
   test "self.persist_records" do
     # Create an array of mock objects to be used as records
-    records = Array.new(10) { MiniTest::Mock.new }
+    records = Array.new(10) { Minitest::Mock.new }
 
     # Set expectations for each mock object
     records.each do |object|
@@ -166,7 +166,7 @@ class AccountInvitationTest < ActiveSupport::TestCase
     file_name = "example_file.csv"
 
     # Stub the BulkImportUsersJob.perform_later method
-    mock_job = MiniTest::Mock.new
+    mock_job = Minitest::Mock.new
     mock_job.expect(:perform_later, nil, [file_name, account])
 
     # Set Rails environment to something other than production
