@@ -1,7 +1,7 @@
 /* Light Jumpstart theme for Pagy's default renderer */
 
 .pagination {
-  @apply inline-flex flex-wrap items-center justify-start float-right mb-5;
+  @apply flex flex-wrap items-center justify-end mb-5;
 
   .page {
     &:first-child a, &:first-child {
@@ -20,13 +20,16 @@
 
   .page {
     &.active {
-      @apply border border-blue-500 bg-blue-500 text-white relative block leading-tight no-underline py-2 px-3;
+      @apply border text-white relative block leading-tight no-underline py-2 px-3;
       margin-left: -1px;
+      background-color: #021642;
+      border-color: #021642;
     }
 
     a {
-      @apply border relative block leading-tight bg-white text-blue-500 no-underline py-2 px-3;
+      @apply border relative block leading-tight bg-white no-underline py-2 px-3;
       margin-left: -1px;
+      color: #021642;
 
       &:hover {
         @apply bg-gray-200;
