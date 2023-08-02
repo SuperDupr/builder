@@ -1,15 +1,16 @@
-<div class="w-full mb-4 lg:w-1/4 lg:p-4">
-  <%= render partial: "shared/account_navbar" %>
-</div>
-
-<header class="flex justify-between items-center mb-4 px-4 shadow-md py-4">
-  <h4 class="">Invite User</h4>
-  <%= link_to("Back", invited_users_account_path(@account), class: "btn btn-primary") %>
-</header>
-
-<div class="container mx-auto py-4">
-  <div class='w-5/12 mx-auto border shadow-md rounded-lg p-5'>
-    <h3 class="mb-3 text-center">Invite New User in <%= @account.name %></h3>
+<div class="flex flex-wrap my-4 lg:px-4">
+  <div class="w-full mb-4 lg:w-1/4 lg:p-4">
+    <%= render partial: "shared/account_navbar" %>
+  </div>
+  <div class="w-full lg:w-3/4 lg:p-4">
+    <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10">
+      <div class="sm:flex items-center justify-between mb-3">
+        <h1 class="flex-1 h3">Invite New User in <%= @account.name %></h1>
+        <div class="flex gap-2">
+           <%= link_to("Back", invited_users_account_path(@account), class: "btn btn-primary") %>
+        </div>
+      </div>
+       <div class='w-5/12 rounded-lg'>
     <%= form_for(@account_invitation, url: account_account_invitations_path(@account.id)) do |f| %>
       <div class="form-group mb-3">
         <label>Email</label>
@@ -42,5 +43,7 @@
         <%= f.submit("Send", class: "btn btn-primary") %>
       </div>
     <% end %>
+  </div>
+    </div>
   </div>
 </div>
