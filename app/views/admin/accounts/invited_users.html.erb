@@ -1,6 +1,7 @@
 <header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
  <h4>Invited Users in <%= @account.name %></h4>
  <div class="flex gap-2">
+  <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
    <a href="<%= new_account_user_invitation_path(@account.id) %>" class="btn btn-primary">Invite User</a>
    <%= render partial: 'admin/accounts/import', locals: { url: bulk_import_account_invitations_path(@account.id) } %>
  </div>
