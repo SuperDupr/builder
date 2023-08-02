@@ -180,24 +180,24 @@ class AccountTest < ActiveSupport::TestCase
     expected_filename = "fte_users_import.xlsx"
     expected_filepath_keyword = "storage"
 
-    test_file_path = Rails.root.join('test', 'fixtures', 'files', 'fte_users_import.xlsx')
-    
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
+
     test_file_blob = ActiveStorage::Blob.create_and_upload!(
       io: File.open(test_file_path),
       filename: expected_filename,
-      content_type: 'xlsx'
+      content_type: "xlsx"
     )
 
     account.users_file_upload.attach(test_file_blob)
-        
+
     assert_equal(expected_filename, account.users_uploaded_file_name)
     assert_includes(account.users_uploaded_file_path, expected_filepath_keyword)
   end
 
   test "self.open_spreadsheet" do
-    test_file_path = Rails.root.join('test', 'fixtures', 'files', 'fte_users_import.xlsx')
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
     test_file_stream = File.open(test_file_path)
-    file_name = 'fte_users_import.xlsx'
+    file_name = "fte_users_import.xlsx"
 
     # Stub the behavior of the Roo::Excel class
     Roo::Excel.stub(:new, true) do
@@ -208,19 +208,19 @@ class AccountTest < ActiveSupport::TestCase
 
   test "self.parse_spreadsheet" do
     account = accounts(:one)
-    file_name = 'fte_users_import.xlsx'
+    file_name = "fte_users_import.xlsx"
 
-    team1 = account.teams.create(name: 'HR')
-    team2 = account.teams.create(name: 'Sales')
-    team3 = account.teams.create(name: "Marketing")
+    account.teams.create(name: "HR")
+    account.teams.create(name: "Sales")
+    account.teams.create(name: "Marketing")
 
-    test_file_path = Rails.root.join('test', 'fixtures', 'files', 'fte_users_import.xlsx')
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
     spreadsheet = Roo::Excelx.new(test_file_path)
 
     Account.parse_spreadsheet(spreadsheet, file_name, account)
 
     account_invitations = AccountInvitation.last(3)
-    
+
     first_names = account_invitations.pluck(:first_name)
     imported = account_invitations.pluck(:imported)
 

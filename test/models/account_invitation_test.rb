@@ -115,32 +115,32 @@ class AccountInvitationTest < ActiveSupport::TestCase
   end
 
   test "self.sanitize_row_data" do
-    teams = { "Team A" => 1, "Team B" => 2 }
-    roles = [{ "admin" => true }, { "member" => true }]
+    teams = {"Team A" => 1, "Team B" => 2}
+    roles = [{"admin" => true}, {"member" => true}]
 
     # Test case 1: Existing team name
-    row1 = { "team_name" => "Team A", "roles" => "admin" }
+    row1 = {"team_name" => "Team A", "roles" => "admin"}
     sanitized_row1 = AccountInvitation.sanitize_row_data(row1, teams, roles)
     assert_equal(1, sanitized_row1["team_id"])
-    assert_equal({ "admin" => true }, sanitized_row1["roles"])
+    assert_equal({"admin" => true}, sanitized_row1["roles"])
 
     # Test case 2: Non-existing team name
-    row2 = { "team_name" => "Team C", "roles" => "member" }
+    row2 = {"team_name" => "Team C", "roles" => "member"}
     sanitized_row2 = AccountInvitation.sanitize_row_data(row2, teams, roles)
     assert_nil(sanitized_row2["team_id"])
-    assert_equal({ "member" => true }, sanitized_row2["roles"])
+    assert_equal({"member" => true}, sanitized_row2["roles"])
 
     # Test case 3: Existing role name
-    row3 = { "team_name" => "Team B", "roles" => "member" }
+    row3 = {"team_name" => "Team B", "roles" => "member"}
     sanitized_row3 = AccountInvitation.sanitize_row_data(row3, teams, roles)
     assert_equal(2, sanitized_row3["team_id"])
-    assert_equal({ "member" => true }, sanitized_row3["roles"])
+    assert_equal({"member" => true}, sanitized_row3["roles"])
 
     # Test case 4: Non-existing role name
-    row4 = { "team_name" => "Team B", "roles" => "guest" }
+    row4 = {"team_name" => "Team B", "roles" => "guest"}
     sanitized_row4 = AccountInvitation.sanitize_row_data(row4, teams, roles)
     assert_equal(2, sanitized_row4["team_id"])
-    assert_equal({ "member" => true }, sanitized_row4["roles"])
+    assert_equal({"member" => true}, sanitized_row4["roles"])
   end
 
   test "self.persist_records" do
