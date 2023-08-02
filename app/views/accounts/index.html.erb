@@ -4,14 +4,17 @@
   </div>
 
   <div class="w-full lg:w-3/4 lg:p-4">
+    <div class="mb-5">
+      <%= render partial: "shared/topBar_nav" %>
+    </div>
     <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10">
 
       <div class="sm:flex items-center justify-between mb-3">
-        <h1 class="flex-1 h3"><%= t(".title") %></h1>
+        <h1 class="flex-1 h3"><%#= t(".title") %> Organization</h1>
 
         <% if @accounts.exists? %>
           <div>
-            <%= link_to t(".create"), new_account_path, class: "btn btn-primary" %>
+            <%#= link_to t(".create"), new_account_path, class: "btn btn-primary" %>
           </div>
         <% end %>
       </div>
@@ -29,6 +32,11 @@
 
               </td>
 
+               <td class="hidden sm:table-cell">
+                <%= link_to "View", account, class: "btn btn-link" %>
+              </td>
+              <!--
+
               <td class="hidden sm:table-cell text-sm text-center">
                 <% if current_account != account %>
                   <%= switch_account_button account, label: t(".switch"), class: "btn btn-light-gray" %>
@@ -36,10 +44,9 @@
                   <span class="font-medium text-gray-600"><%= t(".current") %></span>
                 <% end %>
               </td>
+              -->
 
-              <td class="hidden sm:table-cell">
-                <%= link_to "View", account, class: "btn btn-link" %>
-              </td>
+             
             </tr>
           <% end %>
         </tbody>
@@ -52,10 +59,8 @@
       <% end %>
 
     </div>
-  </div>
-
-  <div>
-    <div>
+    <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10 mt-10">
+     <h1 class="flex-1 h3"><%#= t(".title") %> Users</h1>
       <table border="1">
         <thead>
           <tr>
@@ -91,7 +96,6 @@
           <% end %>
         </tbody>
       </table>
-
       <% if @pagy_2.pages > 1 %>
         <div class="my-6 text-center">
           <%== pagy_nav(@pagy_2) %>
@@ -100,3 +104,7 @@
     </div>
   </div>
 </div>
+
+      
+   
+

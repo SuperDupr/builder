@@ -3,11 +3,14 @@
     <%= render partial: "shared/account_navbar" %>
   </div>
   <div class="w-full lg:w-3/4 lg:p-4">
+    <div class="mb-5">
+      <%= render partial: "shared/topBar_nav" %>
+    </div>
     <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10">
         <div class="sm:flex items-center justify-between mb-3">
           <h1 class="flex-1 h3">All Users in <%= @account.name %></h1>
           <div>
-            <%= link_to("Back to Dashboard", user_root_path, class: "btn btn-primary") %>
+            <%#= link_to("Back to Dashboard", user_root_path, class: "btn btn-primary") %>
           </div>
         </div>
         <table class="border border-collapse w-full">
