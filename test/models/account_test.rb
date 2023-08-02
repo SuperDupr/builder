@@ -174,4 +174,60 @@ class AccountTest < ActiveSupport::TestCase
     mail = Pay::UserMailer.with(pay_customer: pay_customer, pay_charge: pay_charge).receipt
     assert_equal [account.email, "accounting@example.com"], mail.to
   end
+
+  test "#users_uploaded_file_name, #users_uploaded_file_path" do
+    account = accounts(:one)
+    expected_filename = "fte_users_import.xlsx"
+    expected_filepath_keyword = "storage"
+
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
+
+    test_file_blob = ActiveStorage::Blob.create_and_upload!(
+      io: File.open(test_file_path),
+      filename: expected_filename,
+      content_type: "xlsx"
+    )
+
+    account.users_file_upload.attach(test_file_blob)
+
+    assert_equal(expected_filename, account.users_uploaded_file_name)
+    assert_includes(account.users_uploaded_file_path, expected_filepath_keyword)
+  end
+
+  test "self.open_spreadsheet" do
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
+    test_file_stream = File.open(test_file_path)
+    file_name = "fte_users_import.xlsx"
+
+    # Stub the behavior of the Roo::Excel class
+    Roo::Excel.stub(:new, true) do
+      # Call the method and assert that it returns the expected value (Roo::Excelx instance in this case)
+      assert_instance_of(Roo::Excelx, Account.open_spreadsheet(test_file_stream, file_name))
+    end
+  end
+
+  test "self.parse_spreadsheet" do
+    account = accounts(:one)
+    file_name = "fte_users_import.xlsx"
+
+    account.teams.create(name: "HR")
+    account.teams.create(name: "Sales")
+    account.teams.create(name: "Marketing")
+
+    test_file_path = Rails.root.join("test", "fixtures", "files", "fte_users_import.xlsx")
+    spreadsheet = Roo::Excelx.new(test_file_path)
+
+    Account.parse_spreadsheet(spreadsheet, file_name, account)
+
+    account_invitations = AccountInvitation.last(3)
+
+    first_names = account_invitations.pluck(:first_name)
+    imported = account_invitations.pluck(:imported)
+
+    assert_includes(first_names, "Moiz47")
+    assert_includes(first_names, "Moiz48")
+    assert_includes(first_names, "Moiz49")
+
+    assert_not_includes(imported, false)
+  end
 end

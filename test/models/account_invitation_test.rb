@@ -113,4 +113,63 @@ class AccountInvitationTest < ActiveSupport::TestCase
     assert_includes(attrs, "team_name")
     assert_includes(attrs, "roles")
   end
+
+  test "self.sanitize_row_data" do
+    teams = {"Team A" => 1, "Team B" => 2}
+    roles = [{"admin" => true}, {"member" => true}]
+
+    # Test case 1: Existing team name
+    row1 = {"team_name" => "Team A", "roles" => "admin"}
+    sanitized_row1 = AccountInvitation.sanitize_row_data(row1, teams, roles)
+    assert_equal(1, sanitized_row1["team_id"])
+    assert_equal({"admin" => true}, sanitized_row1["roles"])
+
+    # Test case 2: Non-existing team name
+    row2 = {"team_name" => "Team C", "roles" => "member"}
+    sanitized_row2 = AccountInvitation.sanitize_row_data(row2, teams, roles)
+    assert_nil(sanitized_row2["team_id"])
+    assert_equal({"member" => true}, sanitized_row2["roles"])
+
+    # Test case 3: Existing role name
+    row3 = {"team_name" => "Team B", "roles" => "member"}
+    sanitized_row3 = AccountInvitation.sanitize_row_data(row3, teams, roles)
+    assert_equal(2, sanitized_row3["team_id"])
+    assert_equal({"member" => true}, sanitized_row3["roles"])
+
+    # Test case 4: Non-existing role name
+    row4 = {"team_name" => "Team B", "roles" => "guest"}
+    sanitized_row4 = AccountInvitation.sanitize_row_data(row4, teams, roles)
+    assert_equal(2, sanitized_row4["team_id"])
+    assert_equal({"member" => true}, sanitized_row4["roles"])
+  end
+
+  test "self.persist_records" do
+    # Create an array of mock objects to be used as records
+    records = Array.new(10) { Minitest::Mock.new }
+
+    # Set expectations for each mock object
+    records.each do |object|
+      object.expect(:save_and_send_invite, true)
+    end
+
+    # Call the persist_records method
+    AccountInvitation.persist_records(records)
+
+    # Verify that the save_and_send_invite method was called for each object
+    records.each do |object|
+      object.verify
+    end
+  end
+
+  test "self.import_file" do
+    account = accounts(:one)
+    file_name = "example_file.csv"
+
+    # Stub the BulkImportUsersJob.perform_later method
+    mock_job = Minitest::Mock.new
+    mock_job.expect(:perform_later, nil, [file_name, account])
+
+    # Set Rails environment to something other than production
+    AccountInvitation.import_file(file_name, account)
+  end
 end
