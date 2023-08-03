@@ -34,6 +34,7 @@ class TeamsController < Accounts::BaseController
   end
 
   def show
+    @pagy, @users = pagy(@team.users)
   end
 
   def destroy

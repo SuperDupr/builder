@@ -8,6 +8,7 @@ module Admin
     end
 
     def show
+      @pagy, @users = pagy(@team.users)
     end
 
     def new
