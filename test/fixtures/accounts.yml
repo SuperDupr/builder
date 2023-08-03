@@ -57,3 +57,7 @@ fake_processor:
   name: "Per Seat Account"
   personal: false
   account_users_count: 1
+
+without_owner:
+  name: "Account without owner!"
+  personal: false

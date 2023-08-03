@@ -4,7 +4,7 @@ module Admin
     before_action :set_team, only: [:show, :edit, :update, :destroy]
 
     def index
-      @teams = @account.teams
+      @pagy, @teams = pagy(@account.teams)
     end
 
     def show

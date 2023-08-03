@@ -1,11 +1,11 @@
 class TeamsController < Accounts::BaseController
   before_action :authenticate_user!
   before_action :set_account
-  before_action :require_account_admin
+  before_action :require_account_admin, except: [:index]
   before_action :set_team, only: [:edit, :update, :show, :destroy]
 
   def index
-    @teams = @account.teams
+    @pagy, @teams = pagy(@account.teams)
   end
 
   def new

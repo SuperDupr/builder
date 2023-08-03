@@ -26,7 +26,7 @@
 require "test_helper"
 
 class OrganizationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "should inherit from Account class" do
+    assert_includes(Organization.ancestors, Account)
+  end
 end
