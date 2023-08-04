@@ -1,6 +1,6 @@
 <% if current_user != true_user %>
-  <div class="flex items-center justify-center px-2 py-1 text-sm text-white bg-blue-600 font-semibold" role="alert">
-    <span class="mr-2">Logged in as <b><%= link_to "#{current_user.name} (#{current_user.email})", main_app.admin_user_path(current_user), class: "text-white underline hover:text-blue-100" %></b></span>
+  <div class="flex items-center justify-center px-2 py-1 text-white bg-blue-600 font-semibold" role="alert">
+    <span class="mr-2">Logged in as <%= link_to "#{current_user.name} (#{current_user.email})", main_app.admin_user_path(current_user), class: "text-white underline hover:text-blue-100" %></span>
     <%= button_to main_app.admin_user_impersonate_path(user_id: current_user, account_id: current_account.id), method: :delete, form_class: "inline-block", class: "btn btn-primary btn-small" do %>
       Logout
     <% end %>
