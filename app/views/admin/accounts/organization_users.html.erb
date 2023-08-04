@@ -1,5 +1,5 @@
 <header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
- <h4>All Users in <%= @account.name %></h4>
+ <h4>All Users in  <%= @account.name %></h4>
  <div class="flex gap-2">
    <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
 
@@ -12,12 +12,12 @@
     <table class="border mt-5">
       <thead>
         <tr>
-          <th class="w-1/4">First Name</th>
-          <th class="w-1/4">Last Name</th>
-          <th class="w-1/4">Email</th>
-          <th class="w-1/4">Team</th>
-          <th class="w-1/4 text-right">Status</th>
-          <!-- <th>Actions</th> -->
+          <th class="w-1/5">First Name</th>
+          <th class="w-1/5">Last Name</th>
+          <th class="w-1/5">Email</th>
+          <th class="w-1/5">Team</th>
+          <th class="w-1/5">Status</th>
+          <th class="w-1/5 text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +35,7 @@
                   Active
                 </span>
               </td>
+              <td><%= button_to "Login as", admin_user_impersonate_path(account_user.user), method: :post, form_class: "inline-block", class: "btn btn-primary" %></td>
             </tr>
           <% end %>
         <% else %>
