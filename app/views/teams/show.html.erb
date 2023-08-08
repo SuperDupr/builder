@@ -5,21 +5,11 @@
   <div class="w-full lg:w-3/4 lg:p-4">
     <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10">
       <div class="sm:flex items-center justify-between mb-3">
-        <h1 class="flex-1 h3">Show Team</h1>
+        <h1 class="flex-1 h3"><%= @account.name %>: <%= @team.name %></h1>
         <div>
           <%= link_to("Back to Teams", teams_path, class: 'btn btn-primary') %>
         </div>
       </div>
-      <table class="border">
-        <tr>
-          <th>Team Name</th>
-          <td><%= @team.name %></td>
-        </tr>
-        <tr>
-          <th>Organization Name</th>
-          <td><%= @account.name %></td>
-        </tr>
-      </table>
       <h4 class="mt-8 mb-3 normal-case">Users in this Team</h4>
       <table class="border border-collapse w-full">
         <thead>
