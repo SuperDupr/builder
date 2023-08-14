@@ -1,16 +1,16 @@
 <% content_for :section_title, "Cards" %>
 
-<h3>Basic Cards</h3>
+<%= h2_with_anchor "Basic Cards" %>
 <%= render "jumpstart/docs/snippet" do %>
-<div class="border border-gray-400 rounded p-8 my-8">
+<div class="border border-gray-400 dark:border-gray-600 rounded p-8 my-8">
   <h3>Card title</h3>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 </div>
 <% end %>
 
-<h3>Basic Call To Action</h3>
+<%= h2_with_anchor "Basic Call To Action" %>
 <%= render "jumpstart/docs/snippet" do %>
-<div class="border border-gray-400 rounded p-8 my-8">
+<div class="border border-gray-400 dark:border-gray-600 rounded p-8 my-8">
   <div class="flex flex-wrap items-center justify-between">
     <div class="lg:flex-1">
       <h3>Card title</h3>
@@ -23,9 +23,9 @@
 </div>
 <% end %>
 
-<h3>With Image</h3>
+<%= h2_with_anchor "Card with Image" %>
 <%= render "jumpstart/docs/snippet" do %>
-<div class="border border-gray-400 rounded my-8 lg:w-1/2 w-full">
+<div class="border border-gray-400 dark:border-gray-600 rounded my-8 lg:w-1/2 w-full">
   <div class="image-placeholder">
     <%= render_svg "icons/photo", styles: "fill-current text-gray-500 icon-xl" %>
   </div>
@@ -36,9 +36,9 @@
 </div>
 <% end %>
 
-<h3>With Image and Buttons</h3>
+<%= h2_with_anchor "Card with Image and Buttons" %>
 <%= render "jumpstart/docs/snippet" do %>
-<div class="border border-gray-400 rounded my-8 lg:w-1/2 w-full">
+<div class="border border-gray-400 dark:border-gray-600 rounded my-8 lg:w-1/2 w-full">
   <div class="image-placeholder">
     <%= render_svg "icons/photo", styles: "fill-current text-gray-500 icon-xl" %>
   </div>
