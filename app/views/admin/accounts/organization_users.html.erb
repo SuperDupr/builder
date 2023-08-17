@@ -2,6 +2,7 @@
  <h4>All Users in  <%= @account.name %></h4>
  <div class="flex gap-2">
    <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
+   <a href="<%= new_account_user_invitation_path(@account.id) %>" class="btn btn-primary">Invite User</a>
 
    <%#= link_to("Back to Organizations", admin_accounts_path, class: "btn btn-primary") %>
  </div>
