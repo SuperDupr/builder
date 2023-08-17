@@ -2,14 +2,19 @@
 application_name: Builder
 business_name: Feed The Elephant
 business_address: ''
-domain: example.com
-default_from_email: Jumpstart <support@example.com>
+domain: feedtheelephant.com
 support_email: support@feedtheelephant.com
+default_from_email: Feed The Elephant <support@feedtheelephant.com>
 background_job_processor: sidekiq
-email_provider: ''
+email_provider: mailjet
 personal_accounts: false
-solargraph: true
 register_with_account: false
+collect_billing_address: false
 apns: false
 fcm: false
-collect_billing_address: false
+integrations:
+- appsignal
+omniauth_providers:
+payment_processors:
+multitenancy:
+gems:

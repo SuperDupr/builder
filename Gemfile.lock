@@ -112,6 +112,8 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
+    appsignal (3.4.10)
+      rack
     ast (2.4.2)
     bcrypt (3.1.19)
     better_html (2.0.2)
@@ -466,6 +468,7 @@ DEPENDENCIES
   administrate!
   administrate-field-active_storage (~> 0.4.1)
   annotate (>= 3.2.0)
+  appsignal
   bootsnap (>= 1.4.2)
   capybara (>= 3.39)
   country_select (~> 8.0)
