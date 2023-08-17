@@ -30,7 +30,7 @@ module NavHelper
   end
 
   # def org_settings_nav_helper
-  #   if 
+  #   if
   # end
 
   # Generates a header with a link with an anchor for sharing
