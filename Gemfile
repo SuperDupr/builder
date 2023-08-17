@@ -87,3 +87,5 @@ eval_gemfile "Gemfile.jumpstart"
 gem "roo", "~> 2.10.0"
 gem "roo-xls"
 # gem 'activerecord-import', '~> 0.15.0'
+
+gem 'aws-sdk-s3', require: false
