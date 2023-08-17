@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -126,6 +126,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "answers", force: :cascade do |t|
+    t.text "response"
+    t.bigint "question_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+  end
+
   create_table "api_tokens", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "token"
@@ -158,6 +166,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
   create_table "inbound_webhooks", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nodes", force: :cascade do |t|
+    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -286,6 +300,49 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
     t.boolean "charge_per_unit"
   end
 
+  create_table "prompts", force: :cascade do |t|
+    t.string "pre_text"
+    t.string "post_text"
+    t.bigint "question_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_prompts_on_question_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions_and_story_builders", force: :cascade do |t|
+    t.bigint "question_id"
+    t.bigint "story_builder_id"
+    t.index ["question_id"], name: "index_questions_and_story_builders_on_question_id"
+    t.index ["story_builder_id"], name: "index_questions_and_story_builders_on_story_builder_id"
+  end
+
+  create_table "stories", force: :cascade do |t|
+    t.string "title"
+    t.boolean "private", default: true
+    t.boolean "viewable", default: false
+    t.integer "status", default: 0
+    t.bigint "creator_id"
+    t.bigint "story_builder_id"
+    t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_stories_on_account_id"
+    t.index ["creator_id"], name: "index_stories_on_creator_id"
+    t.index ["story_builder_id"], name: "index_stories_on_story_builder_id"
+  end
+
+  create_table "story_builders", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "teams", force: :cascade do |t|
     t.string "name"
     t.bigint "account_id", null: false
@@ -341,10 +398,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_144615) do
   add_foreign_key "account_users", "users"
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "questions"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "prompts", "questions"
+  add_foreign_key "stories", "accounts"
+  add_foreign_key "stories", "story_builders"
+  add_foreign_key "stories", "users", column: "creator_id"
   add_foreign_key "teams", "accounts"
 end
