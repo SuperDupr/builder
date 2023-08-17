@@ -29,6 +29,10 @@ module NavHelper
     link_to name, url, html_options
   end
 
+  # def org_settings_nav_helper
+  #   if 
+  # end
+
   # Generates a header with a link with an anchor for sharing
   def header_with_anchor(title, header_tag: :h2, id: nil, icon: nil, header_class: "group", link_class: "hidden align-middle group-hover:inline-block p-1", icon_class: "fill-current text-gray-500 h-4 w-4")
     id ||= title.parameterize
