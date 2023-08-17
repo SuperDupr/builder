@@ -11,11 +11,6 @@ module Jumpstart
       g.scaffold_stylesheet false
     end
 
-    config.before_initialize do
-      Jumpstart.config = Jumpstart::Configuration.load!
-      Jumpstart.config.verify_dependencies!
-    end
-
     config.to_prepare do
       Administrate::ApplicationController.helper Jumpstart::AdministrateHelpers
     end
@@ -23,6 +18,7 @@ module Jumpstart
     initializer "turbo.native.navigation.helper" do
       ActiveSupport.on_load(:action_controller_base) do
         helper Turbo::Native::Navigation
+        helper Rails.application.helpers
       end
     end
 

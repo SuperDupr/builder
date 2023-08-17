@@ -101,6 +101,10 @@ form.inline {
   }
 }
 
+[type='radio'] {
+  @apply form-radio;
+}
+
 .input-file {
   height: auto;
   z-index: 2;

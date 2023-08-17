@@ -1,6 +1,6 @@
 FROM ruby:3.2
 
-ARG NODE_VERSION=18.15.0
+ARG NODE_VERSION=18.17.0
 ARG YARN_VERSION=1.22.19
 ENV BINDING="0.0.0.0"
 
@@ -72,8 +72,8 @@ RUN apt-get update -qq && \
 # App
 WORKDIR /app
 COPY ./Gemfile* /app/
-COPY ./config/jumpstart/Gemfile /app/config/jumpstart/
 COPY ./lib/jumpstart/ /app/lib/jumpstart/
+COPY ./config/jumpstart.yml* /app/config/jumpstart.yml
 RUN bundle config --local without "staging production omit" && bundle install --jobs $(nproc) --retry 5
 COPY package.json yarn.lock /app/
 RUN yarn install

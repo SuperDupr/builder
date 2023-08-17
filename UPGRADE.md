@@ -1,3 +1,29 @@
+# Jumpstart Pro Upgrade Guide
+
+This file includes notes on major changes that might affect your application and require changes from you to update.
+
+### July 21, 2023
+
+We've made a few gems optional, but still integrated in Jumpstart Pro:
+
+* ActsAsTenant
+* Oj
+* Whenever
+
+If you wish to continue using the gems, enable them in the Jumpstart Pro config at `http://localhost:3000/jumpstart#dependencies`
+
+`pg_search` has been removed to make Jumpstart Pro more compatible with MySQL and SQLite. Add pg_search to your Gemfile to continue using it.
+
+The `solargraph` configuration option was also removed. We now recommend [Ruby LSP](https://github.com/Shopify/ruby-lsp) which is zero-dependency in VS Code.
+
+We've added an example rack-attack configuration. We recommend using rack-attack for blocking malicious users and bots from overwhelming your application.
+
+### July 6, 2023
+
+`Gemfile.jumpstart` now replaces `config/jumpstart/Gemfile`. We no longer rewrite `config/jumpstart/Gemfile` each time the Jumpstart Pro configuration changes to keep things simpler and easier to work with.
+To upgrade, you will remove `config/jumpstart/Gemfile`. Gems will be automatically installed in `Gemfile.jumpstart` instead. You may need to modify this to specify versions if you had previously in the old file.
+Afterwards, you can run `bundle` to confirm all the same gems and versions are installed.
+
 ### April 20, 2023
 
 We've fixed a security issue that allows users to bypass 2FA. See [PR #656](https://github.com/jumpstart-pro/jumpstart-pro-rails/pull/656) for details.
