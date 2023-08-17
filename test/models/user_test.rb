@@ -22,9 +22,11 @@
 #  invited_by_type        :string
 #  last_name              :string
 #  last_otp_timestep      :integer
+#  name                   :string
 #  otp_backup_codes       :text
 #  otp_required_for_login :boolean
 #  otp_secret             :string
+#  preferences            :jsonb
 #  preferred_language     :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -34,6 +36,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  invited_by_id          :bigint
+#  team_id                :integer
 #
 # Indexes
 #
@@ -68,5 +71,9 @@ class UserTest < ActiveSupport::TestCase
   test "renders name with ActionText to_plain_text" do
     user = users(:one)
     assert_equal user.name, user.attachable_plain_text_representation
+  end
+
+  test "can search users by name generated column" do
+    assert_equal users(:one), User.search("one").first
   end
 end

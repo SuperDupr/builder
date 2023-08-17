@@ -1,0 +1,9 @@
+<%= form_for(team) do |f| %>
+  <div class='flex place-items-end gap-2'>
+    <div class="">
+     <%= f.label("Name") %>
+      <%= f.text_field(:name, required: true, class: "form-control") %>
+    </div>
+    <%= f.submit("Save", class: "btn btn-primary") %>
+  </div>
+<% end %>

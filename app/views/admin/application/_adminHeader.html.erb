@@ -1,0 +1,18 @@
+<!-- _header.html.erb -->
+<header class="fixed top-0 w-full bg-white shadow-md left-0 z-50">
+  <div class="flex items-center justify-between px-6 py-4">
+   <div class="flex">
+    <button  class="text-gray-500" id="sidebar-toggle" data-action="click->sidebar#toggleSidebar" >
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    <a  href="/"><img src="<%= asset_path('logo.svg') %>" alt="logo" class="ml-3"></a>
+   </div>
+   <div>
+   <%= link_to destroy_user_session_path, method: :delete do %>
+     Logout <i class="fas fa-sign-out-alt"></i>
+   <% end %>
+   </div>
+  </div>
+</header>

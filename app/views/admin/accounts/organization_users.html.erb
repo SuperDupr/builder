@@ -1,0 +1,58 @@
+<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+ <h4>All Users in  <%= @account.name %></h4>
+ <div class="flex gap-2">
+   <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
+
+   <%#= link_to("Back to Organizations", admin_accounts_path, class: "btn btn-primary") %>
+ </div>
+</header>
+<div class="container mx-auto px-4">
+  <%#= @account_users.count %>
+  <div class="overflow-x-auto">
+    <table class="border mt-5">
+      <thead>
+        <tr>
+          <th class="w-1/5">First Name</th>
+          <th class="w-1/5">Last Name</th>
+          <th class="w-1/5">Email</th>
+          <th class="w-1/5">Team</th>
+          <th class="w-1/5">Status</th>
+          <th class="w-1/5 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% if @account_users.present? %>
+          <% @account_users.each do |account_user| %>
+            <tr>
+              <td><%= account_user.user.first_name %></td>
+              <td><%= account_user.user.last_name %></td>
+              <td><%= account_user.user.email %></td>
+              <td>
+                <%= account_user.user.team.present? ? account_user.user.team.name : "---" %>
+              </td>
+              <td>
+                <span class="inline-flex items-center justify-center rounded-full bg-green-500 text-white p-2">
+                  Active
+                </span>
+              </td>
+              <td><%= button_to "Login as", admin_user_impersonate_path(account_user.user), method: :post, form_class: "inline-block", class: "btn btn-primary" %></td>
+            </tr>
+          <% end %>
+        <% else %>
+        <tr>
+          <td colspan="4" class="text-center">No Users found. Only users that accepted invitation will appear here!</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @pagy.pages > 1 %>
+      <div class="my-6 text-center">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+  <!-- Run User.attribute_names inside rails c to get all attribute names -->
+  <!-- Use required ones accordingly -->
+

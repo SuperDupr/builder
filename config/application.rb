@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 require "jumpstart"
 
+# require "webdrivers"
+
+# Webdrivers::Chromedriver.required_version = "114.0.5735.90"
+
 module JumpstartApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

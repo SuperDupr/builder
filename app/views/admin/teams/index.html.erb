@@ -1,0 +1,56 @@
+<div class='flex justify-between items-center mb-4 px-4 shadow-md py-4'>
+  <h4>All Teams in <%= @account.name %></h4>
+  <div class="flex gap-2">
+   <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
+   <%= link_to("New Team", new_admin_team_path(account_id: @account.id), class: 'btn btn-primary') %>
+  </div>
+  
+</div>
+<div class="container mx-auto py-4">
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th class="w-1/2">Team Name</th>
+          <th class="w-1/2">Organization Name</th>
+          <th class="w-1/2 text-right">Actions</th>
+        </tr>
+      <thead>
+      <tbody>
+        <% if @teams.present? %>
+          <% @teams.each do |team| %>
+            <tr>
+              <td><%= team.name %></td>
+              <td><%= @account.name %></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <%= link_to(admin_team_path(team, account_id: @account.id), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-eye"></i>
+                  <% end %>
+                  <%= link_to(edit_admin_team_path(team, account_id: @account.id), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-pencil"></i>
+                  <% end %>
+                  <%= link_to(admin_team_path(team, account_id: @account.id), class: "btn btn-danger", method: :delete,
+                  data: { confirm: "This will delete the team from the organization. Are you sure?" }) do %>
+                    <i class="fa-solid fa-trash"></i>
+                  <% end %>
+
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="4" class="text-center">No Teams found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @pagy.pages > 1 %>
+      <div class="my-6 text-center">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%#= @teams.count %>

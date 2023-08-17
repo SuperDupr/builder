@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_10_152614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,8 +18,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
     t.bigint "account_id", null: false
     t.bigint "invited_by_id"
     t.string "token", null: false
-    t.string "name", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "name"
     t.string "email", null: false
+    t.string "team_name"
+    t.integer "team_id"
+    t.boolean "imported", default: false
     t.jsonb "roles", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -42,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
     t.string "name", null: false
     t.bigint "owner_id"
     t.boolean "personal", default: false
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "extra_billing_info"
@@ -280,6 +286,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
     t.boolean "charge_per_unit"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_teams_on_account_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -297,6 +311,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
     t.datetime "accepted_privacy_at", precision: nil
     t.datetime "announcements_read_at", precision: nil
     t.boolean "admin"
+    t.integer "team_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "invitation_token"
@@ -312,6 +327,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
     t.string "otp_secret"
     t.integer "last_otp_timestep"
     t.text "otp_backup_codes"
+    t.jsonb "preferences"
+    t.virtual "name", type: :string, as: "(((first_name)::text || ' '::text) || (last_name)::text)", stored: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -327,7 +344,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_180159) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "teams", "accounts"
 end

@@ -22,9 +22,11 @@
 #  invited_by_type        :string
 #  last_name              :string
 #  last_otp_timestep      :integer
+#  name                   :string
 #  otp_backup_codes       :text
 #  otp_required_for_login :boolean
 #  otp_secret             :string
+#  preferences            :jsonb
 #  preferred_language     :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -34,6 +36,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  invited_by_id          :bigint
+#  team_id                :integer
 #
 # Indexes
 #
@@ -47,19 +50,17 @@
 
 class User < ApplicationRecord
   include ActionText::Attachable
-  include PgSearch::Model
   include TwoFactorAuthentication
-  include UserAccounts
-  include UserAgreements
+  include User::Accounts
+  include User::Agreements
+  include User::Theme
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, andle :trackable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable, :omniauthable
+  devise(*[:database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable, (:omniauthable if defined? OmniAuth)].compact)
 
   has_noticed_notifications
   has_person_name
-
-  pg_search_scope :search_by_full_name, against: [:first_name, :last_name], using: {tsearch: {prefix: true}}
 
   # ActiveStorage Associations
   has_one_attached :avatar
@@ -69,6 +70,7 @@ class User < ApplicationRecord
   has_many :connected_accounts, as: :owner, dependent: :destroy
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :notification_tokens, dependent: :destroy
+  belongs_to :team, optional: true
 
   # We don't need users to confirm their email address on create,
   # just when they change it
@@ -80,6 +82,12 @@ class User < ApplicationRecord
   # Validations
   validates :name, presence: true
   validates :avatar, resizable_image: true
+
+  # Replace with a search engine like Meilisearch, ElasticSearch, or pg_search to provide better results
+  # Using arel matches allows for database agnostic like queries
+  def self.search(query)
+    where(arel_table[:name].matches("%#{sanitize_sql_like(query)}%"))
+  end
 
   # When ActionText rendering mentions in plain text
   def attachable_plain_text_representation(caption = nil)

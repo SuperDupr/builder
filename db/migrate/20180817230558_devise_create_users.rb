@@ -40,6 +40,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       t.datetime :announcements_read_at
       t.boolean :admin
 
+      t.integer :team_id
+
       t.timestamps null: false
     end
 

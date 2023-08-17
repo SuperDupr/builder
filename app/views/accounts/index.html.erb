@@ -4,14 +4,17 @@
   </div>
 
   <div class="w-full lg:w-3/4 lg:p-4">
+    <div class="mb-5">
+      <%= render partial: "shared/topBar_nav" %>
+    </div>
     <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10">
 
       <div class="sm:flex items-center justify-between mb-3">
-        <h1 class="flex-1 h3"><%= t(".title") %></h1>
+        <h1 class="flex-1 h3"><%#= t(".title") %> Organization</h1>
 
         <% if @accounts.exists? %>
           <div>
-            <%= link_to t(".create"), new_account_path, class: "btn btn-primary" %>
+            <%#= link_to t(".create"), new_account_path, class: "btn btn-primary" %>
           </div>
         <% end %>
       </div>
@@ -23,23 +26,27 @@
               <td class="p-3">
                 <%= link_to account, class: "flex items-center" do %>
                   <%= account_avatar account, class: "rounded-full h-8 w-8 mr-3" %>
-                  <%= tag.span account.name, class: "text-gray-900 font-semibold text-sm no-underline hover:text-primary" %>
-                  <%= badge "Personal", class: "ml-3" if account.personal_account_for?(current_user) %>
+                  <%= tag.span account.name, class: "text-gray-900 dark:text-gray-100 font-semibold text-sm no-underline hover:text-primary" %>
+                  <%= badge "Personal", class: "ml-3  dark:bg-gray-700 dark:text-gray-200" if account.personal_account_for?(current_user) %>
                 <% end %>
 
               </td>
+
+               <td class="hidden sm:table-cell">
+                <%= link_to "View", account, class: "btn btn-link" %>
+              </td>
+              <!--
 
               <td class="hidden sm:table-cell text-sm text-center">
                 <% if current_account != account %>
                   <%= switch_account_button account, label: t(".switch"), class: "btn btn-light-gray" %>
                 <% else %>
-                  <span class="font-medium text-gray-600"><%= t(".current") %></span>
+                  <span class="font-medium text-gray-600 dark:text-gray-300"><%= t(".current") %></span>
                 <% end %>
               </td>
+              -->
 
-              <td class="hidden sm:table-cell">
-                <%= link_to "View", account, class: "btn btn-link" %>
-              </td>
+             
             </tr>
           <% end %>
         </tbody>
@@ -52,5 +59,52 @@
       <% end %>
 
     </div>
+    <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10 mt-10">
+     <h1 class="flex-1 h3"><%#= t(".title") %> Users</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Team</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @account_users.present? %>
+            <% @account_users.each do |account_user| %>
+              <tr>
+                <td><%= account_user.user.first_name %></td>
+                <td><%= account_user.user.last_name %></td>
+                <td><%= account_user.user.email %></td>
+                <td><%= account_user.roles.first[0].humanize %></td>
+                <td>
+                  <%= account_user.user.team.present? ? account_user.user.team.name : "---" %>
+                </td>
+                <td>
+                  <span class="inline-flex items-center justify-center rounded-full bg-green-500 text-white p-2">
+                    Active
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td>No Invitees found. Only users that have pending invitation will appear here!</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @pagy_2.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy_2) %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
+
+      
+   
+

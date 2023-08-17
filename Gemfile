@@ -73,9 +73,8 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara", ">= 3.26"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  gem "capybara", ">= 3.39"
+  gem "selenium-webdriver", ">= 4.11.0"
   gem "webmock"
 end
 
@@ -84,3 +83,7 @@ eval_gemfile "Gemfile.jumpstart"
 
 # We recommend using strong migrations when your app is in production
 # gem "strong_migrations", "~> 0.7.6"
+
+gem "roo", "~> 2.10.0"
+gem "roo-xls"
+# gem 'activerecord-import', '~> 0.15.0'

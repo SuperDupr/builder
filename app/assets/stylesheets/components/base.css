@@ -4,18 +4,19 @@ body {
   min-height: 100vh;
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
+  font-family: 'Lato', sans-serif;
 }
 .main {
   flex: 1;
 }
 
 a {
-  @apply text-blue-600;
+  @apply text-primary;
 
   &:hover,
   &:focus {
-    @apply text-blue-500;
-
+    @apply text-primary;
+    outline: 0px;
     transform: none;
   }
 }
@@ -38,4 +39,17 @@ ol {
 
 .table-responsive {
   @apply block w-full overflow-x-auto;
+}
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+.settings-tabs .nav-link {
+  text-decoration: none;
+  color: #333;
+  padding: 8px 12px;
+}
+
+.settings-tabs .nav-link.active {
+  border-bottom: 2px solid #021642; /* Replace 'blue' with your desired border color */
 }

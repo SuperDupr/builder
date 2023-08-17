@@ -25,9 +25,12 @@
 @import "components/trix";
 @import "components/typography";
 @import "components/util";
+@import "components/braintree";
 
 @import "tailwindcss/utilities";
 
 @import "flatpickr/dist/flatpickr.css";
 @import "tippy.js/dist/tippy.css";
 @import "tom-select/dist/css/tom-select.css";
+@import "administrate/base/_tables.scss";
+

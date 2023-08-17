@@ -1,8 +1,57 @@
-<div class="container mx-auto p-4">
-  <div class="my-8">
-    <h1><%= t(".title") %></h1>
+<% if current_user.admin? %>
+  <div class="container mx-auto p-4">
+    <div class="my-8">
+      <h1><%= t(".title") %></h1>
 
-    <p class="mb-2">This is the homepage for logged in users.</p>
-    <p>You can customize this page in <code>app/views/dashboard/show.html.erb</code></p>
+      <p class="mb-2">This is the homepage for logged in users.</p>
+      <p>You can customize this page in <code>app/views/dashboard/show.html.erb</code></p>
+    </div>
   </div>
-</div>
+<% else %>
+  <% content_for :title, "Dashboard" %>
+
+  <header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4" role="banner">
+    <h3 class="main-content__page-title">
+      Dashboard
+    </h3>
+  </header>
+
+  <section class="container p-4 mx-auto">
+    <% if current_roles.include?(:admin) %>
+      <div class="flex">
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">Total Revenue</h4>
+          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @total_revenue %></p>
+        </div>
+
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">Revenue Last 12mo</h4>
+          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @last_12_mos %></p>
+        </div>
+
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">Last Month's Revenue</h4>
+          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @last_month %></p>
+        </div>
+
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">This Month's Revenue To Date</h4>
+          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @this_month %></p>
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">Users</h4>
+          <p class="text-3xl font-bold"><%= current_account.users.count %></p>
+        </div>
+
+        <div class="flex-1 shadow rounded p-4 m-4 text-center">
+          <h4 class="font-normal mb-2">Active Subscriptions</h4>
+          <p class="text-3xl font-bold">0<%#= @subscriptions %></p>
+        </div>
+      </div>
+    <% end %>
+  </section>
+<% end %>
+

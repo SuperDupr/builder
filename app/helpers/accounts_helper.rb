@@ -40,6 +40,10 @@ module AccountsHelper
     AccountUser.find_by(account: account, user: account_user).admin?
   end
 
+  def access_state_of_account(account)
+    account.active ? "inactivate" : "activate"
+  end
+
   # A link to switch the account
   #
   # For session switching, we'll use a button_to and submit to the server

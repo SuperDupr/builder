@@ -22,9 +22,11 @@
 #  invited_by_type        :string
 #  last_name              :string
 #  last_otp_timestep      :integer
+#  name                   :string
 #  otp_backup_codes       :text
 #  otp_required_for_login :boolean
 #  otp_secret             :string
+#  preferences            :jsonb
 #  preferred_language     :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -34,6 +36,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  invited_by_id          :bigint
+#  team_id                :integer
 #
 # Indexes
 #
@@ -65,6 +68,26 @@ two:
   email: two@example.com
   first_name: User
   last_name: Two
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  accepted_terms_at: <%= Time.current %>
+  accepted_privacy_at: <%= Time.current %>
+  time_zone: "Central Time (US & Canada)"
+  confirmed_at: <%= Time.current %>
+
+one:
+  email: one@example.com
+  first_name: User
+  last_name: One
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  accepted_terms_at: <%= Time.current %>
+  accepted_privacy_at: <%= Time.current %>
+  time_zone: "Central Time (US & Canada)"
+  confirmed_at: <%= Time.current %>
+
+three:
+  email: three@example.com
+  first_name: User3
+  last_name: Three
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
   accepted_terms_at: <%= Time.current %>
   accepted_privacy_at: <%= Time.current %>

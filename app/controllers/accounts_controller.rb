@@ -1,12 +1,13 @@
 class AccountsController < Accounts::BaseController
   before_action :authenticate_user!
-  before_action :set_account, only: [:show, :edit, :update, :destroy, :switch]
-  before_action :require_account_admin, only: [:edit, :update, :destroy]
+  before_action :set_account, only: [:show, :edit, :update, :destroy, :switch, :organization_users, :invited_users]
+  before_action :require_account_admin, only: [:edit, :update, :destroy, :organization_users, :invited_users]
   before_action :prevent_personal_account_deletion, only: [:destroy]
 
   # GET /accounts
   def index
     @pagy, @accounts = pagy(current_user.accounts)
+    @pagy_2, @account_users = pagy(current_account.account_users.includes(:user))
   end
 
   # GET /accounts/1
@@ -81,6 +82,14 @@ class AccountsController < Accounts::BaseController
       session[:account_id] = @account.id
       redirect_to root_path
     end
+  end
+
+  def organization_users
+    @pagy, @account_users = pagy(@account.account_users.includes(:user))
+  end
+
+  def invited_users
+    @pagy, @account_invitations = pagy(@account.account_invitations)
   end
 
   private
