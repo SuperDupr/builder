@@ -5,7 +5,7 @@ class CreateStories < ActiveRecord::Migration[7.0]
       t.boolean :private, default: true
       t.boolean :viewable, default: false
       t.integer :status, default: 0
-      t.references :creator, foreign_key: { to_table: "users" }
+      t.references :creator, foreign_key: {to_table: "users"}
       t.references :story_builder, foreign_key: true
       t.references :account, foreign_key: true
 
@@ -13,4 +13,3 @@ class CreateStories < ActiveRecord::Migration[7.0]
     end
   end
 end
-  

@@ -12,6 +12,6 @@ class Question < ApplicationRecord
   has_many :prompts, dependent: :destroy
   has_many :parent_nodes, dependent: :destroy
   has_one :answer, dependent: :destroy
-  
+
   has_and_belongs_to_many :story_builders
 end

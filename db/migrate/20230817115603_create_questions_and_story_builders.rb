@@ -10,7 +10,7 @@ class CreateQuestionsAndStoryBuilders < ActiveRecord::Migration[7.0]
       t.string :title
 
       t.timestamps
-    end 
+    end
 
     create_table :questions_and_story_builders do |t|
       t.belongs_to :question
