@@ -384,6 +384,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
     t.string "otp_secret"
     t.integer "last_otp_timestep"
     t.text "otp_backup_codes"
+    t.jsonb "preferences"
+    t.virtual "name", type: :string, as: "(((first_name)::text || ' '::text) || (last_name)::text)", stored: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
