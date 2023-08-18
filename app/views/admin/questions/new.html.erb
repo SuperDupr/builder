@@ -1,0 +1,6 @@
+<h1>Admin::Questions#new</h1>
+<p>Find me in app/views/admin/questions/new.html.erb</p>
+
+<%= link_to("Back to Questions", admin_questions_path, class: "") %>
+
+<%= render(partial: "form", locals: {question: @question, url: admin_questions_path}) %>

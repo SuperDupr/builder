@@ -1,0 +1,9 @@
+<h1>Admin::Questions#show</h1>
+<p>Find me in app/views/admin/questions/show.html.erb</p>
+
+<%= @question.title %>
+
+<!-- Tracked Builders -->
+<% @question.story_builders.each do |story_builder| %>
+  <%= story_builder.title %>
+<% end %>

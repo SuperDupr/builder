@@ -38,7 +38,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     if @story_builder.destroy
       redirect_to admin_story_builders_path, notice: "Builder was successfully destroyed."
     else
-      redirect_to(admin_story_builders_path(@story_builder), alert: "Unable to destroy builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
+      redirect_to(admin_story_builders_path, alert: "Unable to destroy builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
     end
   end
 

@@ -1,0 +1,19 @@
+<h1>Admin::Questions#index</h1>
+<p>Find me in app/views/admin/questions/index.html.erb</p>
+
+<%= link_to("New Question", new_admin_question_path, class: "") %>
+
+<% @questions.each do |question| %>
+  <%= question.title %>
+  <%= question.story_builders.count %>
+
+  <%= link_to("Show", admin_question_path(question)) %>
+  <%= link_to("Edit", edit_admin_question_path(question)) %>
+  <%= link_to("Destroy", admin_question_path(question), method: :delete, data: { confirm: "Are you sure?" }) %>
+<% end %>
+
+<% if @pagy.pages > 1 %>
+  <div class="my-6 text-center">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>

@@ -1,0 +1,6 @@
+<%= form_for(question, url: url) do |f| %>
+  <%= f.label(:title) %>
+  <%= f.text_field(:title) %>
+
+  <%= f.submit("Save") %>
+<% end %>
