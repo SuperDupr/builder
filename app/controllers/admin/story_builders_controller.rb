@@ -4,7 +4,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   def index
     @pagy, @story_builders = pagy(StoryBuilder.includes(:questions).all)
   end
-  
+
   def new
     @story_builder = StoryBuilder.new
   end
@@ -36,7 +36,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def destroy
     if @story_builder.destroy
-      redirect_to admin_story_builders_path, notice: 'Builder was successfully destroyed.'
+      redirect_to admin_story_builders_path, notice: "Builder was successfully destroyed."
     else
       redirect_to(admin_story_builders_path(@story_builder), alert: "Unable to destroy builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
     end
@@ -44,11 +44,11 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   private
 
-    def story_builder_params
-      params.require(:story_builder).permit(:title)
-    end
+  def story_builder_params
+    params.require(:story_builder).permit(:title)
+  end
 
-    def set_story_builder
-      @story_builder = StoryBuilder.find(params[:id])
-    end
+  def set_story_builder
+    @story_builder = StoryBuilder.find(params[:id])
+  end
 end
