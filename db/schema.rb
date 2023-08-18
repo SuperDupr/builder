@@ -315,11 +315,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "questions_and_story_builders", force: :cascade do |t|
+  create_table "questions_story_builders", force: :cascade do |t|
     t.bigint "question_id"
     t.bigint "story_builder_id"
-    t.index ["question_id"], name: "index_questions_and_story_builders_on_question_id"
-    t.index ["story_builder_id"], name: "index_questions_and_story_builders_on_story_builder_id"
+    t.index ["question_id"], name: "index_questions_story_builders_on_question_id"
+    t.index ["story_builder_id"], name: "index_questions_story_builders_on_story_builder_id"
   end
 
   create_table "stories", force: :cascade do |t|

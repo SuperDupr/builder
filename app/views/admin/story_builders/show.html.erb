@@ -1,0 +1,8 @@
+<h1>Builders#show</h1>
+<%= link_to("Back to Builders", admin_story_builders_path, class: "") %>
+
+<%= @story_builder.title %>
+
+<% @story_builder.questions.each do |question| %>
+  <%= question.title %>
+<% end %>

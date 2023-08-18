@@ -39,6 +39,9 @@ Rails.application.routes.draw do
 
       resources :teams
 
+      # StoryBuilding routes
+      resources :story_builders
+
       root to: "dashboard#show"
     end
 

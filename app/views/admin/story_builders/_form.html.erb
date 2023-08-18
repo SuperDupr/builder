@@ -1,0 +1,6 @@
+<%= form_for(story_builder, url: url) do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field(:title) %>
+
+  <%= f.submit("Save", class: "btn btn-primary") %>
+<% end %>
