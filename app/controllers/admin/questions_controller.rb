@@ -10,6 +10,8 @@ class Admin::QuestionsController < Admin::ApplicationController
 
   def new
     @question = Question.new
+    @question.prompts.build
+    @question.parent_nodes.build
   end
 
   def create
@@ -44,7 +46,26 @@ class Admin::QuestionsController < Admin::ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title)
+    params.require(:question).permit(
+      :title, 
+      prompts_attributes: [
+        :id,
+        :pre_text,
+        :post_text,
+        :_destroy
+      ],
+      parent_nodes_attributes: [
+        :id,
+        :title,
+        :_destroy,
+        child_nodes_attributes: [
+          :id,
+          :title,
+          :parent_node_id,
+          :_destroy
+        ]
+      ]
+    )
   end
 
   def set_question
