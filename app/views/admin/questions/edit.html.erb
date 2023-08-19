@@ -3,4 +3,4 @@
 
 <%= link_to("Back to Questions", admin_questions_path, class: "") %>
 
-<%= render(partial: "form", locals: {question: @question, url: admin_question_path(question)}) %>
+<%= render(partial: "form", locals: {question: @question, url: admin_question_path(@question)}) %>
