@@ -1,6 +1,38 @@
 <%= form_for(question, url: url) do |f| %>
   <%= f.label(:title) %>
   <%= f.text_field(:title) %>
+  
+  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper">
+    <template data-nested-form-target="template">
+      <%= f.fields_for :prompts, Prompt.new, child_index: 'NEW_RECORD' do |prompt_fields| %>
+        <%= render "prompt_form", f: prompt_fields %>
+      <% end %>
+    </template>
+
+    <%= f.fields_for :prompts do |prompt_fields| %>
+      <%= render("prompt_form", f: prompt_fields) %>
+    <% end %>
+  
+    <!-- Inserted elements will be injected before that target. -->
+    <div data-nested-form-target="target"></div>
+    <button type="button" data-action="nested-form#add">Add Prompt</button>
+  </div>
+
+  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".parent-nodes-form-wrapper">
+    <template data-nested-form-target="template">
+      <%= f.fields_for :parent_nodes, ParentNode.new, child_index: 'NEW_RECORD' do |parent_node_fields| %>
+        <%= render "parent_node_form", f: parent_node_fields %>
+      <% end %>
+    </template>
+
+    <%= f.fields_for :parent_nodes do |parent_node_fields| %>
+      <%= render("parent_node_form", f: parent_node_fields) %>
+    <% end %>
+  
+    <!-- Inserted elements will be injected before that target. -->
+    <div data-nested-form-target="target"></div>
+    <button type="button" data-action="nested-form#add">Add Node</button>
+  </div>
 
   <%= f.submit("Save") %>
 <% end %>

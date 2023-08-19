@@ -1,0 +1,10 @@
+<div class="parent-nodes-form-wrapper" data-new-record="<%= f.object.new_record? %>">
+  <p>Adding Node</p>
+
+  <%= f.label(:title) %>
+  <%= f.text_field(:title) %>
+
+  <%= render("child_node_content", f: f) %>
+
+  <button type="button" data-action="nested-form#remove">Remove Node</button>
+</div>

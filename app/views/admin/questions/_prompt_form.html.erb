@@ -1,0 +1,11 @@
+<div class="prompts-form-wrapper" data-new-record="<%= f.object.new_record? %>">
+  <p>Adding Prompt</p>
+
+  <%= f.label(:pre_text) %>
+  <%= f.text_field(:pre_text) %>
+
+  <%= f.label(:post_text) %>
+  <%= f.text_field(:post_text) %>
+
+  <button type="button" data-action="nested-form#remove">Remove Prompt</button>
+</div>
