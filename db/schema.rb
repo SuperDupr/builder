@@ -172,6 +172,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
 
   create_table "nodes", force: :cascade do |t|
     t.string "title"
+    t.integer "parent_node_id"
+    t.integer "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
