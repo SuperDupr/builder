@@ -20,4 +20,14 @@
 class Prompt < ApplicationRecord
   # Associations
   belongs_to :question
+
+  def full_sentence_form
+    if pre_text && post_text
+      "#{pre_text}_____#{post_text}"
+    elsif pre_text
+      "#{pre_text}_____"
+    elsif post_text
+      "_____#{post_text}"
+    end
+  end
 end

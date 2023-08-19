@@ -14,4 +14,7 @@ class Question < ApplicationRecord
   has_one :answer, dependent: :destroy
 
   has_and_belongs_to_many :story_builders
+
+  accepts_nested_attributes_for :prompts, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :parent_nodes, reject_if: :all_blank, allow_destroy: true
 end
