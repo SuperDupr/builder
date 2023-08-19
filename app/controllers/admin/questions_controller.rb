@@ -47,7 +47,7 @@ class Admin::QuestionsController < Admin::ApplicationController
 
   def question_params
     params.require(:question).permit(
-      :title, 
+      :title,
       prompts_attributes: [
         :id,
         :pre_text,
