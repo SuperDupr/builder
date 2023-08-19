@@ -14,7 +14,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     @story_builder = StoryBuilder.new(story_builder_params)
 
     if @story_builder.save
-      questionnaire_data = params[:builder][:q_ids].compact_blank.map { |id| { question_id: id, story_builder_id: @story_builder.id } }
+      questionnaire_data = params[:builder][:q_ids].compact_blank.map { |id| {question_id: id, story_builder_id: @story_builder.id} }
       Questionnaire.insert_all(questionnaire_data) if questionnaire_data.present?
       redirect_to(admin_story_builders_path, notice: "Builder created successfully!")
     else
