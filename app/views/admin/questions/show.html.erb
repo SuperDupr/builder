@@ -7,3 +7,16 @@
 <% @question.story_builders.each do |story_builder| %>
   <%= story_builder.title %>
 <% end %>
+
+<!-- Prompts -->
+<% @question.prompts.each do |prompt| %>
+  <%= prompt.full_sentence_form %>
+<% end %>
+
+<!-- Nodes and SubNodes -->
+<% @question.parent_nodes.each do |parent_node| %>
+  <%= parent_node.title %>
+  <% parent_node.child_nodes.each do |child_node| %>
+    <%= child_node.title %>
+  <% end %>
+<% end %>
