@@ -13,7 +13,8 @@ class Question < ApplicationRecord
   has_many :parent_nodes, dependent: :destroy
   has_one :answer, dependent: :destroy
 
-  has_and_belongs_to_many :story_builders
+  has_many :questionnaires
+  has_many :story_builders, through: :questionnaires
 
   accepts_nested_attributes_for :prompts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :parent_nodes, reject_if: :all_blank, allow_destroy: true
