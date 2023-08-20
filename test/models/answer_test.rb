@@ -19,7 +19,12 @@
 require "test_helper"
 
 class AnswerTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @answer = answers(:one)
+  end
+
+  test "belongs_to question association" do
+    assert_respond_to @answer, :question
+    assert_instance_of Question, @answer.question
+  end
 end
