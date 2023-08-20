@@ -2,7 +2,10 @@
   <%= f.label :title %>
   <%= f.text_field(:title) %>
 
-  <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) %>
+  <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) do |b| %>
+    <%= b.check_box(checked: @tracked_question_ids.include?(b.object.id)) %>
+    <%= b.label %>
+  <% end %>
   
   <!-- Navigation for questions -->
   <% if @pagy.pages > 1 %>
