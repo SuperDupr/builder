@@ -48,6 +48,6 @@ class StoryTest < ActiveSupport::TestCase
   end
 
   test "enum status values" do
-    assert_equal({ "draft" => 0, "complete" => 1, "published" => 2 }, Story.statuses)
+    assert_equal({"draft" => 0, "complete" => 1, "published" => 2}, Story.statuses)
   end
 end
