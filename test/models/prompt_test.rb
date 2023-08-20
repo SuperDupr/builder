@@ -20,7 +20,32 @@
 require "test_helper"
 
 class PromptTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @prompt = prompts(:one)
+  end
+
+  test "belongs_to question association" do
+    assert_respond_to @prompt, :question
+    assert_instance_of Question, @prompt.question
+  end
+
+  test "full_sentence_form method" do
+    assert_respond_to @prompt, :full_sentence_form
+
+    @prompt.pre_text = "Before"
+    @prompt.post_text = "After"
+    assert_equal "Before_____After", @prompt.full_sentence_form
+
+    @prompt.pre_text = "Before"
+    @prompt.post_text = nil
+    assert_equal "Before_____", @prompt.full_sentence_form
+
+    @prompt.pre_text = nil
+    @prompt.post_text = "After"
+    assert_equal "_____After", @prompt.full_sentence_form
+
+    @prompt.pre_text = nil
+    @prompt.post_text = nil
+    assert_nil @prompt.full_sentence_form
+  end
 end
