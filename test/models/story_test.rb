@@ -28,7 +28,26 @@
 require "test_helper"
 
 class StoryTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @story = stories(:one)
+  end
+
+  test "belongs_to story_builder association" do
+    assert_respond_to @story, :story_builder
+    assert_instance_of StoryBuilder, @story.story_builder
+  end
+
+  test "belongs_to creator association" do
+    assert_respond_to @story, :creator
+    assert_instance_of User, @story.creator
+  end
+
+  test "belongs_to account association" do
+    assert_respond_to @story, :account
+    assert_instance_of Account, @story.account
+  end
+
+  test "enum status values" do
+    assert_equal({ "draft" => 0, "complete" => 1, "published" => 2 }, Story.statuses)
+  end
 end
