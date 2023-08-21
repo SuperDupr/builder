@@ -1,19 +1,50 @@
-<h1>Admin::Questions#index</h1>
-<p>Find me in app/views/admin/questions/index.html.erb</p>
-
-<%= link_to("New Question", new_admin_question_path, class: "") %>
-
-<% @questions.each do |question| %>
-  <%= question.title %>
-  <%= question.story_builders.count %>
-
-  <%= link_to("Show", admin_question_path(question)) %>
-  <%= link_to("Edit", edit_admin_question_path(question)) %>
-  <%= link_to("Destroy", admin_question_path(question), method: :delete, data: { confirm: "Are you sure?" }) %>
-<% end %>
-
-<% if @pagy.pages > 1 %>
-  <div class="my-6 text-center">
-    <%== pagy_nav(@pagy) %>
+<div class='flex justify-between items-center mb-4 px-4 shadow-md py-4'>
+  <h4>Questions</h4>
+  <%= link_to("New Question", new_admin_question_path, class: "btn btn-primary") %>
+</div>
+<div class="container mx-auto px-4">
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th class="w-1/2">Question Title</th>
+          <th class="w-1/2">Builders Count</th>
+          <th class="w-1/2 text-right">Actions</th>
+        </tr>
+      <thead>
+      <tbody>
+        <% if @questions.present? %>
+          <% @questions.each do |question| %>
+            <tr>
+              <td><%= question.title %></td>
+              <td><%= question.story_builders.count %></td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <%= link_to(admin_question_path(question), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-eye"></i>
+                  <% end %>
+                  <%= link_to(edit_admin_question_path(question), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-pencil"></i>
+                  <% end %>
+                  <%= link_to(admin_question_path(question), class: "btn btn-danger", method: :delete,
+                  data: { confirm: "Are you sure?" }) do %>
+                    <i class="fa-solid fa-trash"></i>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="3" class="text-center">No Questions found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @pagy.pages > 1 %>
+      <div class="my-6 text-right">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

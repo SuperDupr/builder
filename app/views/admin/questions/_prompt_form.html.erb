@@ -1,11 +1,23 @@
-<div class="prompts-form-wrapper" data-new-record="<%= f.object.new_record? %>">
-  <p>Adding Prompt</p>
-
-  <%= f.label(:pre_text) %>
-  <%= f.text_field(:pre_text) %>
-
-  <%= f.label(:post_text) %>
-  <%= f.text_field(:post_text) %>
-
-  <button type="button" data-action="nested-form#remove">Remove Prompt</button>
+<div class="prompts-form-wrapper border p-2 mb-3" data-controller="preview" data-new-record="<%= f.object.new_record? %>">
+  <div class="flex items-center sm:items-end gap-3 mb-2">
+    <div class="sm:flex items-center gap-3 flex-grow">
+      <div class="flex-grow mb-3 sm:mb-0" >
+        <%= f.label(:pre_text) %>
+        <%= f.text_field(:pre_text, class:'rounded-md', data:{preview_target:"inputPreText", action:"input->preview#updatePreTextOutput"}) %>
+      </div>
+      <div class="flex-grow">
+        <%= f.label(:post_text) %>
+        <%= f.text_field(:post_text, class:'rounded-md', data:{preview_target:"inputPostText", action:"input->preview#updatePostTextOutput"}) %>
+      </div>
+    </div>
+    <button data-action="nested-form#remove" type="button" data-controller="tooltip" data-tippy-content="Delete Prompt">
+      <i class="fa-solid fa-trash text-xl mb-1 mt-6 sm:mt-0 cursor-pointer text-danger-600"></i>
+    </button>
+  </div>
+  <div>
+    <span class="font-bold">Preview:</span>
+    <span data-preview-target="outputPreText"></span>
+    __________
+    <span data-preview-target="outputPostText"></span>
+  </div>
 </div>
