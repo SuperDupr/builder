@@ -1,0 +1,16 @@
+<div data-controller="nested-form" data-nested-form-wrapper-selector-value=".child-nodes-form-wrapper">
+  <h5 class="mt-3">Subnodes</h5>
+  <template data-nested-form-target="template">
+    <%= f.fields_for :child_nodes, ChildNode.new, child_index: 'NEW_RECORD' do |child_node_fields| %>
+      <%= render "child_node_form", f: child_node_fields %>
+    <% end %>
+  </template>
+
+  <%= f.fields_for :child_nodes do |child_node_fields| %>
+    <%= render("child_node_form", f: child_node_fields) %>
+  <% end %>
+
+  <!-- Inserted elements will be injected before that target. -->
+  <div data-nested-form-target="target"></div>
+  <button type="button" data-action="nested-form#add" class="btn btn-primary btn-small mt-2">Add Subnode</button>
+</div>

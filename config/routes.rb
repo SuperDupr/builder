@@ -39,6 +39,10 @@ Rails.application.routes.draw do
 
       resources :teams
 
+      # StoryBuilding routes
+      resources :questions
+      resources :story_builders
+
       root to: "dashboard#show"
     end
 
@@ -63,10 +67,10 @@ Rails.application.routes.draw do
   # User account
   devise_for :users,
     controllers: {
-      omniauth_callbacks: "users/omniauth_callbacks",
+      omniauth_callbacks: ("users/omniauth_callbacks" if defined? OmniAuth),
       registrations: "users/registrations",
       sessions: "users/sessions"
-    }
+    }.compact
   devise_scope :user do
     get "session/otp", to: "sessions#otp"
   end

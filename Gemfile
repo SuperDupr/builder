@@ -73,9 +73,8 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara", ">= 3.39  "
-  gem "selenium-webdriver", ">= 4.11.0  "
-  # gem "webdrivers"
+  gem "capybara", ">= 3.39"
+  gem "selenium-webdriver", ">= 4.11.0"
   gem "webmock"
 end
 
@@ -88,3 +87,5 @@ eval_gemfile "Gemfile.jumpstart"
 gem "roo", "~> 2.10.0"
 gem "roo-xls"
 # gem 'activerecord-import', '~> 0.15.0'
+
+gem "aws-sdk-s3", require: false

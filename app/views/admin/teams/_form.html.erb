@@ -1,6 +1,6 @@
 <%= form_for(team, url: url) do |f| %>
   <div class='flex place-items-end gap-2'>
-    <div class="">
+    <div>
      <%= f.label("Name") %>
       <%= f.text_field(:name, required: true, class: "form-control") %>
       <%= f.hidden_field(:account_id, value: params[:account_id]) %>
@@ -8,5 +8,3 @@
     <%= f.submit("Save", class: "btn btn-primary") %>
   </div>
 <% end %>
-
-

@@ -1,11 +1,17 @@
 
-<aside class="fixed flex flex-col h-full bg-white border-r-2 w-64 transition-all duration-75 ease-in top-65 shadow-2xl lg:shadow-none z-10" id="sidebar" data-target="sidebar.sidebar">
+<aside class="fixed flex flex-col h-full bg-white border-r-2 w-64 transition-all duration-75 ease-in top-65 shadow-2xl lg:shadow-none z-10" id="sidebar" data-sidebar-target="sidebar">
   <nav class="mt-5">
     <a href="<%=admin_root_path %>" class="flex items-center py-3 pl-6 hover:bg-gray-100 <%= 'bg-gray-100' if current_page?(admin_root_path) %>">
       <span><i class="fa-solid fa-gauge mr-1"></i> Dashboard</span>
     </a>
-    <a href="<%= admin_accounts_path%>" class="flex items-center py-3 pl-6 hover:bg-gray-100 <%= 'bg-gray-100' if current_page?(admin_accounts_path) %>">
+    <a href="<%= admin_accounts_path %>" class="flex items-center py-3 pl-6 hover:bg-gray-100 <%= 'bg-gray-100' if current_page?(admin_accounts_path) %>">
       <span><i class="fa-solid fa-building w-4 mr-1"></i> Organizations</span>
+    </a>
+    <a href="<%= admin_story_builders_path %>" class="flex items-center py-3 pl-6 hover:bg-gray-100 <%= 'bg-gray-100' if current_page?(admin_story_builders_path) %>">
+      <span><i class="fa-solid fa-file-circle-question w-4 mr-1"></i> Builders</span>
+    </a>
+    <a href="<%= admin_questions_path %>" class="flex items-center py-3 pl-6 hover:bg-gray-100 <%= 'bg-gray-100' if current_page?(admin_questions_path) %>">
+      <span><i class="fa-solid fa-clipboard-question w-4 mr-1"></i> Questions</span>
     </a>
   </nav>
 </aside>
@@ -47,4 +53,3 @@ as defined by the routes in the `admin/` namespace
     ) if accessible_action?(resource, :index) %>
   <%# end %>
 <!--</nav>-->
-
