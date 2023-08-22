@@ -3,7 +3,7 @@ class StoryBuildersController < ApplicationController
   before_action :set_story_builder, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @story_builders = pagy(StoryBuilder.all)    
+    @pagy, @story_builders = pagy(StoryBuilder.all)
   end
 
   private
