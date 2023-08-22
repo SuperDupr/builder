@@ -1,8 +1,9 @@
-<div class="child-nodes-form-wrapper" data-new-record="<%= f.object.new_record? %>">
-  <p>Adding Child Node</p>
-
-  <%= f.label(:title) %>
-  <%= f.text_field(:title) %>
-
-  <button type="button" data-action="nested-form#remove">Remove Child Node</button>
+<div class="child-nodes-form-wrapper flex items-end gap-3 xl:w-3/4 mb-3" data-new-record="<%= f.object.new_record? %>">
+  <div class="flex-grow">
+    <%= f.label(:title) %>
+    <%= f.text_field(:title, required: true, class:'rounded-md') %>
+  </div>
+  <button data-action="nested-form#remove" type="button" data-controller="tooltip" data-tippy-content="Delete Subnode">
+    <i class="fa-solid fa-trash text-xl mb-1 cursor-pointer text-danger-600"></i>
+  </button>
 </div>

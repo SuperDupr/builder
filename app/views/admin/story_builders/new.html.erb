@@ -1,4 +1,7 @@
-<h1>New Builder</h1>
-<%= link_to("Back to Builders", admin_story_builders_path, class: "") %>
-
-<%= render(partial: "form", locals: { story_builder: @story_builder, url: admin_story_builders_path }) %>
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4>New Builder</h4>
+  <%= link_to("Back to Builders", admin_story_builders_path, class: 'btn btn-primary') %>
+</header>
+<div class="px-4">
+  <%= render(partial: "form", locals: { story_builder: @story_builder, url: admin_story_builders_path }) %>
+</div>

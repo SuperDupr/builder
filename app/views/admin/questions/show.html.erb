@@ -1,22 +1,65 @@
-<h1>Admin::Questions#show</h1>
-<p>Find me in app/views/admin/questions/show.html.erb</p>
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4 class="main-content__page-title">
+    Show Question
+  </h4>
+  <div class="ml-2">
+    <%= link_to("Edit Question", edit_admin_question_path(@question), class: 'btn btn-primary') %>
+  </div>
+</header>
 
-<%= @question.title %>
+<div class="px-4">
+  <h5>Title</h5>
+  <div class="text-lg mb-4"><%= @question.title %></div>
 
-<!-- Tracked Builders -->
-<% @question.story_builders.each do |story_builder| %>
-  <%= story_builder.title %>
-<% end %>
+  <div class="border p-2 mb-4">
+    <h5 class="mb-2">Builders</h5>
+    <% if @question.story_builders.present? %>
+      <% @question.story_builders.each_with_index do |story_builder, index| %>
+        <div class="flex items-center justify-between gap-3">
+          <div><%= story_builder.title %></div>
+          <%= link_to("Go to Builder", admin_story_builder_path(story_builder), class:'btn btn-primary btn-small') %>
+        </div>
+        <% if index != @question.story_builders.size - 1 %>
+          <hr class="my-2"/>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div>This question is not present in any story builder.</div>
+    <% end %>
+  </div>
 
-<!-- Prompts -->
-<% @question.prompts.each do |prompt| %>
-  <%= prompt.full_sentence_form %>
-<% end %>
+  <div class="border p-2 mb-4">
+    <h5 class="mb-2">Prompts</h5>
+    <% if @question.prompts.present? %>
+      <ul>
+        <% @question.prompts.each do |prompt| %>
+          <li class="mb-2"><%= prompt.full_sentence_form %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div>No prompts present.</div>
+    <% end %>
+  </div>
 
-<!-- Nodes and SubNodes -->
-<% @question.parent_nodes.each do |parent_node| %>
-  <%= parent_node.title %>
-  <% parent_node.child_nodes.each do |child_node| %>
-    <%= child_node.title %>
+  <h5 class="mt-5 mb-2">Nodes</h5>
+  <% if @question.parent_nodes.present? %>
+    <% @question.parent_nodes.each do |parent_node| %>
+      <div class="border p-2 mb-3">
+        <h6 class="mb-1">Title</h6>
+        <div><%= parent_node.title %></div>
+          <% if parent_node.child_nodes.present? %>
+          <h6 class="mt-3 mb-2">Subnodes</h6>
+          <% if parent_node.child_nodes.present? %>
+            <ul>
+              <% parent_node.child_nodes.each do |child_node| %>
+                <li class="mb-2"><%= child_node.title %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <div>No nodes present.</div>
   <% end %>
-<% end %>
+</div>
