@@ -97,6 +97,7 @@ Rails.application.routes.draw do
   post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations
 
   resources :teams
+  resources :story_builders
 
   # Payments
   resource :billing_address
