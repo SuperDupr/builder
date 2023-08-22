@@ -34,6 +34,7 @@ class AccountTest < ActiveSupport::TestCase
 
     assert_includes(assoc_classes, ActiveRecord::Reflection::HasManyReflection)
     assert_includes(assoc_names, :teams)
+    assert_includes(assoc_names, :stories)
   end
 
   test "validates uniqueness of domain" do

@@ -1,0 +1,27 @@
+<%= form_for(story_builder, url: url) do |f| %>
+  <%= f.label("Name") %>
+  <%= f.text_field(:title, required: true, class: "rounded-lg w-1/2") %>
+  <h5 class="mt-4 mb-1">Select Questions</h5>
+  <% if @questions.present? %>
+    <div class="mt-2">
+      <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) do |b| %>
+        <div class="mb-3 items-center flex">
+          <%= b.check_box(checked: @tracked_question_ids.include?(b.object.id), class:'mr-3') %>
+          <%= b.label class:'inline-block mb-0 text-base leading-none' %>
+        </div>
+      <% end %>
+      <!-- Navigation for questions -->
+      <div class="flex">
+        <% if @pagy.pages > 1 %>
+          <div class="-my-3 text-center">
+            <%== pagy_nav(@pagy) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div>No Questions present. <%= link_to("Add Question", new_admin_question_path, class:'font-bold') %></div>
+  <% end %>
+
+  <%= f.submit("Save Builder", class: "btn btn-primary mt-3") %>
+<% end %>
