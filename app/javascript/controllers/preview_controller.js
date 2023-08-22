@@ -4,8 +4,12 @@ export default class extends Controller {
   static targets = ["inputPreText", "outputPreText", "inputPostText", "outputPostText"];
 
   connect() {
-    this.updatePreTextOutput();
-    this.updatePostTextOutput();
+    if(this.inputPreTextTarget.value){
+      this.updatePreTextOutput();
+    }
+    if(this.inputPostTextTarget.value){
+      this.updatePostTextOutput();
+    }
   }
 
   updatePreTextOutput() {
