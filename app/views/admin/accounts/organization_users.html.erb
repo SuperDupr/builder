@@ -1,4 +1,4 @@
-<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
  <h4>All Users in  <%= @account.name %></h4>
  <div class="flex gap-2">
    <%= link_to 'Back to Organization', admin_account_path(@account), class: 'btn btn-primary' %>
@@ -41,7 +41,7 @@
           <% end %>
         <% else %>
         <tr>
-          <td colspan="4" class="text-center">No Users found. Only users that accepted invitation will appear here!</td>
+          <td colspan="6" class="text-center">No Users found. Only users that accepted invitation will appear here!</td>
         </tr>
         <% end %>
       </tbody>

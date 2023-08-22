@@ -1,10 +1,9 @@
-<div class="parent-nodes-form-wrapper" data-new-record="<%= f.object.new_record? %>">
-  <p>Adding Node</p>
-
+<div class="parent-nodes-form-wrapper mt-3 border px-2 pt-4 pb-2 relative xl:w-3/4" data-new-record="<%= f.object.new_record? %>">
   <%= f.label(:title) %>
-  <%= f.text_field(:title) %>
+  <%= f.text_field(:title, required: true, class:'rounded-md') %>
 
+  <button data-action="nested-form#remove" type="button" class="absolute top-1 right-2" data-controller="tooltip" data-tippy-content="Delete Node">
+    <i class="fa-solid fa-trash text-xl mb-1 cursor-pointer text-danger-600"></i>
+  </button>
   <%= render("child_node_content", f: f) %>
-
-  <button type="button" data-action="nested-form#remove">Remove Node</button>
 </div>
