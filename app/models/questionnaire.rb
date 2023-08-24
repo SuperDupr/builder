@@ -14,7 +14,7 @@
 #
 class Questionnaire < ApplicationRecord
   acts_as_list
-  
+
   belongs_to :question
   belongs_to :story_builder
 end
