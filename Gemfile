@@ -89,4 +89,4 @@ gem "roo-xls"
 # gem 'activerecord-import', '~> 0.15.0'
 
 gem "aws-sdk-s3", require: false
-gem 'acts_as_list'
+gem "acts_as_list"
