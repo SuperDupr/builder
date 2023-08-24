@@ -1,5 +1,5 @@
 class Admin::StoryBuildersController < Admin::ApplicationController
-  before_action :set_story_builder, only: [:show, :edit, :update, :destroy]
+  before_action :set_story_builder, only: [:show, :edit, :update, :destroy, :sort_questions]
 
   def index
     @pagy, @story_builders = pagy(StoryBuilder.includes(:questions).all)
@@ -24,6 +24,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def show
+    @questionnaires = @story_builder.questionnaires.order(position: :asc)
   end
 
   def edit
@@ -49,6 +50,11 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     else
       redirect_to(admin_story_builders_path, alert: "Unable to destroy builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
     end
+  end
+
+  def sort_questions
+    questionnaire = @story_builder.questionnaires.find_by(question_id: params[:question_id])
+    questionnaire.update(position: params[:position].to_i)
   end
 
   private

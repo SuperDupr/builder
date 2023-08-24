@@ -15,6 +15,7 @@ class CreateQuestionsAndStoryBuilders < ActiveRecord::Migration[7.0]
     create_table :questionnaires do |t|
       t.belongs_to :question
       t.belongs_to :story_builder
+      t.integer :position
     end
   end
 end
