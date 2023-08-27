@@ -12,18 +12,16 @@
   <div class="text-lg"><%= @story_builder.title %></div>
   <h5 class="mt-3 mb-2">Questions</h5>
   <% if @questionnaires.present? %>
-    <div data-controller="sortable" data-sortable-resource-name-value="question">
+    <ul data-controller="sortable" data-sortable-resource-name-value="question"
+      data-sortable-response-kind-value="json" id="sortableContainer">
       <% @questionnaires.each_with_index do |questionnaire, index| %>
-          <div class="flex items-center justify-between gap-3" 
-            data-sortable-update-url="<%= sort_questions_admin_story_builder_path(@story_builder, question_id: questionnaire.question_id) %>">
-            <div class="text-base break-words"><%= questionnaire.question.title %> Position: <%= questionnaire.position %></div>
-            <%= link_to("Go to Question", admin_question_path(questionnaire.question), class:'btn btn-primary btn-small') %>
-          </div>
-        <% if index != @questionnaires.size - 1 %>
-          <hr class="my-2"/>
-        <% end %>
+        <li class="flex items-center justify-between gap-3 questionContainer" data-index=<%= index + 1 %>
+        data-sortable-update-url="<%= sort_questions_admin_story_builder_path(@story_builder, question_id: questionnaire.question_id) %>">
+          <div class="text-base break-words"><%= questionnaire.question.title %> Position: <%= questionnaire.position %></div>
+          <%= link_to("Go to Question", admin_question_path(questionnaire.question), class:'btn btn-primary btn-small') %>
+        </li>
       <% end %>
-    </div>
+    </ul>
   <% else %>
     <div>No questions present in this builder.</div>
   <% end %>

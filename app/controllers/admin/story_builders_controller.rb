@@ -54,7 +54,16 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def sort_questions
     questionnaire = @story_builder.questionnaires.find_by(question_id: params[:question_id])
-    questionnaire.update(position: params[:position].to_i)
+    
+    respond_to do |format|
+      format.json do
+        if questionnaire.update(position: params[:question][:position].to_i)
+          render json: { success: true, questionnaire: questionnaire }
+        else
+          render json: { success: false, questionnaire: nil }
+        end
+      end
+    end
   end
 
   private
@@ -73,8 +82,10 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def attach_questions_to_builder
+    position = 0
     questionnaire_data = params[:builder][:q_ids].compact_blank.map do |id|
-      {question_id: id, story_builder_id: @story_builder.id} unless is_question_id_tracked?(id.to_i)
+      position += 1
+      {question_id: id, story_builder_id: @story_builder.id, position: position} unless is_question_id_tracked?(id.to_i)
     end
 
     questionnaire_data.compact!
