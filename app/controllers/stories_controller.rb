@@ -4,7 +4,7 @@ class StoriesController < ApplicationController
 
   def index
   end
-  
+
   def new
     @story = Story.new
   end
@@ -12,6 +12,6 @@ class StoriesController < ApplicationController
   private
 
   def set_story
-    @story = Story.find(params[:id])    
+    @story = Story.find(params[:id])
   end
 end
