@@ -54,13 +54,13 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def sort_questions
     questionnaire = @story_builder.questionnaires.find_by(question_id: params[:question_id])
-    
+
     respond_to do |format|
       format.json do
         if questionnaire.update(position: params[:question][:position].to_i)
-          render json: { success: true, questionnaire: questionnaire }
+          render json: {success: true, questionnaire: questionnaire}
         else
-          render json: { success: false, questionnaire: nil }
+          render json: {success: false, questionnaire: nil}
         end
       end
     end
