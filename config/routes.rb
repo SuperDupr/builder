@@ -98,6 +98,7 @@ Rails.application.routes.draw do
 
   resources :teams
   resources :story_builders
+  resources :stories
 
   # Payments
   resource :billing_address
