@@ -41,7 +41,11 @@ Rails.application.routes.draw do
 
       # StoryBuilding routes
       resources :questions
-      resources :story_builders
+      resources :story_builders do
+        member do
+          patch :sort_questions
+        end
+      end
 
       root to: "dashboard#show"
     end

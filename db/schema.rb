@@ -314,6 +314,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
   create_table "questionnaires", force: :cascade do |t|
     t.bigint "question_id"
     t.bigint "story_builder_id"
+    t.integer "position"
     t.index ["question_id"], name: "index_questionnaires_on_question_id"
     t.index ["story_builder_id"], name: "index_questionnaires_on_story_builder_id"
   end
