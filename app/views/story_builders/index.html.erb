@@ -10,17 +10,19 @@
 <div class="xl:container mx-auto p-4">
   <% if @story_builders.present? %>
     <div class="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-    <% @story_builders.each do |story_builder| %>
-      <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
-        <h4 class=""><%= story_builder.title %></h4>
-        <%= link_to("Start Building >", new_story_path, class: "btn btn-primary btn-small") %>
-      </div>
-    <% end %>
+      <% @story_builders.each do |story_builder| %>
+        <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
+          <h4 class=""><%= story_builder.title %></h4>
+          <%= link_to("Start Building >", new_account_story_path(account_id: current_account.id), class: "btn btn-primary btn-small") %>
+        </div>
+      <% end %>
+    </div>
   <% else %>
     <div class="flex flex-col justify-center items-center">
-    <img src="<%= asset_path('story_builders.jpg') %>" alt="No Story Builders" width="350">
-    <div class="text-2xl mt-6 max-w-[500px] text-center pt-4">
-      We are currently in the process of adding story builders to our database. Please check back later for these.
+      <img src="<%= asset_path('story_builders.jpg') %>" alt="No Story Builders" width="350">
+      <div class="text-2xl mt-6 max-w-[500px] text-center pt-4">
+        We are currently in the process of adding story builders to our database. Please check back later for these.
+      </div>
     </div>
   <% end %>
 </div>

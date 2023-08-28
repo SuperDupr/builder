@@ -95,6 +95,7 @@ Rails.application.routes.draw do
         post :resend
       end
     end
+    resources :stories, module: :accounts
   end
   resources :account_invitations
 
@@ -102,7 +103,6 @@ Rails.application.routes.draw do
 
   resources :teams
   resources :story_builders
-  resources :stories
 
   # Payments
   resource :billing_address
