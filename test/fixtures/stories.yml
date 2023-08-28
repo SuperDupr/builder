@@ -3,7 +3,7 @@
 # Table name: stories
 #
 #  id               :bigint           not null, primary key
-#  private          :boolean          default(TRUE)
+#  private_access   :boolean          default(TRUE)
 #  status           :integer          default("draft")
 #  title            :string
 #  viewable         :boolean          default(FALSE)

@@ -327,7 +327,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
 
   create_table "stories", force: :cascade do |t|
     t.string "title"
-    t.boolean "private", default: true
+    t.boolean "private_access", default: true
     t.boolean "viewable", default: false
     t.integer "status", default: 0
     t.bigint "creator_id"
