@@ -12,13 +12,13 @@
   <div class="text-lg"><%= @story_builder.title %></div>
   <h5 class="mt-3 mb-2">Questions</h5>
   <% if @questionnaires.present? %>
-    <ul data-controller="<%= @questionnaires.size === 1 ? '' : 'sortable' %>" data-sortable-resource-name-value="question"
+    <ul data-controller="<%= @questionnaires_size == 1 ? '' : 'sortable' %>" data-sortable-resource-name-value="question"
       data-sortable-response-kind-value="json" id="sortableContainer" class="border-t">
       <% @questionnaires.each_with_index do |questionnaire, index| %>
-        <li class="flex items-center justify-between gap-3 questionContainer border border-t-0 p-2 <%= @questionnaires.size === 1 ? '' : 'cursor-grab' %>" data-index=<%= index + 1 %>
+        <li class="flex items-center justify-between gap-3 questionContainer border border-t-0 p-2 <%= @questionnaires_size == 1 ? '' : 'cursor-grab' %>" data-index=<%= index + 1 %>
         data-sortable-update-url="<%= sort_questions_admin_story_builder_path(@story_builder, question_id: questionnaire.question_id) %>">
           <div class="flex items-center gap-2">
-            <% if @questionnaires.size > 1 %>
+            <% if @questionnaires_size > 1 %>
               <i class="fa-solid fa-grip"></i>
             <% end %>
             <div class="text-base break-words"><%= questionnaire.question.title %></div>

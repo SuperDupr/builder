@@ -25,6 +25,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def show
     @questionnaires = @story_builder.questionnaires.order(position: :asc)
+    @questionnaires_size = @questionnaires.size
   end
 
   def edit
