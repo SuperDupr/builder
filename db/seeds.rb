@@ -14,20 +14,36 @@
 # Jumpstart.grant_system_admin!(user)
 
 # Create Organizations
-organizations = []
-teams = []
-organization_names = ["Beyond Code", "Drifting Ruby", "Go Rails", "Railscasts", "Deanin", "Brad Traversy", "Level Up Coding", "WebCrunch", "Avdi Grimm", "Beyond Science"]
-team_names = ["Sales", "Marketing", "Admin", "HR", "Content Writing", "Development", "Design"]
+# organizations = []
+# teams = []
+# organization_names = ["Beyond Code", "Drifting Ruby", "Go Rails", "Railscasts", "Deanin", "Brad Traversy", "Level Up Coding", "WebCrunch", "Avdi Grimm", "Beyond Science"]
+# team_names = ["Sales", "Marketing", "Admin", "HR", "Content Writing", "Development", "Design"]
 
-10.times do |i|
-  organizations << Organization.create!(name: organization_names.sample)
+# 10.times do |i|
+#   organizations << Organization.create!(name: organization_names.sample)
+# end
+
+# puts "*** #{organizations.count} organizations created! ***"
+
+# # Create teams
+# organizations.each do |organization|
+#   3.times { teams << organization.teams.create!(name: team_names.sample) }
+# end
+
+# puts "*** #{teams.count} teams created! ***"
+
+story_builder = StoryBuilder.find_or_create_by(title: "Fichteen's Curve")
+story_titles = ["Alpha Curse", "Egyptian Pyramids", "World War II"]
+
+user = User.find_by_email("beyondcoding@example.com")
+
+50.times do |i|
+  Story.create(
+    title: story_titles.sample, 
+    creator_id: user.id, 
+    story_builder_id: story_builder.id, 
+    account_id: user.accounts.first.id,
+    private_access: [true, false].sample,
+    viewable: [true, false].sample 
+  )
 end
-
-puts "*** #{organizations.count} organizations created! ***"
-
-# Create teams
-organizations.each do |organization|
-  3.times { teams << organization.teams.create!(name: team_names.sample) }
-end
-
-puts "*** #{teams.count} teams created! ***"
