@@ -39,11 +39,11 @@ user = User.find_by_email("beyondcoding@example.com")
 
 50.times do |i|
   Story.create(
-    title: story_titles.sample, 
-    creator_id: user.id, 
-    story_builder_id: story_builder.id, 
+    title: story_titles.sample,
+    creator_id: user.id,
+    story_builder_id: story_builder.id,
     account_id: user.accounts.first.id,
     private_access: [true, false].sample,
-    viewable: [true, false].sample 
+    viewable: [true, false].sample
   )
 end
