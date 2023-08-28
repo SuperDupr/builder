@@ -16,6 +16,8 @@
   <%= link_to("Show", "#", class: "") %>
 <% end %>
 
+<%# @pagy_1 %>
+
 <h2>My Stories</h2>
 <% @my_stories.each do |story| %>
   <%= story.title %><%= story.story_builder.title %>
@@ -29,3 +31,5 @@
   <!-- Make it to point nowhere for now -->
   <%= link_to("Edit", "#", class: "") %>
 <% end %>
+
+<%# @pagy_2 %>
