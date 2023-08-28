@@ -40,7 +40,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
         attach_questions_to_builder
         detach_questions_from_builder
       end
-      
+
       redirect_to(admin_story_builders_path, notice: "Builder updated successfully!")
     else
       redirect_to(admin_story_builder_path, alert: "Unable to update builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
