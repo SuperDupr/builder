@@ -13,7 +13,7 @@
     <% @story_builders.each do |story_builder| %>
       <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
         <h4 class=""><%= story_builder.title %></h4>
-        <%= link_to("Start Building >", "#", class: "btn btn-primary btn-small") %>
+        <%= link_to("Start Building >", new_story_path, class: "btn btn-primary btn-small") %>
       </div>
     <% end %>
   <% else %>
@@ -23,9 +23,9 @@
       We are currently in the process of adding story builders to our database. Please check back later for these.
     </div>
   <% end %>
-  <% if @pagy.pages > 1 %>
-    <div class="my-6 text-right">
-      <%== pagy_nav(@pagy) %>
-    </div>
-  <% end %>
 </div>
+<% if @pagy.pages > 1 %>
+  <div class="my-6 text-right">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>

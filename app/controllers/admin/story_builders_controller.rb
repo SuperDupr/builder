@@ -1,5 +1,5 @@
 class Admin::StoryBuildersController < Admin::ApplicationController
-  before_action :set_story_builder, only: [:show, :edit, :update, :destroy]
+  before_action :set_story_builder, only: [:show, :edit, :update, :destroy, :sort_questions]
 
   def index
     @pagy, @story_builders = pagy(StoryBuilder.includes(:questions).all)
@@ -24,6 +24,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def show
+    @questionnaires = @story_builder.questionnaires.order(position: :asc)
   end
 
   def edit
@@ -51,6 +52,20 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     end
   end
 
+  def sort_questions
+    questionnaire = @story_builder.questionnaires.find_by(question_id: params[:question_id])
+
+    respond_to do |format|
+      format.json do
+        if questionnaire.update(position: params[:question][:position].to_i)
+          render json: {success: true, questionnaire: questionnaire}
+        else
+          render json: {success: false, questionnaire: nil}
+        end
+      end
+    end
+  end
+
   private
 
   def story_builder_params
@@ -67,8 +82,10 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def attach_questions_to_builder
+    position = 0
     questionnaire_data = params[:builder][:q_ids].compact_blank.map do |id|
-      {question_id: id, story_builder_id: @story_builder.id} unless is_question_id_tracked?(id.to_i)
+      position += 1
+      {question_id: id, story_builder_id: @story_builder.id, position: position} unless is_question_id_tracked?(id.to_i)
     end
 
     questionnaire_data.compact!

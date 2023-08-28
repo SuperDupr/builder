@@ -41,7 +41,11 @@ Rails.application.routes.draw do
 
       # StoryBuilding routes
       resources :questions
-      resources :story_builders
+      resources :story_builders do
+        member do
+          patch :sort_questions
+        end
+      end
 
       root to: "dashboard#show"
     end
@@ -98,6 +102,7 @@ Rails.application.routes.draw do
 
   resources :teams
   resources :story_builders
+  resources :stories
 
   # Payments
   resource :billing_address
