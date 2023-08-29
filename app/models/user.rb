@@ -99,6 +99,6 @@ class User < ApplicationRecord
   end
 
   def registration_data_absence?
-    industry_id.nil? || work_role.nil? || focus_of_communication.nil?
+    industry_id.blank? || work_role.blank? || focus_of_communication.blank?
   end
 end
