@@ -144,6 +144,10 @@ Rails.application.routes.draw do
   namespace :users do
     resources :mentions, only: [:index]
   end
+
+  resources :registration_questions, module: :users, only: [:index]
+  patch :update_registration_data, to: "users/registration_questions#update_data"
+
   namespace :user, module: :users do
     resource :two_factor, controller: :two_factor do
       get :backup_codes
