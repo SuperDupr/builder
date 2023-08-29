@@ -128,10 +128,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_124811) do
 
   create_table "answers", force: :cascade do |t|
     t.text "response"
+    t.bigint "story_id"
     t.bigint "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["story_id"], name: "index_answers_on_story_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -415,6 +417,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_124811) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "stories"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "industries", "accounts"
