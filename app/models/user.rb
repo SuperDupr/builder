@@ -13,6 +13,7 @@
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string
+#  focus_of_communication :text
 #  invitation_accepted_at :datetime
 #  invitation_created_at  :datetime
 #  invitation_limit       :integer
@@ -33,8 +34,10 @@
 #  reset_password_token   :string
 #  time_zone              :string
 #  unconfirmed_email      :string
+#  work_role              :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  industry_id            :integer
 #  invited_by_id          :bigint
 #  team_id                :integer
 #
@@ -71,6 +74,7 @@ class User < ApplicationRecord
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :notification_tokens, dependent: :destroy
   belongs_to :team, optional: true
+  belongs_to :industry, optional: true
 
   # We don't need users to confirm their email address on create,
   # just when they change it
@@ -92,5 +96,9 @@ class User < ApplicationRecord
   # When ActionText rendering mentions in plain text
   def attachable_plain_text_representation(caption = nil)
     caption || name
+  end
+
+  def registration_data_absence?
+    industry_id.nil? || work_role.nil? || focus_of_communication.nil?
   end
 end
