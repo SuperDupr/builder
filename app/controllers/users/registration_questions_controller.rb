@@ -2,7 +2,7 @@ class Users::RegistrationQuestionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @industries = current_account.industries.map{ |industry| [industry.title, industry.id] }
+    @industries = current_account.industries.map { |industry| [industry.title, industry.id] }
   end
 
   def update_data
