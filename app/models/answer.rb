@@ -19,4 +19,5 @@
 class Answer < ApplicationRecord
   # Associations
   belongs_to :question
+  belongs_to :story
 end
