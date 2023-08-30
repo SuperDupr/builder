@@ -98,6 +98,8 @@ Rails.application.routes.draw do
     resources :stories, module: :accounts
     resources :industries, module: :accounts
   end
+
+  get "question/:id/prompts", to: "accounts/stories#prompt_navigation", as: :prompt_navigation
   resources :account_invitations
 
   post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations

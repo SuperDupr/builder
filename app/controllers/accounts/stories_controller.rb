@@ -24,19 +24,41 @@ class Accounts::StoriesController < ApplicationController
 
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
+    @question = @story.story_builder.questions.order(position: :asc).first
+    @prompts = @question.prompts.order(created_at: :asc)
+    @prompt = @prompts.first
   end
 
   def update
-    if params[:change_access_mode] == "on"
-      @story.toggle!(:private_access)
-
-      render json: {private_access: @story.private_access, operation: "change_access_mode"}
-    elsif params[:draft_mode] == "on"
-      @story.draft!
-
-      render json: {status: @story.status.to_s, operation: "draft_mode"}      
+    respond_to do |format|
+      format.json do
+        if params[:change_access_mode] == "on"
+          @story.toggle!(:private_access)
+    
+          render json: {private_access: @story.private_access, operation: "change_access_mode"}
+        elsif params[:draft_mode] == "on"
+          @story.draft!
+    
+          render json: {status: @story.status.to_s, operation: "draft_mode"}      
+        end
+      end
     end
-  end 
+  end
+
+  def prompt_navigation
+    question = Question.find(params[:id])
+    @prompt = question.prompts[params[:index].to_i]
+
+    respond_to do |format|
+      format.json do 
+        if @prompt.nil?
+          render json: { prompt_id: nil, prompt_sentence: nil, success: false }
+        else
+          render json: { prompt_id: @prompt.id, prompt_sentence: @prompt.full_sentence_form, success: true }
+        end
+      end
+    end
+  end
 
   private
 

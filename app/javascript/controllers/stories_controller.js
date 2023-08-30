@@ -3,7 +3,7 @@ import consumer from "../channels/consumer"
 
 export default class extends Controller {
   connect() {
-    // console.log("I am connected!")
+    this.index = 0
   }
 
   updateStoryAccessOrDraftMode(event) {
@@ -31,6 +31,39 @@ export default class extends Controller {
           } else if (data.operation === "draft_mode") {
             operationResultInfo = data.status
             alert(`Story saved as ${operationResultInfo} successfully!`)
+          }
+        })
+      }
+    })
+  }
+
+  promptNavigation(event) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    let promptNumber = document.getElementById("promptNumber")
+    let promptContainer = document.getElementById("promptContainer")
+    let questionId = document.getElementById("questionContainer").dataset.id
+    let cursor = event.target.dataset.cursor
+    
+    // TODO: Add validations to handle index value correctly
+    if (cursor == "backward") {
+      this.index--
+    } else if (cursor == "forward") {
+      this.index++
+    }
+
+    fetch(`/question/${questionId}/prompts?index=${this.index}`, { 
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      }
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          if (data.success) {
+            promptNumber.textContent = this.index + 1
+            promptContainer.dataset.id = data.prompt_id
+            promptContainer.textContent = data.prompt_sentence
           }
         })
       }

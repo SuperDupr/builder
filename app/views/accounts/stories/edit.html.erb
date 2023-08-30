@@ -18,6 +18,31 @@ Title: <%= @story.title %>
     draft_mode: "on", 
     action: "stories#updateStoryAccessOrDraftMode" }, 
       class: "btn btn-primary") %>
+
+  <h2>Question/Answer</h2>
+
+
+  <div id="questionContainer" data-id=<%= @question.id %>>
+    <%= link_to("Prev Question", "#", class: "btn btn-primary") %>
+    <%= link_to("Next Question", "#", class: "btn btn-primary") %>
+    
+    <%= @question.title %>
+  </div>
+
+  <% if @prompts.any? %>
+    <%= link_to("<-", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#promptNavigation", cursor: "backward" }) %>
+    <%= link_to("->", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#promptNavigation", cursor: "forward" }) %>
+    
+    <div>Prompts: <span id="promptNumber">1</span>/<%= @prompts.count %></div>
+
+    <!-- Display one prompt at a time -->
+    <div id="promptContainer" data-id="<%= @prompt.id %>">
+      <%= @prompt.full_sentence_form %>
+    </div>
+    
+  <% else %>
+    <!-- Display text field to record answer against the question -->
+  <% end %>
 </div>
 
 <h2>My Stories</h2>
