@@ -16,11 +16,11 @@ class Accounts::IndustriesController < ApplicationController
 
   def create
     @industry = current_account.industries.new(industry_params)
-    
+
     if @industry.save
-      redirect_to account_industries_path(account_id: current_account.id), notice: 'Industry was successfully created.'
+      redirect_to account_industries_path(account_id: current_account.id), notice: "Industry was successfully created."
     else
-      redirect_to account_industries_path(account_id: current_account.id), alert: "#{@industry.errors.full_messages.join(", ")}"
+      redirect_to account_industries_path(account_id: current_account.id), alert: "Unable to create industry. Errors: #{@industry.errors.full_messages.join(", ")}"
     end
   end
 
@@ -29,15 +29,15 @@ class Accounts::IndustriesController < ApplicationController
 
   def update
     if @industry.update(industry_params)
-      redirect_to account_industry_path(@industry), notice: 'Industry was successfully updated.'
+      redirect_to account_industry_path(@industry), notice: "Industry was successfully updated."
     else
-      redirect_to account_industry_path(@industry, account_id: current_account.id), alert: "#{@industry.errors.full_messages.join(", ")}"
+      redirect_to account_industry_path(@industry, account_id: current_account.id), alert: "Unable to update industry. Errors: #{@industry.errors.full_messages.join(", ")}"
     end
   end
 
   def destroy
     @industry.destroy
-    redirect_to account_industries_path, notice: 'Industry was successfully destroyed.'
+    redirect_to account_industries_path, notice: "Industry was successfully destroyed."
   end
 
   private
