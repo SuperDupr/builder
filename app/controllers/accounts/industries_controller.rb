@@ -29,9 +29,9 @@ class Accounts::IndustriesController < ApplicationController
 
   def update
     if @industry.update(industry_params)
-      redirect_to account_industry_path(@industry), notice: "Industry was successfully updated."
+      redirect_to account_industries_path(account_id: current_account.id), notice: "Industry was successfully updated."
     else
-      redirect_to account_industry_path(@industry, account_id: current_account.id), alert: "Unable to update industry. Errors: #{@industry.errors.full_messages.join(", ")}"
+      redirect_to account_industries_path(account_id: current_account.id), alert: "Unable to update industry. Errors: #{@industry.errors.full_messages.join(", ")}"
     end
   end
 
