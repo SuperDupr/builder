@@ -1,1 +1,31 @@
 <h1>Stories#edit</h1>
+
+Title: <%= @story.title %>
+
+<div data-controller="stories">
+  <%= link_to("Private", "javascript:void(0)", data: { 
+    id: @story.id, 
+    account_id: current_account.id, 
+    change_access_mode: "on",
+    draft_mode: "off",
+    action: "stories#updateStoryAccessOrDraftMode" }) %>
+
+
+  <%= link_to("Save as Draft", "javascript:void(0)", data: { 
+    id: @story.id, 
+    account_id: current_account.id,
+    change_access_mode: "off",
+    draft_mode: "on", 
+    action: "stories#updateStoryAccessOrDraftMode" }, 
+      class: "btn btn-primary") %>
+</div>
+
+<h2>My Stories</h2>
+<% @my_stories.each do |story| %>
+  <%= story.title %>
+  <p>Final highlights will come here..</p>
+<% end %>
+
+<h2>Already know what kind of story you want to build?</h2>
+<h3>Select the builder you'd like to use below</h3>
+<!-- TODO: Pick the design from original Figma file and hard code the widgets -->
