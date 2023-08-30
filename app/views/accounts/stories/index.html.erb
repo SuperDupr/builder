@@ -28,8 +28,7 @@
   <%= story.status.to_s.capitalize %>
   <%= story.private_access ? "Private" : "Public" %>
   <!-- TODO: Show toggle for private/public access -->
-  <!-- Make it to point nowhere for now -->
-  <%= link_to("Edit", "#", class: "") %>
+  <%= link_to("Edit", edit_account_story_path(story, account_id: current_account.id), class: "") %>
 <% end %>
 
 <%# @pagy_2 %>

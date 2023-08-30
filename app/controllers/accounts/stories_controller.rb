@@ -11,18 +11,27 @@ class Accounts::StoriesController < ApplicationController
     @pagy_2, @my_stories = pagy(Story.includes(:story_builder).where(creator_id: current_user.id))
   end
 
-  def new
-    fallback_to_registration_questions if current_user.registration_data_absence?
-    @story = Story.new
+  def create
+    @story = current_account.stories.new(story_params)
+    @story.creator_id = current_user.id
+
+    if @story.save
+      redirect_to(edit_account_story_path(@story, account_id: current_account.id), notice: "Your story has been created!")
+    else
+      redirect_to(story_builders_path, alert: "Unable to create story. Errors: #{@story.errors.full_messages.join(", ")}")
+    end
+  end
+
+  def edit
   end
 
   private
 
-  def set_story
-    @story = Story.find(params[:id])
+  def story_params
+    params.require(:story).permit(:title, :story_builder_id)
   end
 
-  def fallback_to_registration_questions
-    redirect_to(registration_questions_path, alert: "Please answer the registration questions before getting started!")
+  def set_story
+    @story = Story.find(params[:id])
   end
 end
