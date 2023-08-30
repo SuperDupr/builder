@@ -11,7 +11,7 @@ class Question < ApplicationRecord
   # Associations
   has_many :prompts, dependent: :destroy
   has_many :parent_nodes, dependent: :destroy
-  has_one :answer, dependent: :destroy
+  has_many :answers, dependent: :destroy
 
   has_many :questionnaires
   has_many :story_builders, through: :questionnaires

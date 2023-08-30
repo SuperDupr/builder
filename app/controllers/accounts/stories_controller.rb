@@ -12,6 +12,7 @@ class Accounts::StoriesController < ApplicationController
   end
 
   def new
+    fallback_to_registration_questions if current_user.registration_data_absence?
     @story = Story.new
   end
 
@@ -19,5 +20,9 @@ class Accounts::StoriesController < ApplicationController
 
   def set_story
     @story = Story.find(params[:id])
+  end
+
+  def fallback_to_registration_questions
+    redirect_to(registration_questions_path, alert: "Please answer the registration questions before getting started!")
   end
 end

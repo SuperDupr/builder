@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_124811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,10 +128,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
 
   create_table "answers", force: :cascade do |t|
     t.text "response"
+    t.bigint "story_id"
     t.bigint "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["story_id"], name: "index_answers_on_story_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -168,6 +170,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "industries", force: :cascade do |t|
+    t.string "title"
+    t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_industries_on_account_id"
   end
 
   create_table "nodes", force: :cascade do |t|
@@ -389,6 +399,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
     t.text "otp_backup_codes"
     t.jsonb "preferences"
     t.virtual "name", type: :string, as: "(((first_name)::text || ' '::text) || (last_name)::text)", stored: true
+    t.text "work_role"
+    t.text "focus_of_communication"
+    t.integer "industry_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -404,8 +417,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_140254) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "stories"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "connected_accounts", "users", column: "owner_id"
+  add_foreign_key "industries", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"

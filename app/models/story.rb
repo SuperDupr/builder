@@ -32,6 +32,7 @@ class Story < ApplicationRecord
   belongs_to :story_builder
   belongs_to :creator, class_name: "User"
   belongs_to :account
+  has_many :answers, dependent: :destroy
 
   scope :publicized, -> { where(private_access: false) }
   scope :privatized, -> { where(private_access: true) }
