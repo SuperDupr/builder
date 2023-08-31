@@ -24,7 +24,7 @@ class Accounts::StoriesController < ApplicationController
 
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
-    @questions = @story.story_builder.questions 
+    @questions = @story.story_builder.questions
     @question = @questions.order(position: :asc).first
     @prompts = @question.prompts.order(created_at: :asc)
     @prompt = @prompts.first
@@ -35,12 +35,12 @@ class Accounts::StoriesController < ApplicationController
       format.json do
         if params[:change_access_mode] == "on"
           @story.toggle!(:private_access)
-    
+
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
-    
-          render json: {status: @story.status.to_s, operation: "draft_mode"}      
+
+          render json: {status: @story.status.to_s, operation: "draft_mode"}
         end
       end
     end
@@ -49,29 +49,29 @@ class Accounts::StoriesController < ApplicationController
   def question_navigation
     story_builder = StoryBuilder.find(params[:story_builder_id])
     @question = story_builder.questions[params[:q_index].to_i]
-    
+
     respond_to do |format|
       format.json do
         if @question.nil?
-          render json: { question_id: nil, question_title: nil, success: false }
+          render json: {question_id: nil, question_title: nil, success: false}
         else
-          render json: { question_id: @question.id, question_title: @question.title, success: true }
+          render json: {question_id: @question.id, question_title: @question.title, success: true}
         end
       end
     end
   end
-  
+
   def prompt_navigation
-    # TODO: Shorten the scope by querying the questions of story object 
+    # TODO: Shorten the scope by querying the questions of story object
     question = Question.find(params[:id])
     @prompt = question.prompts[params[:index].to_i]
 
     respond_to do |format|
-      format.json do 
+      format.json do
         if @prompt.nil?
-          render json: { prompt_id: nil, prompt_sentence: nil, success: false }
+          render json: {prompt_id: nil, prompt_sentence: nil, success: false}
         else
-          render json: { prompt_id: @prompt.id, prompt_sentence: @prompt.full_sentence_form, success: true }
+          render json: {prompt_id: @prompt.id, prompt_sentence: @prompt.full_sentence_form, success: true}
         end
       end
     end
@@ -81,11 +81,11 @@ class Accounts::StoriesController < ApplicationController
   def question_nodes
     story_builder = StoryBuilder.find(params[:story_builder_id])
     question = story_builder.questions.find(params[:id])
-    @parent_nodes = question.parent_nodes.map{ |node| [node.title, node.id] }
+    @parent_nodes = question.parent_nodes.map { |node| [node.title, node.id] }
 
     respond_to do |format|
       format.json do
-        render json: { parent_nodes: @parent_nodes, success: true }
+        render json: {parent_nodes: @parent_nodes, success: true}
       end
     end
   end
@@ -94,15 +94,15 @@ class Accounts::StoriesController < ApplicationController
   def sub_nodes_per_node
     question = Question.find(params[:id])
     node = question.parent_nodes.find(params[:node_id])
-    @child_nodes = node.child_nodes.map{ |node| [node.title, node.id] }
+    @child_nodes = node.child_nodes.map { |node| [node.title, node.id] }
 
     respond_to do |format|
       format.json do
-        render json: { child_nodes: @child_nodes, success: true }
+        render json: {child_nodes: @child_nodes, success: true}
       end
     end
   end
-  
+
   private
 
   def story_params
