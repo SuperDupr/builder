@@ -117,6 +117,38 @@ export default class extends Controller {
       }
     })
   }
+
+  // Request to track answer of a question
+  
+  // const questionId = 123; // Replace with the actual question ID
+  // const storyId = 456; // Replace with the actual story ID
+  // const responseText = "Some response text"; // Replace with the actual response text
+
+  // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  // fetch(`/questions/${questionId}/track_answers`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "X-CSRF-Token": csrfToken
+  //   },
+  //   body: JSON.stringify({
+  //     story_id: storyId,
+  //     response: responseText
+  //   })
+  // })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (data.success) {
+  //       console.log("Answer saved successfully:", data.answer);
+  //     } else {
+  //       console.error("Failed to save answer:", data.answer);
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error("Error while saving answer:", error);
+  //   });
+
   
   reconnect(event) {
     if (consumer.connection.isActive()) {

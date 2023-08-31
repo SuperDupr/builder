@@ -103,6 +103,21 @@ class Accounts::StoriesController < ApplicationController
     end
   end
 
+  def track_answers
+    question = Question.find(params[:id])
+    @answer = question.answers.new(story_id: params[:story_id], response: params[:response])
+    
+    respond_to do
+      format.json do
+        if @answer.save
+          render json: {answer: @answer, success: true}
+        else
+          render json: {answer: nil, success: false}
+        end
+      end
+    end
+  end
+
   private
 
   def story_params
