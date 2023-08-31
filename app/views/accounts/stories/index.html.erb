@@ -51,7 +51,7 @@
               <% end %>
               <td>
                 <div class="flex items-center gap-2 justify-end" >
-                  <%= link_to('', class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Show" }) do %>
+                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Show" }) do %>
                     <i class="fa-solid fa-eye"></i>
                   <% end %>
                 </div>
@@ -114,7 +114,7 @@
               <% end %>
               <td>
                 <div class="flex items-center gap-2 justify-end" >
-                  <%= link_to('', class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
+                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
                     <i class="fa-solid fa-pen"></i>
                   <% end %>
                 </div>
