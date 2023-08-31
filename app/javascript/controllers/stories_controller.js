@@ -44,11 +44,15 @@ export default class extends Controller {
     let promptContainer = document.getElementById("promptContainer")
     let questionId = document.getElementById("questionContainer").dataset.id
     let cursor = event.target.dataset.cursor
+    const prevQuestionButton = document.getElementById('promptBackward');
+    const nextQuestionButton = document.getElementById('promptForward');
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
+      console.log(index)
       this.index--
     } else if (cursor == "forward") {
+      console.log(index)
       this.index++
     }
 
@@ -80,15 +84,31 @@ export default class extends Controller {
   questionNavigation(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     let questionNumber = document.getElementById("questionNumber")
+    let questionsCount = +document.getElementById("questionsCount").innerText
     let questionContainer = document.getElementById("questionContainer")
     let cursor = event.target.dataset.cursor
     let storyBuilderId = event.target.dataset.storyBuilderId
+    const prevQuestionButton = document.getElementById('questionBackward');
+    const nextQuestionButton = document.getElementById('questionForward');
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
-      this.qIndex--
+      if(this.qIndex >= 1){
+        nextQuestionButton.classList.remove("pointer-events-none", "opacity-50");
+        this.qIndex--
+        if(this.qIndex + 1 === 1){
+          event.target.classList.add("pointer-events-none", "opacity-50");
+        }
+      }
     } else if (cursor == "forward") {
-      this.qIndex++
+      if(this.qIndex + 1 < questionsCount){
+        prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
+        this.qIndex++
+        if(this.qIndex + 1 === questionsCount){
+          event.target.classList.add("pointer-events-none", "opacity-50");
+        }
+      }
+      
     }
 
     fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
@@ -117,6 +137,37 @@ export default class extends Controller {
       }
     })
   }
+
+  // Request to track answer of a question
+  
+  // const questionId = 123; // Replace with the actual question ID
+  // const storyId = 456; // Replace with the actual story ID
+  // const responseText = "Some response text"; // Replace with the actual response text
+
+  // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  // fetch(`/questions/${questionId}/track_answers`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "X-CSRF-Token": csrfToken
+  //   },
+  //   body: JSON.stringify({
+  //     story_id: storyId,
+  //     response: responseText
+  //   })
+  // })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (data.success) {
+  //       console.log("Answer saved successfully:", data.answer);
+  //     } else {
+  //       console.error("Failed to save answer:", data.answer);
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error("Error while saving answer:", error);
+  //   });
   
   reconnect(event) {
     if (consumer.connection.isActive()) {
