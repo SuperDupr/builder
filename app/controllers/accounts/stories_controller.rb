@@ -24,7 +24,8 @@ class Accounts::StoriesController < ApplicationController
 
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
-    @question = @story.story_builder.questions.order(position: :asc).first
+    @questions = @story.story_builder.questions 
+    @question = @questions.order(position: :asc).first
     @prompts = @question.prompts.order(created_at: :asc)
     @prompt = @prompts.first
   end
@@ -45,7 +46,23 @@ class Accounts::StoriesController < ApplicationController
     end
   end
 
+  def question_navigation
+    story_builder = StoryBuilder.find(params[:story_builder_id])
+    @question = story_builder.questions[params[:q_index].to_i]
+    
+    respond_to do |format|
+      format.json do
+        if @question.nil?
+          render json: { question_id: nil, question_title: nil, success: false }
+        else
+          render json: { question_id: @question.id, question_title: @question.title, success: true }
+        end
+      end
+    end
+  end
+  
   def prompt_navigation
+    # TODO: Shorten the scope by querying the questions of story object 
     question = Question.find(params[:id])
     @prompt = question.prompts[params[:index].to_i]
 
@@ -60,6 +77,32 @@ class Accounts::StoriesController < ApplicationController
     end
   end
 
+  # GET stories/:story_builder_id/question/:id/nodes
+  def question_nodes
+    story_builder = StoryBuilder.find(params[:story_builder_id])
+    question = story_builder.questions.find(params[:id])
+    @parent_nodes = question.parent_nodes.map{ |node| [node.title, node.id] }
+
+    respond_to do |format|
+      format.json do
+        render json: { parent_nodes: @parent_nodes, success: true }
+      end
+    end
+  end
+
+  # GET /question/:id/nodes/:node_id/sub_nodes
+  def sub_nodes_per_node
+    question = Question.find(params[:id])
+    node = question.parent_nodes.find(params[:node_id])
+    @child_nodes = node.child_nodes.map{ |node| [node.title, node.id] }
+
+    respond_to do |format|
+      format.json do
+        render json: { child_nodes: @child_nodes, success: true }
+      end
+    end
+  end
+  
   private
 
   def story_params

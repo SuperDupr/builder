@@ -21,11 +21,12 @@ Title: <%= @story.title %>
 
   <h2>Question/Answer</h2>
 
+  <div>Questions: <span id="questionNumber">1</span>/<%= @questions.count %></div>
 
-  <div id="questionContainer" data-id=<%= @question.id %>>
-    <%= link_to("Prev Question", "#", class: "btn btn-primary") %>
-    <%= link_to("Next Question", "#", class: "btn btn-primary") %>
-    
+  <%= link_to("Prev Question", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
+  <%= link_to("Next Question", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
+  
+  <div id="questionContainer" data-id=<%= @question.id %>>  
     <%= @question.title %>
   </div>
 

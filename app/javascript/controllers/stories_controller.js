@@ -4,6 +4,7 @@ import consumer from "../channels/consumer"
 export default class extends Controller {
   connect() {
     this.index = 0
+    this.qIndex = 0
   }
 
   updateStoryAccessOrDraftMode(event) {
@@ -64,6 +65,53 @@ export default class extends Controller {
             promptNumber.textContent = this.index + 1
             promptContainer.dataset.id = data.prompt_id
             promptContainer.textContent = data.prompt_sentence
+          } else {
+            if (cursor == "backward") {
+              this.index++
+            } else if (cursor == "forward") {
+              this.index--
+            }
+          }
+        })
+      }
+    })
+  }
+
+  questionNavigation(event) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    let questionNumber = document.getElementById("questionNumber")
+    let questionContainer = document.getElementById("questionContainer")
+    let cursor = event.target.dataset.cursor
+    let storyBuilderId = event.target.dataset.storyBuilderId
+    
+    // TODO: Add validations to handle index value correctly
+    if (cursor == "backward") {
+      this.qIndex--
+    } else if (cursor == "forward") {
+      this.qIndex++
+    }
+
+    fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      }
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          if (data.success) {
+            questionNumber.textContent = this.qIndex + 1
+            questionContainer.dataset.id = data.question_id
+            questionContainer.textContent = data.question_title
+
+            // TODO: When a new question is fetched, we have to refresh prompts as well
+          } else {
+            if (cursor == "backward") {
+              this.qIndex++
+            } else if (cursor == "forward") {
+              this.qIndex--
+            }
           }
         })
       }

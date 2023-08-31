@@ -99,7 +99,10 @@ Rails.application.routes.draw do
     resources :industries, module: :accounts
   end
 
+  get "stories/:story_builder_id/questions", to: "accounts/stories#question_navigation", as: :question_navigation
+  get "stories/:story_builder_id/question/:id/nodes", to: "accounts/stories#question_nodes", as: :question_nodes
   get "question/:id/prompts", to: "accounts/stories#prompt_navigation", as: :prompt_navigation
+  get "question/:id/nodes/:node_id/child_nodes", to: "accounts/stories#child_nodes_per_node", as: :child_nodes_per_node
   resources :account_invitations
 
   post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations
