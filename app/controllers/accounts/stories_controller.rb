@@ -25,9 +25,14 @@ class Accounts::StoriesController < ApplicationController
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @questions = @story.story_builder.questions
-    @question = @questions.order(position: :asc).first
-    @prompts = @question.prompts.order(created_at: :asc)
-    @prompt = @prompts.first
+
+    if @questions.empty?
+      redirect_to(account_stories_path, alert: "Your chosen story builder has no associated questions!")
+    else
+      @question = @questions.order(position: :asc).first
+      @prompts = @question.prompts.order(created_at: :asc)
+      @prompt = @prompts.first
+    end
   end
 
   def update
@@ -99,6 +104,21 @@ class Accounts::StoriesController < ApplicationController
     respond_to do |format|
       format.json do
         render json: {child_nodes: @child_nodes, success: true}
+      end
+    end
+  end
+
+  def track_answers
+    question = Question.find(params[:id])
+    @answer = question.answers.new(story_id: params[:story_id], response: params[:response])
+
+    respond_to do
+      format.json do
+        if @answer.save
+          render json: {answer: @answer, success: true}
+        else
+          render json: {answer: nil, success: false}
+        end
       end
     end
   end

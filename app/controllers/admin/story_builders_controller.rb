@@ -15,7 +15,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     @story_builder = StoryBuilder.new(story_builder_params)
 
     if @story_builder.save
-      attach_questions_to_builder
+      attach_questions_to_builder if questions_exist?
       redirect_to(admin_story_builders_path, notice: "Builder created successfully!")
     else
       redirect_to(admin_story_builders_path,
@@ -25,6 +25,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def show
     @questionnaires = @story_builder.questionnaires.order(position: :asc)
+    @questionnaires_size = @questionnaires.size
   end
 
   def edit
@@ -36,8 +37,11 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     @tracked_question_ids = @story_builder.questions&.pluck(:id)
 
     if @story_builder.update(story_builder_params)
-      attach_questions_to_builder
-      detach_questions_from_builder
+      if questions_exist?
+        attach_questions_to_builder
+        detach_questions_from_builder
+      end
+
       redirect_to(admin_story_builders_path, notice: "Builder updated successfully!")
     else
       redirect_to(admin_story_builder_path, alert: "Unable to update builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
@@ -74,6 +78,10 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def set_story_builder
     @story_builder = StoryBuilder.find(params[:id])
+  end
+
+  def questions_exist?
+    params[:builder].present? && params[:builder][:q_ids].present?
   end
 
   def is_question_id_tracked?(id)
