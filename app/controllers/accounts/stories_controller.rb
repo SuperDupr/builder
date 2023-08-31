@@ -111,7 +111,7 @@ class Accounts::StoriesController < ApplicationController
   def track_answers
     question = Question.find(params[:id])
     @answer = question.answers.new(story_id: params[:story_id], response: params[:response])
-    
+
     respond_to do
       format.json do
         if @answer.save
