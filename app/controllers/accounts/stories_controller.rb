@@ -25,9 +25,14 @@ class Accounts::StoriesController < ApplicationController
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @questions = @story.story_builder.questions
-    @question = @questions.order(position: :asc).first
-    @prompts = @question.prompts.order(created_at: :asc)
-    @prompt = @prompts.first
+
+    if @questions.empty?
+      redirect_to(account_stories_path, alert: "Your chosen story builder has no associated questions!")
+    else
+      @question = @questions.order(position: :asc).first
+      @prompts = @question.prompts.order(created_at: :asc)
+      @prompt = @prompts.first
+    end
   end
 
   def update
