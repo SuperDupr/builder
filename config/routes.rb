@@ -95,12 +95,21 @@ Rails.application.routes.draw do
         post :resend
       end
     end
+    resources :stories, module: :accounts
+    resources :industries, module: :accounts
   end
+
+  get "stories/:story_builder_id/questions", to: "accounts/stories#question_navigation", as: :question_navigation
+  get "stories/:story_builder_id/question/:id/nodes", to: "accounts/stories#question_nodes", as: :question_nodes
+  get "question/:id/prompts", to: "accounts/stories#prompt_navigation", as: :prompt_navigation
+  get "question/:id/nodes/:node_id/child_nodes", to: "accounts/stories#child_nodes_per_node", as: :child_nodes_per_node
+  post "question/:id/answers", to: "accounts/stories#track_answers", as: :track_answers
   resources :account_invitations
 
   post "/accounts/:id/invitations/bulk_import", to: "accounts/account_invitations#bulk_import", as: :bulk_import_org_account_invitations
 
   resources :teams
+  resources :story_builders
 
   # Payments
   resource :billing_address
@@ -142,6 +151,10 @@ Rails.application.routes.draw do
   namespace :users do
     resources :mentions, only: [:index]
   end
+
+  resources :registration_questions, module: :users, only: [:index]
+  patch :update_registration_data, to: "users/registration_questions#update_data"
+
   namespace :user, module: :users do
     resource :two_factor, controller: :two_factor do
       get :backup_codes

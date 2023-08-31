@@ -1,0 +1,4 @@
+<h1><%= @industry.title %></h1>
+
+<%= link_to("Edit Industry", edit_account_industry_path(@industry, account_id: current_account.id)) %>
+<%= link_to("Back to Industries", account_industries_path(account_id: current_account.id)) %>

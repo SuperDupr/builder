@@ -1,0 +1,18 @@
+<h1>RegistrationQuestions#index</h1>
+<p>Here we'll render the form</p>
+
+<%= form_for(current_user, url: update_registration_data_path, method: :patch) do |f| %>
+  <!-- TODO: Add the industry selection dropdown -->
+  <%= f.label("Which best describes the industry you work in?") %>
+  <!-- I work in the ________ industry.  -->
+  <%= f.select(:industry_id, @industries, prompt: "Select Industry", class: "form-control") %>
+  
+  <%= f.label("How would you best describe your role?") %>
+  <!-- 2A. I work in the _______ department. 2B. My job title is _________. -->
+  <%= f.text_field(:work_role) %>
+
+  <%= f.label("What is the focus of your communication?") %>
+  <%= f.text_field(:focus_of_communication) %>
+
+  <%= f.submit("Save", class: "btn btn-primary") %>
+<% end %>

@@ -1,0 +1,32 @@
+<h1>Stories#index</h1>
+
+<h2>Organization Stories</h2>
+<% @org_stories.each do |story| %>
+  <%= story.title %><%= story.story_builder.title %>
+  <!-- Skip displaying the profile picture with creator name -->
+  <%= story.creator.name %>
+  <%= story.status.to_s.capitalize %>
+  <% if current_account_user.roles.include?("admin") %>
+    <%= story.viewable ? "Viewable" : "Non-viewable" %>
+    <!-- TODO: Show toggle for viewable -->
+  <% end %>
+  <!-- This will not point to the actual page, until we create the story show page -->
+  <%= link_to("Show", "#", class: "") %>
+<% end %>
+
+<%# @pagy_1 %>
+
+<h2>My Stories</h2>
+<% @my_stories.each do |story| %>
+  <%= story.title %><%= story.story_builder.title %>
+  <!-- Skip displaying the profile picture with creator name -->
+  <%= story.creator.name %>
+   <!-- Note: Make it hard-coded for now -->
+  <p><%= story.answers.count %> out of <%= story.story_builder.questions&.count %></p>
+  <%= story.status.to_s.capitalize %>
+  <%= story.private_access ? "Private" : "Public" %>
+  <!-- TODO: Show toggle for private/public access -->
+  <%= link_to("Edit", edit_account_story_path(story, account_id: current_account.id), class: "") %>
+<% end %>
+
+<%# @pagy_2 %>
