@@ -40,7 +40,7 @@ class Accounts::StoriesController < ApplicationController
       format.json do
         if params[:change_access_mode] == "on"
           @story.toggle!(:private_access)
-          
+
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
