@@ -9,6 +9,7 @@ export default class extends Controller {
 
   updateStoryAccessOrDraftMode(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    let privateAccess = document.getElementById("privateAccess");
     const accountId = event.target.dataset.accountId
     const storyId = event.target.dataset.id
     let changeAccessMode = event.target.dataset.changeAccessMode
@@ -27,11 +28,11 @@ export default class extends Controller {
 
           if (data.operation === "change_access_mode") {
             operationResultInfo = data.private_access ? "Private" : "Public"
-            alert(`Story marked as ${operationResultInfo}!`)
+            privateAccess.textContent = operationResultInfo
             // TODO: Add a redirect to stories index page
-          } else if (data.operation === "draft_mode") {
-            operationResultInfo = data.status
-            alert(`Story saved as ${operationResultInfo} successfully!`)
+          // } else if (data.operation === "draft_mode") {
+          //   // operationResultInfo = data.status
+          //   // alert(`Story saved as ${operationResultInfo} successfully!`)
           }
         })
       }
@@ -42,18 +43,32 @@ export default class extends Controller {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     let promptNumber = document.getElementById("promptNumber")
     let promptContainer = document.getElementById("promptContainer")
+    let promptPreText = document.getElementById("promptPreText");
+    let promptPostText = document.getElementById("promptPostText");
     let questionId = document.getElementById("questionContainer").dataset.id
     let cursor = event.target.dataset.cursor
-    const prevQuestionButton = document.getElementById('promptBackward');
-    const nextQuestionButton = document.getElementById('promptForward');
+    let promptsCount = document.getElementById("promptsCount")
+    const prevPromptButton = document.getElementById('promptBackward');
+    const nextPromptButton = document.getElementById('promptForward');
+    let promptCountContainer = document.getElementById("promptCountContainer")
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
-      console.log(index)
-      this.index--
+      if(this.index >= 1){
+        nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
+        this.index--
+        if(this.index + 1 === 1){
+          event.target.classList.add("pointer-events-none", "opacity-50");
+        }
+      }
     } else if (cursor == "forward") {
-      console.log(index)
-      this.index++
+      if(this.index + 1 < +promptsCount.innerText){
+        prevPromptButton.classList.remove("pointer-events-none", "opacity-50");
+        this.index++
+        if(this.index + 1 === +promptsCount.innerText){
+          event.target.classList.add("pointer-events-none", "opacity-50");
+        }
+      }
     }
 
     fetch(`/question/${questionId}/prompts?index=${this.index}`, { 
@@ -66,15 +81,22 @@ export default class extends Controller {
       if (response.ok) {
         response.json().then((data) => {
           if (data.success) {
+            if(!data.prompt_pretext && !data.prompt_posttext){
+              promptPreText.textContent = 'No Prompt text present'
+              promptPostText.textContent = ''
+            }
+            else{
+              promptPreText.textContent = data.prompt_pretext
+              promptPostText.textContent = data.prompt_posttext
+            }
+            promptCountContainer.style.display = 'inline'
             promptNumber.textContent = this.index + 1
             promptContainer.dataset.id = data.prompt_id
-            promptContainer.textContent = data.prompt_sentence
           } else {
-            if (cursor == "backward") {
-              this.index++
-            } else if (cursor == "forward") {
-              this.index--
-            }
+            nextPromptButton.classList.add("pointer-events-none", "opacity-50");
+            promptCountContainer.style.display = 'none'
+            promptPreText.textContent = 'No Prompts present'
+            promptPostText.textContent = ''
           }
         })
       }
@@ -90,11 +112,19 @@ export default class extends Controller {
     let storyBuilderId = event.target.dataset.storyBuilderId
     const prevQuestionButton = document.getElementById('questionBackward');
     const nextQuestionButton = document.getElementById('questionForward');
+    let promptNumber = document.getElementById("promptNumber")
+    let promptContainer = document.getElementById("promptContainer")
+    let promptPreText = document.getElementById("promptPreText");
+    let promptPostText = document.getElementById("promptPostText");
+    let promptsCount = document.getElementById("promptsCount")
+    let promptCountContainer = document.getElementById("promptCountContainer")
+    const prevPromptButton = document.getElementById('promptBackward');
+    const nextPromptButton = document.getElementById('promptForward');
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
       if(this.qIndex >= 1){
-        nextQuestionButton.classList.remove("pointer-events-none", "opacity-50");
+        nextQuestionButton.textContent = 'Next Question'
         this.qIndex--
         if(this.qIndex + 1 === 1){
           event.target.classList.add("pointer-events-none", "opacity-50");
@@ -105,7 +135,7 @@ export default class extends Controller {
         prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
         this.qIndex++
         if(this.qIndex + 1 === questionsCount){
-          event.target.classList.add("pointer-events-none", "opacity-50");
+          nextQuestionButton.textContent = 'Finish'
         }
       }
       
@@ -124,14 +154,49 @@ export default class extends Controller {
             questionNumber.textContent = this.qIndex + 1
             questionContainer.dataset.id = data.question_id
             questionContainer.textContent = data.question_title
+            prevPromptButton.classList.add("pointer-events-none", "opacity-50");
+
+            fetch(`/question/${data.question_id}/prompts?index=0`, { 
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": csrfToken
+              }
+            }).then((response) => {
+              if (response.ok) {
+                response.json().then((data) => {
+                  if (data.success) {
+                    if(!data.prompt_pretext && !data.prompt_posttext){
+                      promptPreText.textContent = 'No Prompt text present'
+                      promptPostText.textContent = ''
+                    }
+                    else{
+                      promptPreText.textContent = data.prompt_pretext
+                      promptPostText.textContent = data.prompt_posttext
+                    }
+                    if(data.count <= 1){
+                      nextPromptButton.classList.add("pointer-events-none", "opacity-50");
+                    }
+                    else{
+                      nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
+                    }
+                    promptCountContainer.style.display = 'inline'
+                    promptNumber.textContent = 1
+                    promptContainer.dataset.id = data.prompt_id
+                    promptsCount.textContent = data.count
+                  } else {
+                    nextPromptButton.classList.add("pointer-events-none", "opacity-50");
+                    promptCountContainer.style.display = 'none'
+                    promptPreText.textContent = 'No Prompts present'
+                    promptPostText.textContent = ''
+                  }
+                })
+              }
+            })
 
             // TODO: When a new question is fetched, we have to refresh prompts as well
           } else {
-            if (cursor == "backward") {
-              this.qIndex++
-            } else if (cursor == "forward") {
-              this.qIndex--
-            }
+            questionContainer.textContent = 'An error occurred in fetching this question'
           }
         })
       }

@@ -32,7 +32,7 @@
               <td>
                 <%= story.creator.name %>
               </td>
-              <td><%= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
+              <td><%#= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
               <td><%= story.status.to_s.capitalize %></td>
               <% if current_account_user.roles.include?("admin") %>
                 <td>
@@ -95,7 +95,7 @@
                 <%= story.title %>
                 <div class="text-neutral-500"><%= story.story_builder.title %></div>
               </td>
-              <td><%= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
+              <td><%#= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
               <td><%= story.status.to_s.capitalize %></td>
               <% if current_account_user.roles.include?("admin") %>
                 <td>

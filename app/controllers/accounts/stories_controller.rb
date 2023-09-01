@@ -40,7 +40,7 @@ class Accounts::StoriesController < ApplicationController
       format.json do
         if params[:change_access_mode] == "on"
           @story.toggle!(:private_access)
-
+          
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
@@ -53,7 +53,7 @@ class Accounts::StoriesController < ApplicationController
 
   def question_navigation
     story_builder = StoryBuilder.find(params[:story_builder_id])
-    @question = story_builder.questions[params[:q_index].to_i]
+    @question = story_builder.questions.order(position: :asc)[params[:q_index].to_i]
 
     respond_to do |format|
       format.json do
@@ -74,9 +74,9 @@ class Accounts::StoriesController < ApplicationController
     respond_to do |format|
       format.json do
         if @prompt.nil?
-          render json: {prompt_id: nil, prompt_sentence: nil, success: false}
+          render json: {prompt_id: nil, prompt_pretext: nil, prompt_posttext: nil, count: nil, success: false}
         else
-          render json: {prompt_id: @prompt.id, prompt_sentence: @prompt.full_sentence_form, success: true}
+          render json: {prompt_id: @prompt.id, prompt_pretext: @prompt.pre_text, prompt_posttext: @prompt.post_text, count: question.prompts.count, success: true}
         end
       end
     end
