@@ -1,57 +1,136 @@
-<h1>Stories#edit</h1>
-
-Title: <%= @story.title %>
-
-<div data-controller="stories">
-  <%= link_to("Private", "javascript:void(0)", data: { 
-    id: @story.id, 
-    account_id: current_account.id, 
-    change_access_mode: "on",
-    draft_mode: "off",
-    action: "stories#updateStoryAccessOrDraftMode" }) %>
-
-
-  <%= link_to("Save as Draft", "javascript:void(0)", data: { 
-    id: @story.id, 
-    account_id: current_account.id,
-    change_access_mode: "off",
-    draft_mode: "on", 
-    action: "stories#updateStoryAccessOrDraftMode" }, 
-      class: "btn btn-primary") %>
-
-  <h2>Question/Answer</h2>
-
-  <div>Questions: <span id="questionNumber">1</span>/<%= @questions.count %></div>
-
-  <%= link_to("Prev Question", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
-  <%= link_to("Next Question", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
-  
-  <div id="questionContainer" data-id=<%= @question.id %>>  
-    <%= @question.title %>
+<header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4" role="banner">
+  <div>
+    <h3 class="main-content__page-title">
+      Welcome to <%= @story.story_builder.title %> Builder
+    </h3>
+    <h4>Story: <span class="font-normal"><%= @story.title %></span></h4>
   </div>
+</header>
+<div class="py-4 lg:px-4" data-controller="stories">
+  <div class="grid grid-cols-3 gap-4 mb-8">
+    <div class="col-span-2">
 
-  <% if @prompts.any? %>
-    <%= link_to("<-", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#promptNavigation", cursor: "backward" }) %>
-    <%= link_to("->", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#promptNavigation", cursor: "forward" }) %>
-    
-    <div>Prompts: <span id="promptNumber">1</span>/<%= @prompts.count %></div>
+      <!--  Questions Start -->
 
-    <!-- Display one prompt at a time -->
-    <div id="promptContainer" data-id="<%= @prompt.id %>">
-      <%= @prompt.full_sentence_form %>
+      <% if @questions.any? %>
+        <h5 class="mb-4">
+          Questions 
+          <span class="font-normal">
+            <span id="questionNumber">1</span>
+            /
+            <span id="questionsCount"><%= @questions.count %></span>
+          </span>
+        </h5>
+        <div class="flex justify-between items-center gap-2">
+          <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-primary pointer-events-none opacity-50", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
+          <%= link_to("#{@questions.count === 1 ? 'Finish' : 'Next Question'}", "javascript:void(0)", id:'questionForward', class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
+        </div>
+        <h5 id="questionContainer" class="mt-4" data-id=<%= @question.id %>>
+          <%= @question.title %>
+        </h5>
+        <% if @prompts.any? %>
+          <div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-2">
+              <h5>
+                Prompts 
+                <span class="font-normal" id="promptCountContainer">
+                  <span id="promptNumber">1</span>
+                  /
+                  <span id="promptsCount"><%= @prompts.count %></span>
+                </span>
+              </h5>
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary pointer-events-none opacity-50" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+                <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
+              </div>
+            </div>
+            <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="<%= @prompt.id %>">
+              <div id="promptPreText"><%= @prompt.pre_text %></div>
+                <select id="nodes" class="!w-auto">
+                  <option disabled selected>Select option</option>
+                  <% @question.parent_nodes.each do |node| %>
+                    <option value="<%= node.id %>">
+                      <%= node.title %>
+                    </option>
+                  <% end %>
+                </select>
+                <!-- Show following select of child nodes after selecting parent nodes -->
+                <select id="subNodes" class="!w-auto">
+                  <option disabled selected>Select option</option>
+                  <%# node.child_nodes.each do |child_node| %>
+                    <option value="<%#= child_node.id %>">
+                      <%#= child_node.title %>
+                    </option>
+                  <%# end %>
+                </select>
+                <!-- Show following input field if no nodes are present -->
+                <% if !@question.parent_nodes.any? %>
+                  <input id="textAnswer" type="text" class="form-control w-auto mt-1" />
+                <% end %>
+              <div id="promptPostText"><%= @prompt.post_text %></div>
+            </div>
+            <div class="h-10"></div>
+          </div>
+        <% else %>
+          <h5>No Prompts present.</h5>
+        <% end %>
+      <% else %>
+        <h5>No Questions present.</h5>
+      <% end %>
+
+      <!--  Questions End -->
+
+      <h5 class="mt-8">Already know what kind of story you want to build?</h5>
+      <div class="mt-2">Select the builder you'd like to use below</div>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-5">
+        <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
+          <h4 class="">Fichteen's Curve</h4>
+          <button class="btn btn-primary btn-small">Start Building ></button>
+        </div>
+        <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
+          <h4 class="">Fichteen's Curve</h4>
+          <button class="btn btn-primary btn-small">Start Building ></button>
+        </div>
+      </div>
     </div>
-    
-  <% else %>
-    <!-- Display text field to record answer against the question -->
-  <% end %>
-</div>
-
-<h2>My Stories</h2>
-<% @my_stories.each do |story| %>
-  <%= story.title %>
-  <p>Final highlights will come here..</p>
-<% end %>
-
-<h2>Already know what kind of story you want to build?</h2>
-<h3>Select the builder you'd like to use below</h3>
-<!-- TODO: Pick the design from original Figma file and hard code the widgets -->
+    <!-- col -->
+    <div>
+      <div class="flex items-center gap-2 justify-between">
+        <label for="access" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+          <div class="relative">
+            <% if @story.private_access %>
+              <input id="access" type="checkbox" class="sr-only"
+                data-id="<%= @story.id %>"
+                checked
+                data-account-id="<%= current_account.id %>"
+                data-change-access-mode="on"
+                data-draft-mode="off"
+                data-action="change->stories#updateStoryAccessOrDraftMode">
+            <% else %>
+              <input id="access" type="checkbox" class="sr-only"
+                data-id="<%= @story.id %>"
+                data-account-id="<%= current_account.id %>"
+                data-change-access-mode="on"
+                data-draft-mode="off"
+                data-action="change->stories#updateStoryAccessOrDraftMode">
+            <% end %>
+            <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+          </div>
+          <div class="ml-3 text-gray-700 font-medium" id="privateAccess"><%= @story.private_access === true ? 'Private' : 'Public' %></div>
+        </label>
+        <%= link_to("Save as Draft", account_stories_path, class: "btn btn-primary") %>
+      </div>
+      <div class="p-3 mt-3 border border-gray-200 rounded-lg">
+        <h5>My Stories</h5>
+        <% @my_stories.each do |story| %>
+          <div class="p-3 mt-3 border border-gray-200 bg-gray-100 rounded-sm">
+            <div class="font-semibold"><%= story.title %></div>
+            <p>Final highlights will come here..</p>
+            <a href="#" class="inline-block font-semibold mt-4">View</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>  

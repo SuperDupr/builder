@@ -1,32 +1,137 @@
-<h1>Stories#index</h1>
+<header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4" role="banner">
+  <h3 class="main-content__page-title">
+    Stories
+  </h3>
+</header>
 
-<h2>Organization Stories</h2>
-<% @org_stories.each do |story| %>
-  <%= story.title %><%= story.story_builder.title %>
-  <!-- Skip displaying the profile picture with creator name -->
-  <%= story.creator.name %>
-  <%= story.status.to_s.capitalize %>
-  <% if current_account_user.roles.include?("admin") %>
-    <%= story.viewable ? "Viewable" : "Non-viewable" %>
-    <!-- TODO: Show toggle for viewable -->
+<!-- Organization Stories -->
+<div class="xl:container mx-auto pt-4 px-4">
+  <h4>Organization Stories</h4>
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th>Story Details</th>
+          <th>Created By</th>
+          <th>Questions Responded</th>
+          <th>Status</th>
+          <% if current_account_user.roles.include?("admin") %>
+            <th>Team Access</th>
+          <% end %>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @org_stories.present? %>
+          <% @org_stories.each do |story| %>
+            <tr>
+              <td>
+                <%= story.title %>
+                <div class="text-neutral-500"><%= story.story_builder.title %></div>
+              </td>
+              <td>
+                <%= story.creator.name %>
+              </td>
+              <td><%#= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
+              <td><%= story.status.to_s.capitalize %></td>
+              <% if current_account_user.roles.include?("admin") %>
+                <td>
+                  <div class="flex items-center w-full">
+                    <label for="access<%= story.id %>" class="flex items-center cursor-pointer">
+                      <div class="relative" data-controller="tooltip" data-tippy-content="Make it Viewable/Non-viewable for whole organization">
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>" data-action="click->accounts#toggleSwitchListener" <%= story.viewable ? "checked" : "" %>>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 text-gray-700 font-medium"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
+                    </label>
+                  </div>
+                </td>
+              <% end %>
+              <td>
+                <div class="flex items-center gap-2 justify-end" >
+                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Show" }) do %>
+                    <i class="fa-solid fa-eye"></i>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" class="text-center">No Organizations stories found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy_1.pages > 1 %>
+    <div class="mt-6 text-right">
+      <%== pagy_nav(@pagy_1) %>
+    </div>
   <% end %>
-  <!-- This will not point to the actual page, until we create the story show page -->
-  <%= link_to("Show", "#", class: "") %>
-<% end %>
+</div>
 
-<%# @pagy_1 %>
-
-<h2>My Stories</h2>
-<% @my_stories.each do |story| %>
-  <%= story.title %><%= story.story_builder.title %>
-  <!-- Skip displaying the profile picture with creator name -->
-  <%= story.creator.name %>
-   <!-- Note: Make it hard-coded for now -->
-  <p><%= story.answers.count %> out of <%= story.story_builder.questions&.count %></p>
-  <%= story.status.to_s.capitalize %>
-  <%= story.private_access ? "Private" : "Public" %>
-  <!-- TODO: Show toggle for private/public access -->
-  <%= link_to("Edit", edit_account_story_path(story, account_id: current_account.id), class: "") %>
-<% end %>
-
-<%# @pagy_2 %>
+<!-- My Stories -->
+<div class="xl:container mx-auto pb-4 px-4">
+  <h4>My Stories</h4>
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th>Story Details</th>
+          <th>Questions Responded</th>
+          <th>Status</th>
+          <th>Access</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @my_stories.present? %>
+          <% @my_stories.each do |story| %>
+            <tr>
+              <td>
+                <%= story.title %>
+                <div class="text-neutral-500"><%= story.story_builder.title %></div>
+              </td>
+              <td><%#= story.answers.count %> out of <%= story.story_builder.questions&.count %></td>
+              <td><%= story.status.to_s.capitalize %></td>
+              <% if current_account_user.roles.include?("admin") %>
+                <td>
+                  <div class="flex items-center w-full">
+                    <label for="access<%= story.id %>" class="flex items-center cursor-pointer">
+                      <div class="relative" data-controller="tooltip" data-tippy-content="Make story Private/Public">
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>" data-action="click->accounts#toggleSwitchListener" <%= story.private_access ? "checked" : "" %>>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 text-gray-700 font-medium"><%= story.private_access ? "Private" : "Public" %></div>
+                    </label>
+                  </div>
+                </td>
+              <% end %>
+              <td>
+                <div class="flex items-center gap-2 justify-end" >
+                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
+                    <i class="fa-solid fa-pen"></i>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="5" class="text-center">No stories found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy_2.pages > 1 %>
+    <div class="mt-6 text-right">
+      <%== pagy_nav(@pagy_2) %>
+    </div>
+  <% end %>
+</div>
