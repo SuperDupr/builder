@@ -5,10 +5,10 @@ class Accounts::StoriesController < ApplicationController
   def index
     # Fetch organization stories that are shared by the organization admin
     org_stories = current_account.stories.includes(:story_builder, :creator).publicized
-    @pagy_1, @org_stories = pagy(current_account_user.roles.include?("admin") ? org_stories : org_stories.viewable)
+    @pagy_1, @org_stories = pagy(current_account_user.roles.include?("admin") ? org_stories : org_stories.viewable, items: 10)
 
     # Fetch stories that are created by the logged in organization admin/member
-    @pagy_2, @my_stories = pagy(Story.includes(:story_builder, :creator).where(creator_id: current_user.id))
+    @pagy_2, @my_stories = pagy(Story.includes(:story_builder, :creator).where(creator_id: current_user.id), items: 10)
   end
 
   def create
