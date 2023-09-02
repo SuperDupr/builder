@@ -13,8 +13,15 @@
       <% @story_builders.each do |story_builder| %>
         <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
           <h4 class=""><%= story_builder.title %></h4>
-          <% unless @redirect_to_registration_section %>
-            <div class="flex items-center gap-2">
+          
+          <% if @redirect_to_registration_section %>
+            <%= link_to("Start Building >", registration_questions_path(fallback: "story_creation"), class: "btn btn-primary btn-small") %>
+          <% else %>
+            <% if story_builder.questions.empty? %>
+              <%= link_to("Start Building >", "javascript:void(0)", class: "btn btn-primary btn-small", 
+                data: { controller: "stories", action: "stories#showQuestionsAbsenceAlert" }) %>
+            <% else %>
+              <div class="flex items-center gap-2">
               <div data-controller="modal" data-action="keydown.esc->modal#close" tabindex="-1">
                 <button class="btn btn-primary btn-small" data-action="click->modal#open:prevent">Start Building ></button>
 
@@ -37,8 +44,7 @@
                 </div>
               </div>
             </div>
-          <% else %>
-            <%= link_to("Start Building >", registration_questions_path(fallback: "story_creation"), class: "btn btn-primary btn-small") %>
+            <% end %>
           <% end %>
         </div>
       <% end %>

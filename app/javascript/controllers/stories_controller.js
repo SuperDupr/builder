@@ -7,6 +7,10 @@ export default class extends Controller {
     this.qIndex = 0
   }
 
+  showQuestionsAbsenceAlert() {
+    alert("Your chosen story builder has no associated questions!")
+  }
+
   updateStoryAccessOrDraftMode(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let privateAccess = document.getElementById("privateAccess");
