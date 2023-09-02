@@ -24,7 +24,7 @@
                       <h2 class="text-lg mb-2">Suggest a Name for your Story</h2>
 
                       <%= form_for(@story, url: account_stories_path(account_id: current_account.id)) do |f| %>
-                        <%= f.text_field(:title, class:"form-control") %>
+                        <%= f.text_field(:title, class:"form-control", required: true) %>
                         <%= f.hidden_field(:story_builder_id, value: story_builder.id) %>
 
                         <div class="flex justify-end items-center flex-wrap gap-2 mt-4">
