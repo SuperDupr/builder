@@ -130,9 +130,9 @@ class Accounts::StoriesController < Accounts::BaseController
     respond_to do |format|
       format.json do
         if @story.toggle!(:viewable)
-          render json: { viewable: @story.viewable, success: true }
+          render json: {viewable: @story.viewable, success: true}
         else
-          render json: { viewable: nil, success: false }
+          render json: {viewable: nil, success: false}
         end
       end
     end
@@ -149,6 +149,6 @@ class Accounts::StoriesController < Accounts::BaseController
   end
 
   def set_account
-    @account = current_account    
+    @account = current_account
   end
 end

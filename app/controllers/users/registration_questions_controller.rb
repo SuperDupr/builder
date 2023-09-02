@@ -5,7 +5,7 @@ class Users::RegistrationQuestionsController < ApplicationController
     if params[:fallback] == "story_creation"
       flash[:alert] = "Please answer some basic questions to lead up the story building process!"
     end
-    
+
     @industries = current_account.industries.map { |industry| [industry.title, industry.id] }
   end
 
