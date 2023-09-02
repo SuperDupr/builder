@@ -207,6 +207,28 @@ export default class extends Controller {
     })
   }
 
+  toggleStoryVisibility(event) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const storyId = event.target.dataset.id
+    const viewableTextContainer = document.getElementById(`viewableTextContainer${storyId}`)
+    
+    fetch(`/stories/${storyId}/update_visibility`, { 
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      },
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          if (data.success) {
+            viewableTextContainer.textContent = data.viewable ? "Viewable" : "Non-viewable"
+            // event.target.setAttribute("checked", data.viewable)
+          }
+        })
+      }
+    })
+  }
   // Request to track answer of a question
   
   // const questionId = 123; // Replace with the actual question ID

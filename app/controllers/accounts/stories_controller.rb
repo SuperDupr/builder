@@ -1,11 +1,14 @@
-class Accounts::StoriesController < ApplicationController
+class Accounts::StoriesController < Accounts::BaseController
   before_action :authenticate_user!
-  before_action :set_story, only: [:show, :edit, :update, :destroy]
+  before_action :set_story, only: [:show, :edit, :update, :destroy, :update_visibility]
+  before_action :set_account, only: :update_visibility
+  before_action :require_account_admin, only: :update_visibility
 
   def index
     # Fetch organization stories that are shared by the organization admin
     org_stories = current_account.stories.includes(:story_builder, :creator).publicized
-    @pagy_1, @org_stories = pagy(current_account_user.roles.include?("admin") ? org_stories : org_stories.viewable, items: 10)
+    @admin_logged_in = current_account_user.roles.include?("admin")
+    @pagy_1, @org_stories = pagy(@admin_logged_in ? org_stories : org_stories.viewable, items: 10)
 
     # Fetch stories that are created by the logged in organization admin/member
     @pagy_2, @my_stories = pagy(Story.includes(:story_builder, :creator).where(creator_id: current_user.id), items: 10)
@@ -123,6 +126,18 @@ class Accounts::StoriesController < ApplicationController
     end
   end
 
+  def update_visibility
+    respond_to do |format|
+      format.json do
+        if @story.toggle!(:viewable)
+          render json: { viewable: @story.viewable, success: true }
+        else
+          render json: { viewable: nil, success: false }
+        end
+      end
+    end
+  end
+
   private
 
   def story_params
@@ -131,5 +146,9 @@ class Accounts::StoriesController < ApplicationController
 
   def set_story
     @story = Story.find(params[:id])
+  end
+
+  def set_account
+    @account = current_account    
   end
 end
