@@ -43,38 +43,43 @@ export default class extends Controller {
     })
   }
 
-  promptNavigation(event) {
+  promptNavigationFunction(event, fetchAfterQuestion, questionId) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     let promptNumber = document.getElementById("promptNumber")
     let promptContainer = document.getElementById("promptContainer")
     let promptPreText = document.getElementById("promptPreText");
     let promptPostText = document.getElementById("promptPostText");
-    let questionId = document.getElementById("questionContainer").dataset.id
     let cursor = event.target.dataset.cursor
     let promptsCount = document.getElementById("promptsCount")
+    let promptCountContainer = document.getElementById("promptCountContainer")
     const prevPromptButton = document.getElementById('promptBackward');
     const nextPromptButton = document.getElementById('promptForward');
-    let promptCountContainer = document.getElementById("promptCountContainer")
-    
-    // TODO: Add validations to handle index value correctly
-    if (cursor == "backward") {
-      if(this.index >= 1){
-        nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
-        this.index--
-        if(this.index + 1 === 1){
-          event.target.classList.add("pointer-events-none", "opacity-50");
+  
+  
+    if(!fetchAfterQuestion){
+      // TODO: Add validations to handle index value correctly
+      if (cursor == "backward") {
+        if(this.index >= 1){
+          nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
+          this.index--
+          if(this.index + 1 === 1){
+            event.target.classList.add("pointer-events-none", "opacity-50");
+          }
         }
-      }
-    } else if (cursor == "forward") {
-      if(this.index + 1 < +promptsCount.innerText){
-        prevPromptButton.classList.remove("pointer-events-none", "opacity-50");
-        this.index++
-        if(this.index + 1 === +promptsCount.innerText){
-          event.target.classList.add("pointer-events-none", "opacity-50");
+      } else if (cursor == "forward") {
+        if(this.index + 1 < +promptsCount.innerText){
+          prevPromptButton.classList.remove("pointer-events-none", "opacity-50");
+          this.index++
+          if(this.index + 1 === +promptsCount.innerText){
+            event.target.classList.add("pointer-events-none", "opacity-50");
+          }
         }
       }
     }
-
+    else{
+      this.index = 0;
+    }
+  
     fetch(`/question/${questionId}/prompts?index=${this.index}`, { 
       method: "GET",
       headers: {
@@ -85,6 +90,7 @@ export default class extends Controller {
       if (response.ok) {
         response.json().then((data) => {
           if (data.success) {
+            
             if(!data.prompt_pretext && !data.prompt_posttext){
               promptPreText.textContent = 'No Prompt text present'
               promptPostText.textContent = ''
@@ -93,9 +99,21 @@ export default class extends Controller {
               promptPreText.textContent = data.prompt_pretext
               promptPostText.textContent = data.prompt_posttext
             }
+  
+            if(fetchAfterQuestion){
+              promptsCount.textContent = data.count
+              if(data.count <= 1){
+                nextPromptButton.classList.add("pointer-events-none", "opacity-50");
+              }
+              else{
+                nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
+              }
+            }
+  
             promptCountContainer.style.display = 'inline'
             promptNumber.textContent = this.index + 1
             promptContainer.dataset.id = data.prompt_id
+  
           } else {
             nextPromptButton.classList.add("pointer-events-none", "opacity-50");
             promptCountContainer.style.display = 'none'
@@ -107,6 +125,11 @@ export default class extends Controller {
     })
   }
 
+  promptNavigation(event) {
+    let questionId = document.getElementById("questionContainer").dataset.id
+    this.promptNavigationFunction(event, false, questionId)
+  }
+
   questionNavigation(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     let questionNumber = document.getElementById("questionNumber")
@@ -116,14 +139,7 @@ export default class extends Controller {
     let storyBuilderId = event.target.dataset.storyBuilderId
     const prevQuestionButton = document.getElementById('questionBackward');
     const nextQuestionButton = document.getElementById('questionForward');
-    let promptNumber = document.getElementById("promptNumber")
-    let promptContainer = document.getElementById("promptContainer")
-    let promptPreText = document.getElementById("promptPreText");
-    let promptPostText = document.getElementById("promptPostText");
-    let promptsCount = document.getElementById("promptsCount")
-    let promptCountContainer = document.getElementById("promptCountContainer")
     const prevPromptButton = document.getElementById('promptBackward');
-    const nextPromptButton = document.getElementById('promptForward');
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
@@ -160,45 +176,8 @@ export default class extends Controller {
             questionContainer.textContent = data.question_title
             prevPromptButton.classList.add("pointer-events-none", "opacity-50");
 
-            fetch(`/question/${data.question_id}/prompts?index=0`, { 
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-Token": csrfToken
-              }
-            }).then((response) => {
-              if (response.ok) {
-                response.json().then((data) => {
-                  if (data.success) {
-                    if(!data.prompt_pretext && !data.prompt_posttext){
-                      promptPreText.textContent = 'No Prompt text present'
-                      promptPostText.textContent = ''
-                    }
-                    else{
-                      promptPreText.textContent = data.prompt_pretext
-                      promptPostText.textContent = data.prompt_posttext
-                    }
-                    if(data.count <= 1){
-                      nextPromptButton.classList.add("pointer-events-none", "opacity-50");
-                    }
-                    else{
-                      nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
-                    }
-                    promptCountContainer.style.display = 'inline'
-                    promptNumber.textContent = 1
-                    promptContainer.dataset.id = data.prompt_id
-                    promptsCount.textContent = data.count
-                  } else {
-                    nextPromptButton.classList.add("pointer-events-none", "opacity-50");
-                    promptCountContainer.style.display = 'none'
-                    promptPreText.textContent = 'No Prompts present'
-                    promptPostText.textContent = ''
-                  }
-                })
-              }
-            })
+            this.promptNavigationFunction(event, true, data.question_id)
 
-            // TODO: When a new question is fetched, we have to refresh prompts as well
           } else {
             questionContainer.textContent = 'An error occurred in fetching this question'
           }
