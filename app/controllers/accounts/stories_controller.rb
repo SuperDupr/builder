@@ -94,11 +94,11 @@ class Accounts::StoriesController < Accounts::BaseController
       format.json do
         if @prompt.nil?
           render json: {
-            prompt_id: nil, 
-            prompt_pretext: nil, 
-            prompt_posttext: nil, 
-            count: nil, 
-            answer: answer_response, 
+            prompt_id: nil,
+            prompt_pretext: nil,
+            prompt_posttext: nil,
+            count: nil,
+            answer: answer_response,
             success: false
           }
         else
@@ -189,7 +189,7 @@ class Accounts::StoriesController < Accounts::BaseController
   def track_answer_as_per_prompt(question, prompt)
     if prompt.present?
       answer = question.answers.find_by(story_id: params[:story_id], prompt_id: prompt.id)
-      
+
       if answer.present?
         answer.response = params[:selector]
         answer
