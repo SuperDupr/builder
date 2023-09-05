@@ -5,6 +5,7 @@
 #  id          :bigint           not null, primary key
 #  post_text   :string
 #  pre_text    :string
+#  selector    :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  question_id :bigint

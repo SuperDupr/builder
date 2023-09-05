@@ -1,0 +1,45 @@
+<%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", data: { action: "stories#saveAnswer" }) %>
+
+<% if @prompts.any? %>
+  <div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between" id="answerProvider" data-prompt-mode="on">
+    <div class="flex items-center justify-between gap-2">
+      <h5>
+        Prompts 
+        <span class="font-normal" id="promptCountContainer">
+          <span id="promptNumber">1</span>
+          /
+          <span id="promptsCount"><%= @prompts.count %></span>
+        </span>
+      </h5>
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary pointer-events-none opacity-50" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+        <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
+      </div>
+    </div>
+    <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="<%= @prompt.id %>">
+      <div id="promptPreText"><%= @prompt.pre_text %></div>
+        <select id="nodes" class="!w-auto">
+          <option disabled selected value="">Select option</option>
+          <% @question.parent_nodes.each do |node| %>
+            <optgroup label="<%= node.title %>">
+            <% node.child_nodes.each do |child_node| %>
+              <option value="<%= child_node.id %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
+                <%= child_node.title %>
+              </option>
+            <% end %>
+            </optgroup>
+          <% end %>
+        </select>
+        <!-- Show following input field if no nodes are present -->
+        <% if !@question.parent_nodes.any? %>
+          <input id="textAnswer" type="text" class="form-control w-auto mt-1" />
+        <% end %>
+      <div id="promptPostText"><%= @prompt.post_text %></div>
+    </div>
+    <div class="h-10"></div>
+  </div>
+<% else %>
+  <div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between" id="answerProvider" data-prompt-mode="off">
+    <%= text_field_tag(:answer, nil, class: "form-control w-auto mt-1", placeholder: "Provide your answer here..") %>
+  </div>
+<% end %>

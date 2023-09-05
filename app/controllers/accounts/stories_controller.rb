@@ -74,12 +74,34 @@ class Accounts::StoriesController < Accounts::BaseController
     question = Question.find(params[:id])
     @prompt = question.prompts[params[:index].to_i]
 
+    node_selection = []
+    parent_nodes = question.parent_nodes
+
+    parent_nodes.each do |node|
+      node_hash = {}
+      child_nodes_data = []
+      node.child_nodes.each do |child_node|
+        child_nodes_data << {id: child_node.id, title: child_node.title}
+      end
+      node_hash[:title] = node.title
+      node_hash[:child_nodes] = child_nodes_data
+      node_selection << node_hash
+    end
+
     respond_to do |format|
       format.json do
         if @prompt.nil?
           render json: {prompt_id: nil, prompt_pretext: nil, prompt_posttext: nil, count: nil, success: false}
         else
-          render json: {prompt_id: @prompt.id, prompt_pretext: @prompt.pre_text, prompt_posttext: @prompt.post_text, count: question.prompts.count, success: true}
+          render json: {
+            prompt_id: @prompt.id,
+            prompt_pretext: @prompt.pre_text,
+            prompt_posttext: @prompt.post_text,
+            prompt_selector: @prompt.selector,
+            count: question.prompts.count,
+            nodes: node_selection,
+            success: true
+          }
         end
       end
     end
@@ -113,11 +135,13 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def track_answers
     question = Question.find(params[:id])
+    prompt = Prompt.find(params[:prompt_id])
     @answer = question.answers.new(story_id: params[:story_id], response: params[:response])
 
-    respond_to do
+    respond_to do |format|
       format.json do
         if @answer.save
+          prompt.update(selector: params[:selector])
           render json: {answer: @answer, success: true}
         else
           render json: {answer: nil, success: false}

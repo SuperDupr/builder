@@ -45,39 +45,18 @@ export default class extends Controller {
 
   promptNavigationFunction(event, fetchAfterQuestion, questionId) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    let promptNumber = document.getElementById("promptNumber")
-    let promptContainer = document.getElementById("promptContainer")
-    let promptPreText = document.getElementById("promptPreText");
-    let promptPostText = document.getElementById("promptPostText");
     let cursor = event.target.dataset.cursor
     let promptsCount = document.getElementById("promptsCount")
-    let promptCountContainer = document.getElementById("promptCountContainer")
-    const prevPromptButton = document.getElementById('promptBackward');
-    const nextPromptButton = document.getElementById('promptForward');
-  
-  
-    if(!fetchAfterQuestion){
-      // TODO: Add validations to handle index value correctly
-      if (cursor == "backward") {
-        if(this.index >= 1){
-          nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
-          this.index--
-          if(this.index + 1 === 1){
-            event.target.classList.add("pointer-events-none", "opacity-50");
-          }
-        }
-      } else if (cursor == "forward") {
-        if(this.index + 1 < +promptsCount.innerText){
-          prevPromptButton.classList.remove("pointer-events-none", "opacity-50");
-          this.index++
-          if(this.index + 1 === +promptsCount.innerText){
-            event.target.classList.add("pointer-events-none", "opacity-50");
-          }
-        }
+    const answerProviderArea = document.getElementById("answerProvider")
+
+    if (!fetchAfterQuestion) {
+      if (cursor === "backward") {
+        this.index--
+      } else if (cursor === "forward") {
+        this.index++
       }
-    }
-    else{
-      this.index = 0;
+    } else {
+      this.index = 0
     }
   
     fetch(`/question/${questionId}/prompts?index=${this.index}`, { 
@@ -87,42 +66,100 @@ export default class extends Controller {
         "X-CSRF-Token": csrfToken
       }
     }).then((response) => {
-      if (response.ok) {
+        if (response.ok) {
         response.json().then((data) => {
           if (data.success) {
-            
-            if(!data.prompt_pretext && !data.prompt_posttext){
-              promptPreText.textContent = 'No Prompt text present'
-              promptPostText.textContent = ''
-            }
-            else{
-              promptPreText.textContent = data.prompt_pretext
-              promptPostText.textContent = data.prompt_posttext
-            }
-  
-            if(fetchAfterQuestion){
-              promptsCount.textContent = data.count
+            // Scenario 1: Construct the answer field with prompt data, counter, navigation buttons, nodes and sub-nodes
+            answerProviderArea.innerHTML = ""
+            answerProviderArea.innerHTML = this.constructDataPerPrompt(data.count, this.index, data.prompt_id, data.prompt_pretext, data.prompt_posttext, data.prompt_selector, data.nodes)
+
+            // TODO: Add validations to handle index value correctly
+            if(!fetchAfterQuestion){
+              if (cursor == "backward") {
+                if(this.index >= 1){
+                  document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
+                  if(this.index === 1){
+                    document.getElementById('promptBackward').classList.add("pointer-events-none", "opacity-50");
+                  }
+                }
+              } else if (cursor == "forward") {
+                if(this.index < +promptsCount.innerText) {
+                  document.getElementById('promptBackward').classList.remove("pointer-events-none", "opacity-50");
+
+                  if ((this.index + 1) === +promptsCount.innerText) {
+                    document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
+                  }
+                }
+              }
+            } else {
               if(data.count <= 1){
-                nextPromptButton.classList.add("pointer-events-none", "opacity-50");
+                document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
               }
               else{
-                nextPromptButton.classList.remove("pointer-events-none", "opacity-50");
+                document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
               }
             }
-  
-            promptCountContainer.style.display = 'inline'
-            promptNumber.textContent = this.index + 1
-            promptContainer.dataset.id = data.prompt_id
-  
           } else {
-            nextPromptButton.classList.add("pointer-events-none", "opacity-50");
-            promptCountContainer.style.display = 'none'
-            promptPreText.textContent = 'No Prompts present'
-            promptPostText.textContent = ''
+            // Scenario 2: Construct the answer field with text area
+            answerProviderArea.innerHTML = ""
+            answerProviderArea.innerHTML = this.constructDataPerAnswerTextArea()
           }
         })
       }
     })
+  }
+
+  constructDataPerPrompt(totalPromptsCount, promptIndex, promptId, promptPreText, promptPostText, promptSelector, nodes) {
+    document.getElementById("answerProvider").dataset.promptMode = "on"
+    console.log(promptSelector)
+    let selectHTML = promptSelector ? 
+      `<select id="nodes" class="!w-auto">` :
+      `<select id="nodes" class="!w-auto"><option disabled="" value="" selected="">Select option</option>`
+     
+    
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      selectHTML += `<optgroup label="${node.title}">`
+      
+      for (let j = 0; j < node.child_nodes.length; j++) {
+        const child_node = node.child_nodes[j];
+        let shouldSelect = child_node.title === promptSelector
+
+        selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+      }
+
+      selectHTML += `</optgroup>`
+    }
+
+    selectHTML += `</select>`
+    
+    return `
+      <div class="flex items-center justify-between gap-2">
+        <h5>
+          Prompts 
+          <span class="font-normal" id="promptCountContainer" style="display: inline;">
+            <span id="promptNumber">${promptIndex + 1}</span>
+            /
+            <span id="promptsCount">${totalPromptsCount}</span>
+          </span>
+        </h5>
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary pointer-events-none opacity-50" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+          <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
+        </div>
+      </div>
+      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="${promptId}">
+        <div id="promptPreText">${promptPreText}</div>
+        ${selectHTML}
+        <div id="promptPostText">${promptPostText}</div>
+      </div>
+      <div class="h-10"></div>
+    `
+  }
+
+  constructDataPerAnswerTextArea() {
+    document.getElementById("answerProvider").dataset.promptMode = "off"
+    return `<input type="text" name="answer" id="answer" class="form-control" placeholder="Provide your answer here..">`
   }
 
   promptNavigation(event) {
@@ -158,7 +195,6 @@ export default class extends Controller {
           nextQuestionButton.textContent = 'Finish'
         }
       }
-      
     }
 
     fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
@@ -174,7 +210,9 @@ export default class extends Controller {
             questionNumber.textContent = this.qIndex + 1
             questionContainer.dataset.id = data.question_id
             questionContainer.textContent = data.question_title
-            prevPromptButton.classList.add("pointer-events-none", "opacity-50");
+            if (prevPromptButton) {
+              prevPromptButton.classList.add("pointer-events-none", "opacity-50");
+            }
 
             this.promptNavigationFunction(event, true, data.question_id)
 
@@ -184,6 +222,36 @@ export default class extends Controller {
         })
       }
     })
+  }
+
+  saveAnswer() {
+    const answerProvider = document.getElementById("answerProvider")
+    const promptMode = answerProvider.dataset.promptMode
+    
+    if (promptMode === "on") {
+      let selectedValue = document.getElementById("nodes").value
+      if (selectedValue === "") {
+        alert("Please select an option to save response!")
+      } else {
+        let questionId = document.getElementById("questionContainer").dataset.id
+        let storyId = document.getElementById("storyDetails").dataset.storyId
+        let promptId = document.getElementById("promptContainer").dataset.id
+        let promptPreText = document.getElementById("promptPreText").textContent
+        let promptPostText = document.getElementById("promptPostText").textContent
+        let selectElement = document.getElementById("nodes") 
+        let selectedText = selectElement.options[selectElement.selectedIndex].text
+        let response = `${promptPreText} ${selectedText} ${promptPostText}`
+        this.trackAnswer(questionId, storyId, promptId, selectedText, response)
+      }
+    } else if (promptMode === "off") {
+      let answerField = document.getElementById("answer")
+      
+      if (answerField.value === "") {
+        alert("Please add your answer in the field!")
+      } else {
+        console.log("Save answer on backend")
+      }
+    }
   }
 
   toggleStoryVisibility(event) {
@@ -208,36 +276,34 @@ export default class extends Controller {
       }
     })
   }
+
   // Request to track answer of a question
+  trackAnswer(questionId, storyId, promptId, selectedText, response) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   
-  // const questionId = 123; // Replace with the actual question ID
-  // const storyId = 456; // Replace with the actual story ID
-  // const responseText = "Some response text"; // Replace with the actual response text
-
-  // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-  // fetch(`/questions/${questionId}/track_answers`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-CSRF-Token": csrfToken
-  //   },
-  //   body: JSON.stringify({
-  //     story_id: storyId,
-  //     response: responseText
-  //   })
-  // })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     if (data.success) {
-  //       console.log("Answer saved successfully:", data.answer);
-  //     } else {
-  //       console.error("Failed to save answer:", data.answer);
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error("Error while saving answer:", error);
-  //   });
+    fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      },
+      body: JSON.stringify({
+        response: response
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          console.log("Answer saved successfully:", data.answer);
+        } else {
+          console.error("Failed to save answer:", data.answer);
+        }
+      })
+      .catch(error => {
+        console.error("Error while saving answer:", error);
+      });
+  }
+  
   
   reconnect(event) {
     if (consumer.connection.isActive()) {

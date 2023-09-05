@@ -1,0 +1,15 @@
+<h5 class="mb-4">
+  Questions 
+  <span class="font-normal">
+    <span id="questionNumber">1</span>
+    /
+    <span id="questionsCount"><%= @questions.count %></span>
+  </span>
+</h5>
+<div class="flex justify-between items-center gap-2">
+  <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-primary pointer-events-none opacity-50", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
+  <%= link_to("#{@questions.count === 1 ? 'Finish' : 'Next Question'}", "javascript:void(0)", id:'questionForward', class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
+</div>
+<h5 id="questionContainer" class="mt-4" data-id=<%= @question.id %>>
+  <%= @question.title %>
+</h5>
