@@ -30,10 +30,6 @@
             </optgroup>
           <% end %>
         </select>
-        <!-- Show following input field if no nodes are present -->
-        <% if !@question.parent_nodes.any? %>
-          <input id="textAnswer" type="text" class="form-control w-auto mt-1" />
-        <% end %>
       <div id="promptPostText"><%= @prompt.post_text %></div>
     </div>
     <div class="h-10"></div>
