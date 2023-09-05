@@ -6,6 +6,7 @@
 #  response    :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  prompt_id   :integer
 #  question_id :bigint
 #  story_id    :bigint
 #

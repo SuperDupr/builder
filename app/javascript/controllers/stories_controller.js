@@ -248,12 +248,11 @@ export default class extends Controller {
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
         let promptId = document.getElementById("promptContainer").dataset.id
-        let promptPreText = document.getElementById("promptPreText").textContent
-        let promptPostText = document.getElementById("promptPostText").textContent
+        // let promptPreText = document.getElementById("promptPreText").textContent
+        // let promptPostText = document.getElementById("promptPostText").textContent
         let selectElement = document.getElementById("nodes") 
         let selectedText = selectElement.options[selectElement.selectedIndex].text
-        let response = `${promptPreText} ${selectedText} ${promptPostText}`
-        this.trackAnswer(questionId, storyId, promptId, selectedText, response)
+        this.trackAnswer(questionId, storyId, promptId, selectedText)
       }
     } else if (promptMode === "off") {
       let answerField = document.getElementById("answer")
@@ -290,7 +289,7 @@ export default class extends Controller {
   }
 
   // Request to track answer of a question
-  trackAnswer(questionId, storyId, promptId, selectedText, response) {
+  trackAnswer(questionId, storyId, promptId, selectedText) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   
     fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
@@ -298,10 +297,7 @@ export default class extends Controller {
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": csrfToken
-      },
-      body: JSON.stringify({
-        response: response
-      })
+      }
     })
       .then(response => response.json())
       .then(data => {
@@ -315,7 +311,6 @@ export default class extends Controller {
         console.error("Error while saving answer:", error);
       });
   }
-  
   
   reconnect(event) {
     if (consumer.connection.isActive()) {

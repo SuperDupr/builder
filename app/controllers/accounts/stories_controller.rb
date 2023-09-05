@@ -136,7 +136,8 @@ class Accounts::StoriesController < Accounts::BaseController
   def track_answers
     question = Question.find(params[:id])
     prompt = Prompt.find(params[:prompt_id])
-    @answer = question.answers.new(story_id: params[:story_id], response: params[:response])
+
+    @answer = track_answer_as_per_prompt(question)
 
     respond_to do |format|
       format.json do
@@ -174,5 +175,16 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def set_account
     @account = current_account
+  end
+
+  def track_answer_as_per_prompt(question)
+    answer = question.answers.find_by(story_id: params[:story_id], prompt_id: params[:prompt_id])
+
+    if answer.present?
+      answer.response = params[:selector]
+      answer
+    else
+      question.answers.new(story_id: params[:story_id], prompt_id: params[:prompt_id], response: params[:selector])
+    end    
   end
 end
