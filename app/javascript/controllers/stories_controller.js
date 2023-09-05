@@ -43,7 +43,7 @@ export default class extends Controller {
     })
   }
 
-  promptNavigationFunction(event, fetchAfterQuestion, questionId) {
+  promptNavigationFunction(event, fetchAfterQuestion, questionId, storyId) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     let cursor = event.target.dataset.cursor
     let promptsCount = document.getElementById("promptsCount")
@@ -59,7 +59,7 @@ export default class extends Controller {
       this.index = 0
     }
   
-    fetch(`/question/${questionId}/prompts?index=${this.index}`, { 
+    fetch(`/question/${questionId}/prompts?index=${this.index}&story_id=${storyId}`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export default class extends Controller {
           } else {
             // Scenario 2: Construct the answer field with text area
             answerProviderArea.innerHTML = ""
-            answerProviderArea.innerHTML = this.constructDataPerAnswerTextArea()
+            answerProviderArea.innerHTML = this.constructDataPerAnswerTextArea(data.answer)
           }
         })
       }
@@ -158,25 +158,26 @@ export default class extends Controller {
         <div id="promptPostText">${promptPostText}</div>
       </div>
       <div class="w-full text-right">
-        <a class="btn btn-primary" data-action="stories#saveAnswer" href="javascript:void(0)">Save</a>
+        <a class="btn btn-primary" data-action="stories#saveAnswer" data-disable-with="Saving" id="saveAnswer" href="javascript:void(0)">Save</a>
       </div>
     `
   }
 
-  constructDataPerAnswerTextArea() {
+  constructDataPerAnswerTextArea(answer) {
     document.getElementById("answerProvider").dataset.promptMode = "off"
     return `
     <h5 class="w-full">Answer</h5>
-    <textarea name="answer" id="answer" class="form-control lg:w-2/3 xl:w-1/2" placeholder="Provide your answer here.." rows="3"></textarea>
+    <textarea name="answer" id="answer" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
     <div class="w-full text-right">
-      <a class="btn btn-primary" data-action="stories#saveAnswer" href="javascript:void(0)">Save</a>
+      <a class="btn btn-primary" data-action="stories#saveAnswer" data-disable-with="Saving" id="saveAnswer" href="javascript:void(0)">Save</a>
     </div>
     `
   }
 
   promptNavigation(event) {
     let questionId = document.getElementById("questionContainer").dataset.id
-    this.promptNavigationFunction(event, false, questionId)
+    let storyId = document.getElementById("storyDetails").dataset.storyId
+    this.promptNavigationFunction(event, false, questionId, storyId)
   }
 
   questionNavigation(event) {
@@ -186,6 +187,7 @@ export default class extends Controller {
     let questionContainer = document.getElementById("questionContainer")
     let cursor = event.target.dataset.cursor
     let storyBuilderId = event.target.dataset.storyBuilderId
+    let storyId = document.getElementById("storyDetails").dataset.storyId
     const prevQuestionButton = document.getElementById('questionBackward');
     const nextQuestionButton = document.getElementById('questionForward');
     const prevPromptButton = document.getElementById('promptBackward');
@@ -226,7 +228,7 @@ export default class extends Controller {
               prevPromptButton.classList.add("pointer-events-none", "opacity-50");
             }
 
-            this.promptNavigationFunction(event, true, data.question_id)
+            this.promptNavigationFunction(event, true, data.question_id, storyId)
 
           } else {
             questionContainer.textContent = 'An error occurred in fetching this question'
@@ -248,19 +250,19 @@ export default class extends Controller {
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
         let promptId = document.getElementById("promptContainer").dataset.id
-        // let promptPreText = document.getElementById("promptPreText").textContent
-        // let promptPostText = document.getElementById("promptPostText").textContent
         let selectElement = document.getElementById("nodes") 
         let selectedText = selectElement.options[selectElement.selectedIndex].text
         this.trackAnswer(questionId, storyId, promptId, selectedText)
       }
     } else if (promptMode === "off") {
-      let answerField = document.getElementById("answer")
+      let answerFieldValue = document.getElementById("answer").value
       
-      if (answerField.value === "") {
+      if (answerFieldValue === "") {
         alert("Please add your answer in the field!")
       } else {
-        console.log("Save answer on backend")
+        let questionId = document.getElementById("questionContainer").dataset.id
+        let storyId = document.getElementById("storyDetails").dataset.storyId
+        this.trackAnswer(questionId, storyId, "", answerFieldValue)
       }
     }
   }
@@ -303,13 +305,11 @@ export default class extends Controller {
       .then(data => {
         if (data.success) {
           console.log("Answer saved successfully:", data.answer);
+          document.getElementById("saveAnswer").textContent = "Save"
         } else {
           console.error("Failed to save answer:", data.answer);
         }
       })
-      .catch(error => {
-        console.error("Error while saving answer:", error);
-      });
   }
   
   reconnect(event) {

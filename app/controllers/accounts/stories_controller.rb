@@ -33,6 +33,7 @@ class Accounts::StoriesController < Accounts::BaseController
       redirect_to(account_stories_path, alert: "Your chosen story builder has no associated questions!")
     else
       @question = @questions.order(position: :asc).first
+      @answer = @question.answers.find_by(story_id: @story.id)
       @prompts = @question.prompts.order(created_at: :asc)
       @prompt = @prompts.first
     end
@@ -73,6 +74,7 @@ class Accounts::StoriesController < Accounts::BaseController
     # TODO: Shorten the scope by querying the questions of story object
     question = Question.find(params[:id])
     @prompt = question.prompts[params[:index].to_i]
+    answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
     node_selection = []
     parent_nodes = question.parent_nodes
@@ -91,7 +93,14 @@ class Accounts::StoriesController < Accounts::BaseController
     respond_to do |format|
       format.json do
         if @prompt.nil?
-          render json: {prompt_id: nil, prompt_pretext: nil, prompt_posttext: nil, count: nil, success: false}
+          render json: {
+            prompt_id: nil, 
+            prompt_pretext: nil, 
+            prompt_posttext: nil, 
+            count: nil, 
+            answer: answer_response, 
+            success: false
+          }
         else
           render json: {
             prompt_id: @prompt.id,
@@ -135,14 +144,14 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def track_answers
     question = Question.find(params[:id])
-    prompt = Prompt.find(params[:prompt_id])
+    prompt = Prompt.find_by(id: params[:prompt_id])
 
-    @answer = track_answer_as_per_prompt(question)
+    @answer = track_answer_as_per_prompt(question, prompt)
 
     respond_to do |format|
       format.json do
         if @answer.save
-          prompt.update(selector: params[:selector])
+          prompt.update(selector: params[:selector]) if prompt.present?
           render json: {answer: @answer, success: true}
         else
           render json: {answer: nil, success: false}
@@ -177,14 +186,25 @@ class Accounts::StoriesController < Accounts::BaseController
     @account = current_account
   end
 
-  def track_answer_as_per_prompt(question)
-    answer = question.answers.find_by(story_id: params[:story_id], prompt_id: params[:prompt_id])
-
-    if answer.present?
-      answer.response = params[:selector]
-      answer
+  def track_answer_as_per_prompt(question, prompt)
+    if prompt.present?
+      answer = question.answers.find_by(story_id: params[:story_id], prompt_id: prompt.id)
+      
+      if answer.present?
+        answer.response = params[:selector]
+        answer
+      else
+        question.answers.new(story_id: params[:story_id], prompt_id: prompt.id, response: params[:selector])
+      end
     else
-      question.answers.new(story_id: params[:story_id], prompt_id: params[:prompt_id], response: params[:selector])
-    end    
+      answer = question.answers.find_by(story_id: params[:story_id])
+
+      if answer.present?
+        answer.response = params[:selector]
+        answer
+      else
+        question.answers.new(story_id: params[:story_id], response: params[:selector])
+      end
+    end
   end
 end
