@@ -13,9 +13,9 @@ export default class extends Controller {
 
   updateStoryAccessOrDraftMode(event) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    let privateAccess = document.getElementById("privateAccess");
-    const accountId = event.target.dataset.accountId
     const storyId = event.target.dataset.id
+    let privateAccess = document.getElementById(`privateAccess${storyId}`);
+    const accountId = event.target.dataset.accountId
     let changeAccessMode = event.target.dataset.changeAccessMode
     let draftMode = event.target.dataset.draftMode
     
@@ -78,7 +78,7 @@ export default class extends Controller {
               if (cursor == "backward") {
                 if(this.index >= 1){
                   document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
-                  if(this.index === 1){
+                  if(this.index === 0){
                     document.getElementById('promptBackward').classList.add("pointer-events-none", "opacity-50");
                   }
                 }
@@ -119,22 +119,26 @@ export default class extends Controller {
     
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
-      selectHTML += `<optgroup label="${node.title}">`
-      
-      for (let j = 0; j < node.child_nodes.length; j++) {
-        const child_node = node.child_nodes[j];
-        let shouldSelect = child_node.title === promptSelector
-
-        selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+      if(node.child_nodes.length > 0){
+        selectHTML += `<optgroup label="${node.title}">`
+        for (let j = 0; j < node.child_nodes.length; j++) {
+          const child_node = node.child_nodes[j];
+          let shouldSelect = child_node.title === promptSelector
+  
+          selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+        }
+  
+        selectHTML += `</optgroup>`
       }
-
-      selectHTML += `</optgroup>`
+      else{
+        let shouldSelect = node.title === promptSelector
+        selectHTML += `<option value="${node.id}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
+      }
     }
 
     selectHTML += `</select>`
-    
     return `
-      <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center justify-between w-full gap-2">
         <h5>
           Prompts 
           <span class="font-normal" id="promptCountContainer" style="display: inline;">
@@ -144,7 +148,7 @@ export default class extends Controller {
           </span>
         </h5>
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary pointer-events-none opacity-50" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+          <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary ${promptIndex === 0 ? 'pointer-events-none opacity-50' : ''}" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
@@ -153,13 +157,21 @@ export default class extends Controller {
         ${selectHTML}
         <div id="promptPostText">${promptPostText}</div>
       </div>
-      <div class="h-10"></div>
+      <div class="w-full text-right">
+        <a class="btn btn-primary" data-action="stories#saveAnswer" href="javascript:void(0)">Save</a>
+      </div>
     `
   }
 
   constructDataPerAnswerTextArea() {
     document.getElementById("answerProvider").dataset.promptMode = "off"
-    return `<input type="text" name="answer" id="answer" class="form-control" placeholder="Provide your answer here..">`
+    return `
+    <h5 class="w-full">Answer</h5>
+    <textarea name="answer" id="answer" class="form-control lg:w-2/3 xl:w-1/2" placeholder="Provide your answer here.." rows="3"></textarea>
+    <div class="w-full text-right">
+      <a class="btn btn-primary" data-action="stories#saveAnswer" href="javascript:void(0)">Save</a>
+    </div>
+    `
   }
 
   promptNavigation(event) {

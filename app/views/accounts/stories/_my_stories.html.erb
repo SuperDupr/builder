@@ -4,7 +4,7 @@
     <div class="p-3 mt-3 border border-gray-200 bg-gray-100 rounded-sm">
       <div class="font-semibold"><%= story.title %></div>
       <p>Final highlights will come here..</p>
-      <a href="#" class="inline-block font-semibold mt-4">View</a>
+      <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="inline-block font-semibold mt-4">Go to Story</a>
     </div>
   <% end %>
 </div>
