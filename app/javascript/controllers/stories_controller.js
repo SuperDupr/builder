@@ -158,7 +158,7 @@ export default class extends Controller {
         <div id="promptPostText">${promptPostText}</div>
       </div>
       <div class="w-full text-right">
-        <a class="btn btn-primary" data-action="stories#saveAnswer" data-disable-with="Saving" id="saveAnswer" href="javascript:void(0)">Save</a>
+        <a class="btn btn-primary" data-action="stories#saveAnswer" id="saveAnswer" href="javascript:void(0)">Save</a>
       </div>
     `
   }
@@ -169,7 +169,7 @@ export default class extends Controller {
     <h5 class="w-full">Answer</h5>
     <textarea name="answer" id="answer" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
     <div class="w-full text-right">
-      <a class="btn btn-primary" data-action="stories#saveAnswer" data-disable-with="Saving" id="saveAnswer" href="javascript:void(0)">Save</a>
+      <a class="btn btn-primary" data-action="stories#saveAnswer" id="saveAnswer" href="javascript:void(0)">Save</a>
     </div>
     `
   }
@@ -293,6 +293,9 @@ export default class extends Controller {
   // Request to track answer of a question
   trackAnswer(questionId, storyId, promptId, selectedText) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    let saveAnswerButton = document.getElementById("saveAnswer")
+    saveAnswerButton.classList.add("pointer-events-none", "opacity-50");
+    saveAnswerButton.textContent = "Saving..."
   
     fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
       method: "POST",
@@ -305,7 +308,8 @@ export default class extends Controller {
       .then(data => {
         if (data.success) {
           console.log("Answer saved successfully:", data.answer);
-          document.getElementById("saveAnswer").textContent = "Save"
+          saveAnswerButton.classList.remove("pointer-events-none", "opacity-50");
+          saveAnswerButton.textContent = "Save"
         } else {
           console.error("Failed to save answer:", data.answer);
         }
