@@ -51,7 +51,7 @@ class StoryTest < ActiveSupport::TestCase
     assert_respond_to(@story, :answers)
     assert_instance_of(Answer, @story.answers.build)
   end
- 
+
   test "enum status values" do
     assert_equal({"draft" => 0, "complete" => 1, "published" => 2}, Story.statuses)
   end

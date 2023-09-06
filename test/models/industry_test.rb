@@ -22,7 +22,7 @@ class IndustryTest < ActiveSupport::TestCase
   def setup
     @industry = industries(:one)
   end
-  
+
   test "belongs_to account association" do
     assert_respond_to(@industry, :account)
     assert_instance_of(Account, @industry.build_account)
