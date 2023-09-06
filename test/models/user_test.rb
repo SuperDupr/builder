@@ -65,6 +65,20 @@ class UserTest < ActiveSupport::TestCase
     assert_equal accounts(:one), user.personal_account
   end
 
+  test "belongs_to team association" do
+    user = users(:one)
+
+    assert_respond_to(user, :team)
+    assert_instance_of(Team, user.build_team)
+  end
+
+  test "belongs_to industry association" do
+    user = users(:one)
+
+    assert_respond_to(user, :industry)
+    assert_instance_of(Industry, user.build_industry)
+  end
+
   test "can delete user with accounts" do
     assert_difference "User.count", -1 do
       users(:one).destroy
