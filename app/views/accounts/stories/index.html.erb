@@ -93,35 +93,33 @@
                 <div class="text-neutral-500"><%= story.story_builder.title %></div>
               </td>
               <td><%= story.status.to_s.capitalize %></td>
-              <% if current_account_user.roles.include?("admin") %>
-                <td>
-                  <div class="flex items-center w-full">
-                    <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
-                      <div class="relative" data-controller="stories">
-                        <% if story.private_access %>
-                          <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                            data-id="<%= story.id %>"
-                            checked
-                            data-account-id="<%= current_account.id %>"
-                            data-change-access-mode="on"
-                            data-draft-mode="off"
-                            data-action="change->stories#updateStoryAccessOrDraftMode">
-                        <% else %>
-                          <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                            data-id="<%= story.id %>"
-                            data-account-id="<%= current_account.id %>"
-                            data-change-access-mode="on"
-                            data-draft-mode="off"
-                            data-action="change->stories#updateStoryAccessOrDraftMode">
-                        <% end %>
-                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                      </div>
-                      <div class="ml-3 text-gray-700 font-medium" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
-                    </label>
-                  </div>
-                </td>
-              <% end %>
+              <td>
+                <div class="flex items-center w-full">
+                  <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+                    <div class="relative" data-controller="stories">
+                      <% if story.private_access %>
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>"
+                          checked
+                          data-account-id="<%= current_account.id %>"
+                          data-change-access-mode="on"
+                          data-draft-mode="off"
+                          data-action="change->stories#updateStoryAccessOrDraftMode">
+                      <% else %>
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>"
+                          data-account-id="<%= current_account.id %>"
+                          data-change-access-mode="on"
+                          data-draft-mode="off"
+                          data-action="change->stories#updateStoryAccessOrDraftMode">
+                      <% end %>
+                      <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                      <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                    </div>
+                    <div class="ml-3 text-gray-700 font-medium" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+                  </label>
+                </div>
+              </td>
               <td>
                 <div class="flex items-center gap-2 justify-end" >
                   <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
