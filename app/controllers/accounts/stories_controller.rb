@@ -135,7 +135,7 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
-  # GET /question/:id/nodes/:node_id/sub_nodes
+  # GET /question/:id/nodes/:node_id/child_nodes
   def sub_nodes_per_node
     question = Question.find(params[:id])
     node = question.parent_nodes.find(params[:node_id])

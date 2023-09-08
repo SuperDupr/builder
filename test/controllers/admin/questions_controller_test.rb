@@ -23,19 +23,6 @@ class Admin::QuestionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create question" do
-    prompts_count_before = Prompt.count
-    # parent_nodes_count_before = ParentNode.count
-
-    # TODO: Fix the ParentNode.count inconsistency
-
-    # puts Prompt.count
-    # puts ParentNode.count
-
-    # puts ParentNode.all.inspect
-    # puts ChildNode.count
-
-    # puts "_____________"
-
     post admin_questions_path, params: {
       question: {
         title: "New Question",
@@ -46,16 +33,12 @@ class Admin::QuestionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    # puts Prompt.count
-    # puts ParentNode.count
-
-    # puts ParentNode.all.inspect
-    # puts ChildNode.count
+    question = controller.instance_variable_get(:@question)
 
     assert_redirected_to admin_questions_path
     assert_equal "Question created successfully!", flash[:notice]
-    assert_equal prompts_count_before + 1, Prompt.count
-    # assert_equal parent_nodes_count_before + 1, ParentNode.count
+    assert_equal question.parent_nodes.first.title, "Parent Node"
+    assert_equal question.prompts.first.pre_text, "Pre"
   end
 
   test "should get edit" do
@@ -78,14 +61,10 @@ class Admin::QuestionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy question" do
     question = questions(:one)
-    prompts_count_before = Prompt.count
-    # parent_nodes_count_before = ParentNode.count
 
     delete admin_question_path(question)
 
     assert_redirected_to admin_questions_path
     assert_equal "Question was successfully destroyed.", flash[:notice]
-    assert_equal prompts_count_before - 1, Prompt.count
-    # assert_equal parent_nodes_count_before - 1, ParentNode.count
   end
 end

@@ -31,4 +31,9 @@ class AnswerTest < ActiveSupport::TestCase
     assert_respond_to @answer, :question
     assert_instance_of Question, @answer.question
   end
+
+  test "belongs_to story association" do
+    assert_respond_to @answer, :story
+    assert_instance_of Story, @answer.build_story
+  end
 end

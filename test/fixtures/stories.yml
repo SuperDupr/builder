@@ -38,7 +38,16 @@ one:
 two:
   title: MyString
   private_access: false
-  viewable: false
+  viewable: true
+  status: 1
+  story_builder: two
+  creator: two
+  account: two
+
+three:
+  title: MyString
+  private_access: true
+  viewable: true
   status: 1
   story_builder: two
   creator: two
