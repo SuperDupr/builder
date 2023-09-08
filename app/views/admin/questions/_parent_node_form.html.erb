@@ -5,5 +5,7 @@
   <button data-action="nested-form#remove" type="button" class="absolute top-1 right-2" data-controller="tooltip" data-tippy-content="Delete Node">
     <i class="fa-solid fa-trash text-xl mb-1 cursor-pointer text-danger-600"></i>
   </button>
+
+  <%= f.hidden_field :_destroy %>
   <%= render("child_node_content", f: f) %>
 </div>
