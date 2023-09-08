@@ -19,7 +19,9 @@
             <tr>
               <th class="w-1/2">Team Name</th>
               <th class="w-1/2">Organization Name</th>
-              <th class="w-1/2 text-right">Actions</th>
+              <% if current_account_admin? %>
+                <th class="w-1/2 text-right">Actions</th>
+              <% end %>
             </tr>
           <thead>
           <tbody>
@@ -28,21 +30,23 @@
                 <tr>
                   <td><%= team.name %></td>
                   <td><%= @account.name %></td>
-                  <td>
-                    <div class="flex items-center gap-2">
-                      <%= link_to(team_path(team), class: "btn btn-primary") do %>
-                        <i class="fa-solid fa-eye"></i>
-                      <% end %>
-                      <%= link_to(edit_team_path(team), class: "btn btn-primary") do %>
-                        <i class="fa-solid fa-pencil"></i>
-                      <% end %>
-                      <%= link_to(team_path(team), class: "btn btn-danger", method: :delete,
-                      data: { confirm: "This will delete the team from the organization. Are you sure?" }) do %>
-                        <i class="fa-solid fa-trash"></i>
-                      <% end %>
+                  <% if current_account_admin? %>
+                    <td>
+                      <div class="flex items-center gap-2">
+                        <%= link_to(team_path(team), class: "btn btn-primary") do %>
+                          <i class="fa-solid fa-eye"></i>
+                        <% end %>
+                        <%= link_to(edit_team_path(team), class: "btn btn-primary") do %>
+                          <i class="fa-solid fa-pencil"></i>
+                        <% end %>
+                        <%= link_to(team_path(team), class: "btn btn-danger", method: :delete,
+                        data: { confirm: "This will delete the team from the organization. Are you sure?" }) do %>
+                          <i class="fa-solid fa-trash"></i>
+                        <% end %>
 
-                    </div>
-                  </td>
+                      </div>
+                    </td>
+                  <% end %>
                 </tr>
               <% end %>
             <% else %>
