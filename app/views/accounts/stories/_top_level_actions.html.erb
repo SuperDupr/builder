@@ -22,5 +22,12 @@
     </div>
     <div class="ml-3 text-gray-700 font-medium" id="privateAccess<%= @story.id %>"><%= @story.private_access === true ? 'Private' : 'Public' %></div>
   </label>
-  <%= link_to("Save as Draft", account_stories_path, class: "btn btn-primary") %>
+  <%= link_to("Save as Draft", "javascript:void(0)", 
+    data: {
+      id: @story.id,
+      account_id: current_account.id,
+      change_access_mode: "off",
+      draft_mode: "on",
+      action: "stories#updateStoryAccessOrDraftMode"      
+    }, class: "btn btn-primary") %>
 </div>

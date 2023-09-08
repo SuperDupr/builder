@@ -52,6 +52,12 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {status: @story.status.to_s, operation: "draft_mode"}
         end
       end
+
+      format.html do
+        @story.complete!
+
+        redirect_to(account_stories_path, notice: "Story marked as completed successfully!")
+      end
     end
   end
 

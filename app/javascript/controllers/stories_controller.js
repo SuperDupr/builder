@@ -33,10 +33,9 @@ export default class extends Controller {
           if (data.operation === "change_access_mode") {
             operationResultInfo = data.private_access ? "Private" : "Public"
             privateAccess.textContent = operationResultInfo
-            // TODO: Add a redirect to stories index page
-          // } else if (data.operation === "draft_mode") {
-          //   // operationResultInfo = data.status
-          //   // alert(`Story saved as ${operationResultInfo} successfully!`)
+          } else if (data.operation === "draft_mode") {
+            operationResultInfo = data.status
+            alert(`Story saved as ${operationResultInfo} successfully!`)
           }
         })
       }
@@ -185,9 +184,11 @@ export default class extends Controller {
     let questionNumber = document.getElementById("questionNumber")
     let questionsCount = +document.getElementById("questionsCount").innerText
     let questionContainer = document.getElementById("questionContainer")
+    let questionsNavigationSection = document.getElementById("questionsNavigationSection")
     let cursor = event.target.dataset.cursor
     let storyBuilderId = event.target.dataset.storyBuilderId
     let storyId = document.getElementById("storyDetails").dataset.storyId
+    let accountId = document.getElementById("access").dataset.accountId
     const prevQuestionButton = document.getElementById('questionBackward');
     const nextQuestionButton = document.getElementById('questionForward');
     const prevPromptButton = document.getElementById('promptBackward');
@@ -195,7 +196,13 @@ export default class extends Controller {
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
       if(this.qIndex >= 1){
-        nextQuestionButton.textContent = 'Next Question'
+        if (nextQuestionButton.style.display === "none") {
+          nextQuestionButton.style.display = "flex"
+        }
+        
+        const finishLink = document.getElementById("finishLink")
+        if (finishLink) { finishLink.remove() }
+
         this.qIndex--
         if(this.qIndex + 1 === 1){
           event.target.classList.add("pointer-events-none", "opacity-50");
@@ -206,7 +213,8 @@ export default class extends Controller {
         prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
         this.qIndex++
         if(this.qIndex + 1 === questionsCount){
-          nextQuestionButton.textContent = 'Finish'
+          nextQuestionButton.style.display = "none"
+          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-primary' id="finishLink" data-method="patch">Finish</a>`
         }
       }
     }
