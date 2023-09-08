@@ -20,7 +20,7 @@
       </div>
     </div>
   <% else %>
-    <div>No Questions present. <%= link_to("Add Question", new_admin_question_path, class:'font-bold') %></div>
+    <div>No Questions present. <%= link_to("Add New Question", new_admin_question_path, class:'btn btn-primary btn-small') %></div>
   <% end %>
 
   <%= f.submit("Save Builder", class: "btn btn-primary mt-3") %>

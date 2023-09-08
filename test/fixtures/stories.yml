@@ -3,7 +3,7 @@
 # Table name: stories
 #
 #  id               :bigint           not null, primary key
-#  private          :boolean          default(TRUE)
+#  private_access   :boolean          default(TRUE)
 #  status           :integer          default("draft")
 #  title            :string
 #  viewable         :boolean          default(FALSE)
@@ -28,7 +28,7 @@
 
 one:
   title: MyString
-  private: false
+  private_access: false
   viewable: false
   status: 1
   story_builder: one
@@ -37,7 +37,7 @@ one:
 
 two:
   title: MyString
-  private: false
+  private_access: false
   viewable: false
   status: 1
   story_builder: two

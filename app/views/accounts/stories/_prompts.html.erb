@@ -1,0 +1,51 @@
+<% if @prompts.any? %>
+  <div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6" id="answerProvider" data-prompt-mode="on">
+    <div class="flex items-center justify-between w-full gap-2">
+      <h5>
+        Prompts
+        <span class="font-normal" id="promptCountContainer">
+          <span id="promptNumber">1</span>
+          /
+          <span id="promptsCount"><%= @prompts.count %></span>
+        </span>
+      </h5>
+      <div class="flex items-center justify-between gap-2">
+        <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary pointer-events-none opacity-50" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+        <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
+      </div>
+    </div>
+    <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="<%= @prompt.id %>">
+      <div id="promptPreText"><%= @prompt.pre_text %></div>
+        <select id="nodes" class="!w-auto">
+          <option disabled selected value="">Select option</option>
+          <% @question.parent_nodes.each do |node| %>
+            <% if node.child_nodes.any? %>
+              <optgroup label="<%= node.title %>">
+                <% node.child_nodes.each do |child_node| %>
+                  <option value="<%= child_node.id %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
+                    <%= child_node.title %>
+                  </option>
+                <% end %>
+              </optgroup>
+            <% else %>
+              <option value="<%= node.id %>" <%= node.title == @prompt.selector ? 'selected' : '' %>>
+                <%= node.title %>
+              </option>
+            <% end %>
+          <% end %>
+        </select>
+      <div id="promptPostText"><%= @prompt.post_text %></div>
+    </div>
+    <div class="w-full text-right">
+      <%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer"}) %>
+    </div>
+  </div>
+<% else %>
+  <div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6" id="answerProvider" data-prompt-mode="off">
+    <h5 class="w-full">Answer</h5>
+    <%= text_area_tag(:answer, @answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3) %>
+    <div class="w-full text-right">
+      <%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer" }) %>
+    </div>
+  </div>
+<% end %>

@@ -47,7 +47,6 @@
             <th class="w-1/5">Email</th>
             <th class="w-1/5">Team</th>
             <th class="w-1/5">Status</th>
-            <th class="w-1/5 text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +64,6 @@
                     Active
                   </span>
                 </td>
-                <td><%= button_to "Login as", admin_user_impersonate_path(account_user.user), method: :post, form_class: "inline-block", class: "btn btn-primary" %></td>
               </tr>
             <% end %>
           <% else %>

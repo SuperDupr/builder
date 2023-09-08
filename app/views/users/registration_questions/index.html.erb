@@ -1,0 +1,21 @@
+<div class="xl:container py-4 lg:px-4 mx-auto">
+  <div class="p-4 bg-white border border-gray-200 rounded-lg lg:px-10 lg:py-30 pb-5">
+    <h1 class="h3">Registration Questions</h1>
+    <%= form_for(current_user, url: update_registration_data_path, method: :patch) do |f| %>
+      <!-- TODO: Add the industry selection dropdown -->
+      <%= f.label("Which best describes the industry you work in?", class:'mt-4 font-semibold text-lg') %>
+      <!-- I work in the ________ industry.  -->
+      <%= f.select(:industry_id, @industries, prompt: "Select Industry") %>
+      
+      <%= f.label("How would you best describe your role?", class:'mt-4 font-semibold text-lg') %>
+      <!-- 2A. I work in the _______ department. 2B. My job title is _________. -->
+      <%= f.text_field(:work_role, class:'form-control', required: true) %>
+
+      <%= f.label("What is the focus of your communication?", class:'mt-4 font-semibold text-lg') %>
+      <%= f.text_field(:focus_of_communication, class:'form-control', required: true) %>
+
+      <%= hidden_field_tag(:fallback, params[:fallback]) %>
+      <%= f.submit("Save", class: "btn btn-primary mt-4") %>
+    <% end %>
+  </div>
+</div>

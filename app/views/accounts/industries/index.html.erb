@@ -1,0 +1,54 @@
+<div class="flex flex-wrap my-4 lg:px-4">
+  <div class="w-full mb-4 lg:w-1/4 lg:p-4">
+    <%= render partial: "shared/account_navbar" %>
+  </div>
+  <div class="w-full lg:w-3/4 lg:p-4">
+    <div class="mb-5">
+      <%= render partial: "shared/topBar_nav" %>
+    </div>
+    <div class="p-4 bg-white border border-gray-200 rounded-lg lg:p-10 pb-5">
+      <div class="sm:flex items-center justify-between mb-3">
+        <h1 class="flex-1 h3">Industries</h1>
+        <div class="flex gap-2">
+          <a href="<%= new_account_industry_path(account_id: current_account.id) %>" class="btn btn-primary">New Industry</a>
+        </div>
+      </div>
+      <table class="border border-collapse mt-5">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @industries.present? %>
+            <% @industries.each do |industry| %>
+              <tr>
+                <td><%= industry.title %></td>
+                <td>
+                  <div class="flex gap-2 items-center">
+                    <%= link_to(edit_account_industry_path(industry, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
+                      <i class="fa-solid fa-pen"></i>
+                    <% end %>
+                    <%= link_to(account_industry_path(industry, account_id: current_account.id), method: :delete, class: "btn btn-danger", data: { controller: "tooltip", tippy_content: "Delete", confirm: "Are you sure?" }) do %>
+                      <i class="fa-solid fa-trash"></i>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" class="text-center">No industries found.</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @pagy.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

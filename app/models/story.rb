@@ -3,7 +3,7 @@
 # Table name: stories
 #
 #  id               :bigint           not null, primary key
-#  private          :boolean          default(TRUE)
+#  private_access   :boolean          default(TRUE)
 #  status           :integer          default("draft")
 #  title            :string
 #  viewable         :boolean          default(FALSE)
@@ -32,4 +32,9 @@ class Story < ApplicationRecord
   belongs_to :story_builder
   belongs_to :creator, class_name: "User"
   belongs_to :account
+  has_many :answers, dependent: :destroy
+
+  scope :publicized, -> { where(private_access: false) }
+  scope :privatized, -> { where(private_access: true) }
+  scope :viewable, -> { where(viewable: true) }
 end

@@ -13,6 +13,7 @@
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string
+#  focus_of_communication :text
 #  invitation_accepted_at :datetime
 #  invitation_created_at  :datetime
 #  invitation_limit       :integer
@@ -33,8 +34,10 @@
 #  reset_password_token   :string
 #  time_zone              :string
 #  unconfirmed_email      :string
+#  work_role              :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  industry_id            :integer
 #  invited_by_id          :bigint
 #  team_id                :integer
 #

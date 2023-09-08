@@ -24,9 +24,9 @@ class QuestionTest < ActiveSupport::TestCase
     assert_instance_of ParentNode, @question.parent_nodes.build
   end
 
-  test "has_one answer association" do
-    assert_respond_to @question, :answer
-    assert_instance_of Answer, @question.build_answer
+  test "has_many answers association" do
+    assert_respond_to @question, :answers
+    assert_instance_of Answer, @question.answers.build
   end
 
   test "has_many questionnaires association" do
