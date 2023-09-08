@@ -58,7 +58,7 @@ export default class extends Controller {
       this.index = 0
     }
   
-    fetch(`/question/${questionId}/prompts?index=${this.index}&story_id=${storyId}`, { 
+    fetch(`/question/${questionId}/prompts?index=${this.index}&story_id=${storyId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
