@@ -33,7 +33,7 @@ class Accounts::StoriesController < Accounts::BaseController
       redirect_to(account_stories_path, alert: "Your chosen story builder has no associated questions!")
     else
       @question = @questions.order(position: :asc).first
-      @answer = @question.answers.find_by(story_id: @story.id)
+      @answer = @question.answers.find_by(story_id: @story.id)&.response
       @prompts = @question.prompts.order(created_at: :asc)
       @prompt = @prompts.first
     end
