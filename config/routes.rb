@@ -111,7 +111,7 @@ Rails.application.routes.draw do
 
   resources :teams
   patch "/users/:id/update_team", to: "teams#update_user", as: :update_user
-  
+
   resources :story_builders
 
   # Payments

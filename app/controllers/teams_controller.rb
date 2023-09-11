@@ -53,7 +53,7 @@ class TeamsController < Accounts::BaseController
     else
       redirect_to(organization_users_account_path(@account.id), alert: "Errors: #{@user.errors.full_messages.join(", ")}")
     end
-  end  
+  end
 
   private
 
