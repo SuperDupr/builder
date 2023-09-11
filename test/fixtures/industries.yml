@@ -19,6 +19,8 @@
 
 one:
   title: MyString
+  account: one
 
 two:
   title: MyString
+  account: two

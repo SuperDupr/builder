@@ -19,7 +19,17 @@
 require "test_helper"
 
 class IndustryTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @industry = industries(:one)
+  end
+
+  test "belongs_to account association" do
+    assert_respond_to(@industry, :account)
+    assert_instance_of(Account, @industry.build_account)
+  end
+
+  test "has_many :users" do
+    assert_respond_to(@industry, :users)
+    assert_instance_of(User, @industry.users.build)
+  end
 end
