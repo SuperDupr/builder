@@ -44,6 +44,17 @@ class TeamsController < Accounts::BaseController
     redirect_to(teams_path)
   end
 
+  def update_user
+    @user = User.find(params[:id])
+    @team = @account.teams.find(params[:team_id])
+
+    if @user.update(team_id: params[:team_id])
+      redirect_to(organization_users_account_path(@account.id), notice: "User's team was updated successfully!")
+    else
+      redirect_to(organization_users_account_path(@account.id), alert: "Errors: #{@user.errors.full_messages.join(", ")}")
+    end
+  end  
+
   private
 
   def set_account
