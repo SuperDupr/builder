@@ -71,6 +71,7 @@ export default class extends Controller {
             answerProviderArea.innerHTML = ""
 
             if (data.nodes_without_prompt) {
+              console.log("I am here!")
               // Scenario 2: Construct the answer field with prompt data, counter, navigation buttons, nodes and sub-nodes
               answerProviderArea.innerHTML = this.constructSelectionElementForNodes(data.nodes, data.answer)
             } else {
@@ -138,7 +139,7 @@ export default class extends Controller {
         selectHTML += `</optgroup>`
       }
       else{
-        let shouldSelect = node.title === promptSelector
+        let shouldSelect = node.title === answerSelector
         selectHTML += `<option value="${node.id}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
       }
     }
