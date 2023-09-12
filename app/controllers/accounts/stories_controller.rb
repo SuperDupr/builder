@@ -88,14 +88,7 @@ class Accounts::StoriesController < Accounts::BaseController
     respond_to do |format|
       format.json do
         if @prompt.nil?
-          unless node_selection.empty?
-            render json: {
-              nodes_without_prompt: true,
-              nodes: node_selection,
-              answer: answer_response,
-              success: true
-            }
-          else
+          if node_selection.empty?
             render json: {
               nodes_without_prompt: false,
               prompt_id: nil,
@@ -104,6 +97,13 @@ class Accounts::StoriesController < Accounts::BaseController
               count: nil,
               answer: answer_response,
               success: false
+            }
+          else
+            render json: {
+              nodes_without_prompt: true,
+              nodes: node_selection,
+              answer: answer_response,
+              success: true
             }
           end
         else
