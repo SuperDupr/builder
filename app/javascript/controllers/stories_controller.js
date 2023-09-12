@@ -122,7 +122,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML = answerSelector ?
-    `<select id="nodes" class="!w-auto">` :
+    `<select id="nodes" class="md:!w-2/3 xl:!w-1/3">` :
     `<select id="nodes" class="!w-auto"><option disabled="" value="" selected="">Select option</option>`
 
     for (let i = 0; i < nodes.length; i++) {
@@ -147,14 +147,11 @@ export default class extends Controller {
     selectHTML += `</select>`
 
     return `
-    <div id="" class="flex items-center gap-3 flex-wrap justify-center" data-id="">
-      <div id=""></div>
-        ${selectHTML}
-      <div id=""></div>
-    </div>
-    <div class="w-full text-right">
-      <a class="btn btn-primary" data-action="stories#saveAnswer" id="saveAnswer" href="javascript:void(0)">Save</a>
-    </div>
+      <h5 class="w-full">Select an option</h5>
+      ${selectHTML}
+      <div class="w-full text-right">
+        <a class="btn btn-primary" data-action="stories#saveAnswer" id="saveAnswer" href="javascript:void(0)">Save</a>
+      </div>
     `
   }
 
@@ -197,10 +194,13 @@ export default class extends Controller {
             <span id="promptsCount">${totalPromptsCount}</span>
           </span>
         </h5>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary ${promptIndex === 0 ? 'pointer-events-none opacity-50' : ''}" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
-          <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
-        </div>
+        ${
+          totalPromptsCount > 1  ?
+          `<div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary ${promptIndex === 0 ? 'pointer-events-none opacity-50' : ''}" id="promptBackward" data-action="click->stories#promptNavigation" data-cursor="backward"></i>
+            <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
+          </div>` : ''
+        }
       </div>
       <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="${promptId}">
         <div id="promptPreText">${promptPreText}</div>
@@ -318,7 +318,7 @@ export default class extends Controller {
     } else if (promptMode === "off") {
       let answerFieldValue
 
-      if (answerProvider.dataset.onlyNodeMode) {
+      if (answerProvider.dataset.onlyNodeMode === "on") {
         let selectElement = document.getElementById("nodes")
         answerFieldValue = selectElement.options[selectElement.selectedIndex].text
       } else {
@@ -365,24 +365,28 @@ export default class extends Controller {
     let saveAnswerButton = document.getElementById("saveAnswer")
     saveAnswerButton.classList.add("pointer-events-none", "opacity-50");
     saveAnswerButton.textContent = "Saving..."
-  
-    fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          console.log("Answer saved successfully:", data.answer);
-          saveAnswerButton.classList.remove("pointer-events-none", "opacity-50");
-          saveAnswerButton.textContent = "Save"
-        } else {
-          console.error("Failed to save answer:", data.answer);
+    setTimeout(() => {
+      fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken
         }
       })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log("Answer saved successfully:", data.answer);
+            saveAnswerButton.textContent = "Saved"
+            setTimeout(() => {
+              saveAnswerButton.classList.remove("pointer-events-none", "opacity-50");
+              saveAnswerButton.textContent = "Save"
+            }, 800);
+          } else {
+            console.error("Failed to save answer:", data.answer);
+          }
+        })
+    }, 1000);
   }
   
   reconnect(event) {
