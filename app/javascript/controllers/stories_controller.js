@@ -68,36 +68,43 @@ export default class extends Controller {
         if (response.ok) {
         response.json().then((data) => {
           if (data.success) {
-            // Scenario 1: Construct the answer field with prompt data, counter, navigation buttons, nodes and sub-nodes
             answerProviderArea.innerHTML = ""
-            answerProviderArea.innerHTML = this.constructDataPerPrompt(data.count, this.index, data.prompt_id, data.prompt_pretext, data.prompt_posttext, data.prompt_selector, data.nodes)
 
-            // TODO: Add validations to handle index value correctly
-            if(!fetchAfterQuestion){
-              if (cursor == "backward") {
-                if(this.index >= 1){
-                  document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
-                  if(this.index === 0){
-                    document.getElementById('promptBackward').classList.add("pointer-events-none", "opacity-50");
-                  }
-                }
-              } else if (cursor == "forward") {
-                if(this.index < +promptsCount.innerText) {
-                  document.getElementById('promptBackward').classList.remove("pointer-events-none", "opacity-50");
-
-                  if ((this.index + 1) === +promptsCount.innerText) {
-                    document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
-                  }
-                }
-              }
+            if (data.nodes_without_prompt) {
+              // Scenario 2: Construct the answer field with prompt data, counter, navigation buttons, nodes and sub-nodes
+              answerProviderArea.innerHTML = this.constructSelectionElementForNodes(data.nodes, data.answer)
             } else {
-              if(data.count <= 1){
-                document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
-              }
-              else{
-                document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
+              // Scenario 1: Construct the answer field with prompt data, counter, navigation buttons, nodes and sub-nodes
+              answerProviderArea.innerHTML = this.constructDataPerPrompt(data.count, this.index, data.prompt_id, data.prompt_pretext, data.prompt_posttext, data.prompt_selector, data.nodes)
+              
+              if(!fetchAfterQuestion){
+                if (cursor == "backward") {
+                  if(this.index >= 1){
+                    document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
+                    if(this.index === 0){
+                      document.getElementById('promptBackward').classList.add("pointer-events-none", "opacity-50");
+                    }
+                  }
+                } else if (cursor == "forward") {
+                  if(this.index < +promptsCount.innerText) {
+                    document.getElementById('promptBackward').classList.remove("pointer-events-none", "opacity-50");
+  
+                    if ((this.index + 1) === +promptsCount.innerText) {
+                      document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
+                    }
+                  }
+                }
+              } else {
+                if(data.count <= 1){
+                  document.getElementById('promptForward').classList.add("pointer-events-none", "opacity-50");
+                }
+                else{
+                  document.getElementById('promptForward').classList.remove("pointer-events-none", "opacity-50");
+                }
               }
             }
+
+            // TODO: Add validations to handle index value correctly
           } else {
             // Scenario 2: Construct the answer field with text area
             answerProviderArea.innerHTML = ""
@@ -108,8 +115,51 @@ export default class extends Controller {
     })
   }
 
+  constructSelectionElementForNodes(nodes, answerSelector) {
+    const answerProvider = document.getElementById("answerProvider")
+    answerProvider.setAttribute("data-only-node-mode", "on")
+    answerProvider.setAttribute("data-prompt-mode", "off")
+
+    let selectHTML = answerSelector ?
+    `<select id="nodes" class="!w-auto">` :
+    `<select id="nodes" class="!w-auto"><option disabled="" value="" selected="">Select option</option>`
+
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if(node.child_nodes.length > 0){
+        selectHTML += `<optgroup label="${node.title}">`
+        for (let j = 0; j < node.child_nodes.length; j++) {
+          const child_node = node.child_nodes[j];
+          let shouldSelect = child_node.title === answerSelector
+  
+          selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+        }
+  
+        selectHTML += `</optgroup>`
+      }
+      else{
+        let shouldSelect = node.title === promptSelector
+        selectHTML += `<option value="${node.id}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
+      }
+    }
+
+    selectHTML += `</select>`
+
+    return `
+    <div id="" class="flex items-center gap-3 flex-wrap justify-center" data-id="">
+      <div id=""></div>
+        ${selectHTML}
+      <div id=""></div>
+    </div>
+    <div class="w-full text-right">
+      <a class="btn btn-primary" data-action="stories#saveAnswer" id="saveAnswer" href="javascript:void(0)">Save</a>
+    </div>
+    `
+  }
+
   constructDataPerPrompt(totalPromptsCount, promptIndex, promptId, promptPreText, promptPostText, promptSelector, nodes) {
     document.getElementById("answerProvider").dataset.promptMode = "on"
+    document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
     let selectHTML = promptSelector ? 
       `<select id="nodes" class="!w-auto">` :
@@ -164,6 +214,8 @@ export default class extends Controller {
 
   constructDataPerAnswerTextArea(answer) {
     document.getElementById("answerProvider").dataset.promptMode = "off"
+    document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
+    
     return `
     <h5 class="w-full">Answer</h5>
     <textarea name="answer" id="answer" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
@@ -263,8 +315,15 @@ export default class extends Controller {
         this.trackAnswer(questionId, storyId, promptId, selectedText)
       }
     } else if (promptMode === "off") {
-      let answerFieldValue = document.getElementById("answer").value
-      
+      let answerFieldValue
+
+      if (answerProvider.dataset.onlyNodeMode) {
+        let selectElement = document.getElementById("nodes")
+        answerFieldValue = selectElement.options[selectElement.selectedIndex].text
+      } else {
+        answerFieldValue = document.getElementById("answer").value
+      }
+
       if (answerFieldValue === "") {
         alert("Please add your answer in the field!")
       } else {
@@ -272,6 +331,7 @@ export default class extends Controller {
         let storyId = document.getElementById("storyDetails").dataset.storyId
         this.trackAnswer(questionId, storyId, "", answerFieldValue)
       }
+      
     }
   }
 
