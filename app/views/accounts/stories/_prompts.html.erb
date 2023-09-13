@@ -39,7 +39,7 @@
       <div id="promptPostText"><%= @prompt.post_text %></div>
     </div>
     <div class="w-full text-right">
-      <%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer"}) %>
+      <%#= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer"}) %>
     </div>
   </div>
 <% else %>
@@ -65,7 +65,7 @@
         <% end %>
       </select>
       <div class="w-full text-right">
-        <%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer" }) %>
+        <%#= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer" }) %>
       </div>
     </div>
   <% else %>
@@ -73,7 +73,7 @@
       <h5 class="w-full">Answer</h5>
       <%= text_area_tag(:answer, @answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3) %>
       <div class="w-full text-right">
-        <%= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer" }) %>
+        <%#= link_to("Save", "javascript:void(0)", class: "btn btn-primary", id: "saveAnswer", data: { action: "stories#saveAnswer" }) %>
       </div>
     </div>
   <% end %>
