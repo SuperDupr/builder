@@ -10,8 +10,6 @@ class Admin::QuestionsController < Admin::ApplicationController
 
   def new
     @question = Question.new
-    @question.prompts.build
-    @question.parent_nodes.build
   end
 
   def create
