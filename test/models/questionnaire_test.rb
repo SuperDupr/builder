@@ -1,11 +1,16 @@
 # == Schema Information
 #
-# Table name: questions
+# Table name: questionnaires
 #
-#  id         :bigint           not null, primary key
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :bigint           not null, primary key
+#  position         :integer
+#  question_id      :bigint
+#  story_builder_id :bigint
+#
+# Indexes
+#
+#  index_questionnaires_on_question_id       (question_id)
+#  index_questionnaires_on_story_builder_id  (story_builder_id)
 #
 require "test_helper"
 
