@@ -57,7 +57,7 @@ export default class extends Controller {
     } else {
       this.index = 0
     }
-  
+    
     fetch(`/question/${questionId}/prompts?index=${this.index}&story_id=${storyId}`, {
       method: "GET",
       headers: {
@@ -332,7 +332,7 @@ export default class extends Controller {
         let storyId = document.getElementById("storyDetails").dataset.storyId
         this.trackAnswer(questionId, storyId, "", answerFieldValue)
       }
-      
+
     }
   }
 
