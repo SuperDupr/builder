@@ -1,0 +1,31 @@
+<header class="main-content__header flex justify-between items-center px-4 shadow-md py-4" role="banner">
+  <div>
+    <h3 class="main-content__page-title">
+      Welcome to <%= @story.story_builder.title %> Builder
+    </h3>
+    <h4 id="storyDetails" data-story-id="<%= @story.id %>">Story: <span class="font-normal"><%= @story.title %></span></h4>
+  </div>
+</header>
+<div class="notice notice-warning dark:bg-blue-700 dark:text-blue-300 mb-3 mt-1 py-3" role="alert">
+  <p>You must have to click <span class="font-semibold">Save</span> button to save answer of a question</p>
+</div>
+<div class="py-4 lg:px-4" data-controller="stories">
+  <div class="grid lg:grid-cols-3 grid-cols-1 gap-4 mb-8">
+    <div class="col-span-2">
+
+      <!--  Questions Start -->
+      <%= render("questions") %>
+      <!--  Questions End -->
+
+      <!-- Prompts section start -->
+      <%= render("prompts") %>
+      <!-- Prompts section end -->
+
+      <%= render("story_builders") %>
+    </div>
+    <!-- col -->
+    <div>
+      <%= render("my_stories") %>
+    </div>
+  </div>
+</div>  

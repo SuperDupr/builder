@@ -17,7 +17,7 @@ as well as a link to its edit page.
 %>
 
 <% content_for(:title) { t("administrate.actions.show_resource", name: page.page_title) } %>
-<header class="main-content__header flex place-content-between flex justify-between items-center mb-4 px-4 shadow-md py-4">
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
   <h4 class="main-content__page-title">
     <%#= content_for(:title) %>
     Show Organization
@@ -50,7 +50,7 @@ as well as a link to its edit page.
     
   </h2>
   <dl>
-    <!--<label for="resource_name">Name</label> ->
+    <label for="resource_name">Name</label>
     <%# page.attributes.each do |attribute| %>
       <dt class="attribute-label" id="<%#= attribute.name %>">
       <%#= t(

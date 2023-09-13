@@ -20,38 +20,65 @@
     <% if current_roles.include?(:admin) %>
       <div class="flex">
         <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Total Revenue</h4>
-          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @total_revenue %></p>
+          <h4 class="font-normal mb-2">Identity Metaphors Built</h4>
+          <p class="text-3xl font-bold">12</p>
         </div>
 
         <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Revenue Last 12mo</h4>
-          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @last_12_mos %></p>
+          <h4 class="font-normal mb-2">Perception Shifting Metaphors Built</h4>
+          <p class="text-3xl font-bold">22</p>
         </div>
 
         <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Last Month's Revenue</h4>
-          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @last_month %></p>
-        </div>
-
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">This Month's Revenue To Date</h4>
-          <p class="text-3xl font-bold">$0.00<%#= number_to_currency @this_month %></p>
-        </div>
-      </div>
-
-      <div class="flex">
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Users</h4>
-          <p class="text-3xl font-bold"><%= current_account.users.count %></p>
-        </div>
-
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Active Subscriptions</h4>
-          <p class="text-3xl font-bold">0<%#= @subscriptions %></p>
+          <h4 class="font-normal mb-2">Multi-Step Process Metaphors Built</h4>
+          <p class="text-3xl font-bold">3</p>
         </div>
       </div>
     <% end %>
   </section>
+  <div class="container mx-auto px-4">
+    <%#= @account_users.count %>
+    <div class="overflow-x-auto">
+      <table class="border mt-5">
+        <thead>
+          <tr>
+            <th class="w-1/5">First Name</th>
+            <th class="w-1/5">Last Name</th>
+            <th class="w-1/5">Email</th>
+            <th class="w-1/5">Team</th>
+            <th class="w-1/5">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% if @account_users.present? %>
+            <% @account_users.each do |account_user| %>
+              <tr>
+                <td><%= account_user.user.first_name %></td>
+                <td><%= account_user.user.last_name %></td>
+                <td><%= account_user.user.email %></td>
+                <td>
+                  <%= account_user.user.team.present? ? account_user.user.team.name : "---" %>
+                </td>
+                <td>
+                  <span class="inline-flex items-center justify-center rounded-full bg-green-500 text-white p-2">
+                    Active
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+          <tr>
+            <td colspan="4" class="text-center">No Users found. Only users that accepted invitation will appear here!</td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @pagy.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 

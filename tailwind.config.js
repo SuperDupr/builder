@@ -36,6 +36,10 @@ module.exports = {
         gray: colors.neutral,
         "code-400": "#fefcf9",
         "code-600": "#3c455b",
+        "fte-primary": "#021642",
+        "fte-secondary": "#FD5B28",
+        "fte-gray": "#9AA2B3",
+        "fte-warm-gray": "#E2DEDC"
       },
       spacing: {
       // Customize spacing values here
@@ -44,6 +48,7 @@ module.exports = {
       '3': '12px',  
       '4': '16px',     
       '5': '20px',
+      '30': '30px',
       '50': '50px',
       '60': '60px', 
       '65': '65px',

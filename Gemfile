@@ -19,7 +19,7 @@ gem "puma", "~> 6.0"
 gem "turbo-rails", "~> 1.0", ">= 1.0.1"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails", "~> 1.0", ">= 1.0.2"
+gem "stimulus-rails", "~> 1.2"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder", github: "excid3/jbuilder", branch: "partial-paths" # "~> 2.11"
@@ -87,3 +87,6 @@ eval_gemfile "Gemfile.jumpstart"
 gem "roo", "~> 2.10.0"
 gem "roo-xls"
 # gem 'activerecord-import', '~> 0.15.0'
+
+gem "aws-sdk-s3", require: false
+gem "acts_as_list"
