@@ -1,7 +1,11 @@
 <div class="flex settings-tabs overflow-x-auto">
   <a href="<%= accounts_path %>" class="nav-link lg:mr-1 <%= request.path == accounts_path ? 'active' : '' %>">Org. Settings</a>
-  <a href="<%= organization_users_account_path(current_account) %>" class="nav-link lg:mr-1 <%= request.path == organization_users_account_path(current_account) ? 'active' : '' %>">Users</a>
-  <a href="<%= invited_users_account_path(current_account) %>" class="nav-link lg:mr-1 <%= request.path == invited_users_account_path(current_account) ? 'active' : '' %>">Invitations</a>
+  
+  <% if current_account_admin? %>
+    <a href="<%= organization_users_account_path(current_account) %>" class="nav-link lg:mr-1 <%= request.path == organization_users_account_path(current_account) ? 'active' : '' %>">Users</a>
+    <a href="<%= invited_users_account_path(current_account) %>" class="nav-link lg:mr-1 <%= request.path == invited_users_account_path(current_account) ? 'active' : '' %>">Invitations</a>
+    <a href="<%= account_industries_path(account_id: current_account.id) %>" class="nav-link lg:mr-1 <%= request.path == account_industries_path(account_id: current_account.id) ? 'active' : '' %>">Industries</a>
+  <% end %>
+
   <a href="<%= teams_path %>" class="nav-link lg:mr-1 <%= request.path == teams_path ? 'active' : '' %>">Teams</a>
-  <a href="<%= account_industries_path(account_id: current_account.id) %>" class="nav-link lg:mr-1 <%= request.path == account_industries_path(account_id: current_account.id) ? 'active' : '' %>">Industries</a>
 </div>
