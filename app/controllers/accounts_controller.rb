@@ -85,7 +85,8 @@ class AccountsController < Accounts::BaseController
   end
 
   def organization_users
-    @pagy, @account_users = pagy(@account.account_users.includes(:user))
+    @pagy, @account_users = pagy(@account.account_users.includes(:user).order(updated_at: :desc))
+    @teams = @account.teams
   end
 
   def invited_users

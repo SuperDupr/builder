@@ -33,7 +33,7 @@
                 <td><%= account_user.user.email %></td>
                 <td>
                   <div class="flex gap-2 justify-between">
-                    <%= account_user.user.team.present? ? account_user.user.team.name : "---" %>
+                    <%= account_user.user.team.present? ? account_user.user.team.name : "No team associated" %>
 
                     <!-- Modal to Change Team -->
                     <div data-controller="modal" data-action="keydown.esc->modal#close" tabindex="-1">
@@ -48,21 +48,15 @@
 
                             <h2 class="text-lg mb-2">Change Team of <%= account_user.user.first_name %></h2>
 
-                            <%#= form_for(@story, url:  do |f| %>
-                              <select>
-                                <option selected disabled>
-                                  Select Team
-                                </option>
-                                <option>Team 1</option>
-                                <option>Team 2</option>
-                              </select>
-                              <%#= f.hidden_field(:account_user.user.id, value: account_user.user.id) %>
+                            <%= form_tag(update_user_path(account_user.user.id), method: :patch) do |f| %>
+                            <%= select_tag(:team_id, options_from_collection_for_select(@teams, "id", "name", 
+                              account_user.user&.team&.id), prompt: "Select Team", required: true) %>
 
                               <div class="flex justify-end items-center flex-wrap gap-2 mt-4">
-                                <%#= f.submit("Proceed", class: "btn btn-white") %>
+                                <%= submit_tag("Proceed", class: "btn btn-white") %>
                                 <button class="btn btn-white" data-action="click->modal#close:prevent">Cancel</button>
                               </div>
-                            <%# end %>
+                            <% end %>
                           </div>
                         </div>
                       </div>

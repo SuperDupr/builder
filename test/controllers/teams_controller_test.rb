@@ -77,4 +77,17 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(Team.first.account, accounts(:two))
     assert_response(:redirect)
   end
+
+  test "PATCH :update_user" do
+    patch update_user_path(
+      id: users(:one).id,
+      team_id: teams(:one).id
+    )
+
+    user = controller.instance_variable_get(:@user)
+
+    assert_equal(user.email, users(:one).email)
+    assert_equal(user.team_id, teams(:one).id)
+    assert_response(:redirect)
+  end
 end

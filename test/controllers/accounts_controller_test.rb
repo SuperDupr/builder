@@ -20,9 +20,11 @@ class AccountControllerTest < ActionDispatch::IntegrationTest
 
     account_users = controller.instance_variable_get(:@account_users)
     pagy = controller.instance_variable_get(:@pagy)
+    teams = controller.instance_variable_get(:@teams)
 
     assert_includes(account_users, account_users(:one))
     assert_instance_of(Pagy, pagy)
+    assert_includes(teams, teams(:one))
   end
 
   test "GET :invited_users" do
