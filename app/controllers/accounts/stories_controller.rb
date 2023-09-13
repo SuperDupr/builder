@@ -83,28 +83,11 @@ class Accounts::StoriesController < Accounts::BaseController
     @prompt = question.prompts[params[:index].to_i]
     answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
-<<<<<<< HEAD
     node_selection = build_node_selection_structure(question.parent_nodes)
-=======
-    node_selection = []
-    parent_nodes = question.parent_nodes
-
-    parent_nodes.each do |node|
-      node_hash = {}
-      child_nodes_data = []
-      node.child_nodes.each do |child_node|
-        child_nodes_data << {id: child_node.id, title: child_node.title}
-      end
-      node_hash[:title] = node.title
-      node_hash[:child_nodes] = child_nodes_data
-      node_selection << node_hash
-    end
->>>>>>> f5acedcc (Finalize Story Building flows (#93))
 
     respond_to do |format|
       format.json do
         if @prompt.nil?
-<<<<<<< HEAD
           if node_selection.empty?
             render json: {
               nodes_without_prompt: false,
@@ -126,18 +109,6 @@ class Accounts::StoriesController < Accounts::BaseController
         else
           render json: {
             nodes_without_prompt: false,
-=======
-          render json: {
-            prompt_id: nil,
-            prompt_pretext: nil,
-            prompt_posttext: nil,
-            count: nil,
-            answer: answer_response,
-            success: false
-          }
-        else
-          render json: {
->>>>>>> f5acedcc (Finalize Story Building flows (#93))
             prompt_id: @prompt.id,
             prompt_pretext: @prompt.pre_text,
             prompt_posttext: @prompt.post_text,
@@ -164,11 +135,7 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
-<<<<<<< HEAD
   # GET /question/:id/nodes/:node_id/child_nodes
-=======
-  # GET /question/:id/nodes/:node_id/sub_nodes
->>>>>>> f5acedcc (Finalize Story Building flows (#93))
   def sub_nodes_per_node
     question = Question.find(params[:id])
     node = question.parent_nodes.find(params[:node_id])
@@ -246,7 +213,6 @@ class Accounts::StoriesController < Accounts::BaseController
       end
     end
   end
-<<<<<<< HEAD
 
   def build_node_selection_structure(parent_nodes)
     node_selection = []
@@ -264,6 +230,4 @@ class Accounts::StoriesController < Accounts::BaseController
 
     node_selection
   end
-=======
->>>>>>> f5acedcc (Finalize Story Building flows (#93))
 end
