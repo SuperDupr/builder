@@ -12,8 +12,9 @@
       /
       <span id="questionsCount"><%= @questions.count %></span>
     </span>
-  </p>
-
-<p id="questionContainer" class="fs-20 mb-4" data-id=<%= @question.id %>>
+  </h5>
+  <%= render("top_level_actions") %>
+</div>
+<h5 id="questionContainer" class="mt-4" data-id=<%= @question.id %>>
   <%= @question.title %>
 </p>
