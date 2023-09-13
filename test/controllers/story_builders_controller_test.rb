@@ -7,15 +7,20 @@ class StoryBuildersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get story_builders_path
-    assert_response :success
-  end
+    @story_builder = story_builders(:one)
 
-  # TODO: Once the show action is implemented, enable it.
-  test "should set story_builder" do
-    # story_builder = story_builders(:one)
-    # get story_builder_path(story_builder)
-    # assert_response :success
-    # assert_equal story_builder, assigns(:story_builder)
+    get story_builders_path
+
+    story_builders = controller.instance_variable_get(:@story_builders)
+    pagy = controller.instance_variable_get(:@pagy)
+    redirect_to_registration_section = controller.instance_variable_get(:@redirect_to_registration_section)
+    story = controller.instance_variable_get(:@story)
+
+    assert_includes(story_builders, @story_builder)
+    assert_instance_of(Pagy, pagy)
+    assert_equal(redirect_to_registration_section, true)
+    assert_equal(story.new_record?, true)
+
+    assert_response :success
   end
 end

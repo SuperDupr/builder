@@ -35,6 +35,7 @@ class Accounts::StoriesController < Accounts::BaseController
       @question = @questions.order(position: :asc).first
       @answer = @question.answers.find_by(story_id: @story.id)&.response
       @prompts = @question.prompts.order(created_at: :asc)
+      @nodes = @question.parent_nodes
       @prompt = @prompts.first
     end
   end
@@ -82,33 +83,32 @@ class Accounts::StoriesController < Accounts::BaseController
     @prompt = question.prompts[params[:index].to_i]
     answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
-    node_selection = []
-    parent_nodes = question.parent_nodes
-
-    parent_nodes.each do |node|
-      node_hash = {}
-      child_nodes_data = []
-      node.child_nodes.each do |child_node|
-        child_nodes_data << {id: child_node.id, title: child_node.title}
-      end
-      node_hash[:title] = node.title
-      node_hash[:child_nodes] = child_nodes_data
-      node_selection << node_hash
-    end
+    node_selection = build_node_selection_structure(question.parent_nodes)
 
     respond_to do |format|
       format.json do
         if @prompt.nil?
-          render json: {
-            prompt_id: nil,
-            prompt_pretext: nil,
-            prompt_posttext: nil,
-            count: nil,
-            answer: answer_response,
-            success: false
-          }
+          if node_selection.empty?
+            render json: {
+              nodes_without_prompt: false,
+              prompt_id: nil,
+              prompt_pretext: nil,
+              prompt_posttext: nil,
+              count: nil,
+              answer: answer_response,
+              success: false
+            }
+          else
+            render json: {
+              nodes_without_prompt: true,
+              nodes: node_selection,
+              answer: answer_response,
+              success: true
+            }
+          end
         else
           render json: {
+            nodes_without_prompt: false,
             prompt_id: @prompt.id,
             prompt_pretext: @prompt.pre_text,
             prompt_posttext: @prompt.post_text,
@@ -135,7 +135,7 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
-  # GET /question/:id/nodes/:node_id/sub_nodes
+  # GET /question/:id/nodes/:node_id/child_nodes
   def sub_nodes_per_node
     question = Question.find(params[:id])
     node = question.parent_nodes.find(params[:node_id])
@@ -212,5 +212,22 @@ class Accounts::StoriesController < Accounts::BaseController
         question.answers.new(story_id: params[:story_id], response: params[:selector])
       end
     end
+  end
+
+  def build_node_selection_structure(parent_nodes)
+    node_selection = []
+
+    parent_nodes.each do |node|
+      node_hash = {}
+      child_nodes_data = []
+      node.child_nodes.each do |child_node|
+        child_nodes_data << {id: child_node.id, title: child_node.title}
+      end
+      node_hash[:title] = node.title
+      node_hash[:child_nodes] = child_nodes_data
+      node_selection << node_hash
+    end
+
+    node_selection
   end
 end

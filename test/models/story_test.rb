@@ -47,7 +47,21 @@ class StoryTest < ActiveSupport::TestCase
     assert_instance_of Account, @story.account
   end
 
+  test "has_many answers association" do
+    assert_respond_to(@story, :answers)
+    assert_instance_of(Answer, @story.answers.build)
+  end
+
   test "enum status values" do
     assert_equal({"draft" => 0, "complete" => 1, "published" => 2}, Story.statuses)
+  end
+
+  test "scopes :publicized, :privatized, :viewable" do
+    @story_2 = stories(:two)
+    @story_3 = stories(:three)
+
+    assert_includes(Story.publicized, @story_2)
+    assert_includes(Story.privatized, @story_3)
+    assert_includes(Story.viewable, @story_3)
   end
 end
