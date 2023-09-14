@@ -53,7 +53,3 @@ ol {
 .settings-tabs .nav-link.active {
   border-bottom: 2px solid #021642; /* Replace 'blue' with your desired border color */
 }
-
-.prompt-height{
-  height: calc(100% - 366px)
-}

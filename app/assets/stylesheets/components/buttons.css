@@ -45,11 +45,11 @@ button[disabled]        .when-enabled { display: none; }
     }
 
     &.btn-outline {
-      @apply bg-transparent border border-blue-500 text-blue-500 shadow-none;
+      @apply bg-transparent border border-primary text-primary shadow-none;
 
       &:hover,
       &:focus {
-        @apply bg-blue-500 text-white;
+        @apply bg-primary text-white;
       }
     }
   }
