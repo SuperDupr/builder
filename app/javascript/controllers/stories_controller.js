@@ -247,8 +247,8 @@ export default class extends Controller {
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
       if(this.qIndex >= 1){
-        if (nextQuestionButton?.style.display === "none") {
-          nextQuestionButton?.style.display = "flex"
+        if (nextQuestionButton.style.display === "none") {
+          nextQuestionButton.style.display = "flex"
         }
         
         if (finishLink) { finishLink.remove() }
@@ -263,7 +263,7 @@ export default class extends Controller {
         prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
         this.qIndex++
         if(this.qIndex + 1 === questionsCount){
-          nextQuestionButton?.style.display = "none"
+          nextQuestionButton.style.display = "none"
           questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-primary' id="finishLink" data-method="patch">Finish</a>`
         }
       }
