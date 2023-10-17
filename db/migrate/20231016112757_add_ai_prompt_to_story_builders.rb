@@ -1,6 +1,6 @@
 class AddAiPromptToStoryBuilders < ActiveRecord::Migration[7.0]
   def default_system_ai_prompt
-    "You are story creator. You have to generate stories in a concise format. "\
+    "You are story creator. You have to generate stories in a concise format. Your voice should be formal. "\
     "We're going to give you a set of responses that received from question answer session from users. "\
     "Data will be in the format of a hash like this: "\
     "{
