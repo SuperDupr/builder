@@ -61,6 +61,13 @@ table.new-design-table tbody tr {
 table.new-design-table td:first-child{
   border-left: 8px solid #fff;
 }
+table.new-design-table td:last-child{
+  background-color: #0f0144;
+  color: #fff;
+}
+table.new-design-table td:last-child a:hover{
+  color: #fff;
+}
 table.new-design-table td{
   padding: 8px 10px;
   background-color: #F5F5F5;
