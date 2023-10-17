@@ -144,6 +144,16 @@ table.new-design-table td{
 .min-h-400 {
   min-height: 400px;
 }
+.slec-without-border, .slec-without-border:focus {
+  box-shadow: none !important;
+  border: 0px;
+  font-size: 30px;
+  line-height: normal;
+  margin-top: 0px !important;
+}
+.slec-without-border option {
+  font-size: 20px;
+}
 
 @media only screen and (max-width: 992px) {
   table.new-design-table td .small-screen{

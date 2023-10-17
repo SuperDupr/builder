@@ -130,7 +130,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option>`
+    `<div class="py-40"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option></div>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -156,7 +156,7 @@ export default class extends Controller {
     return `
       <h5 class="w-full mb-6">Select an option</h5>
       ${selectHTML}
-      <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
+      <div id="errorText" class="text-red-500 text-center mt-1 hidden block fs-15">Please select an option to save response</div>
     `
   }
 
@@ -165,7 +165,7 @@ export default class extends Controller {
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
     let selectHTML =
-      `<select id="nodes" class="!w-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option>`
+      `<div class=" flex"><select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option></div>`
     
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -202,10 +202,10 @@ export default class extends Controller {
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary ${totalPromptsCount <= 1 ? '!hidden' : ''}" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
-      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="${promptId}">
-        <div id="promptPreText">${promptPreText}</div>
+      <div id="promptContainer" class="flex items-center justify-center py-40" data-id="${promptId}">
+        <div id="promptPreText" class="fs-30">${promptPreText}</div>
         ${selectHTML}
-        <div id="promptPostText">${promptPostText}</div>
+        <div id="promptPostText" class="fs-30">${promptPostText}</div>
       </div>
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
     `
@@ -218,8 +218,11 @@ export default class extends Controller {
     
     return `
       <h5 class="w-full mb-6">Answer</h5>
+      <div class="py-40">
       <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
-      <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please write answer to save response</div>
+      <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
+      </div>
+      
     `
   }
 
@@ -264,7 +267,7 @@ export default class extends Controller {
         this.qIndex++
         if(this.qIndex + 1 === questionsCount){
           nextQuestionButton.style.display = "none"
-          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-primary' id="finishLink" data-method="patch">Finish</a>`
+          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch">Finish</a>`
         }
       }
     }
