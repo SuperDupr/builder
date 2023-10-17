@@ -1,137 +1,278 @@
-<header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4" role="banner">
-  <h3 class="main-content__page-title">
-    Stories
-  </h3>
-</header>
-
-<!-- Organization Stories -->
-<div class="xl:container mx-auto pt-4 px-4">
+<div class="py-9 bg-primary"><h1 class="text-center text-white fs-40 fw-medium">Storybank</h1></div>
+<div class="xl:container mx-auto pt-12 px-4">
   <h4>Organization Stories</h4>
-  <div class="overflow-x-auto">
-    <table class="border border-collapse mt-5">
+  <div class="mb-12">
+    <table class="new-design-table">
       <thead>
         <tr>
           <th>Story Details</th>
-          <th>Created By</th>
+          <th>Creater Name</th>
           <th>Status</th>
           <% if @admin_logged_in %>
-            <th>Team Access</th>
-          <% end %>
-          <th class="text-right">Actions</th>
+          <th>Team Access</th>
+        <% end %>
+          <th></td>
         </tr>
       </thead>
       <tbody>
         <% if @org_stories.present? %>
-          <% @org_stories.each do |story| %>
-            <tr>
-              <td>
+        <% @org_stories.each do |story| %>
+        <tr>
+          <td>
+            <div class="flex items-center gap-2 small-screen">
+            <div class="circle-72"></div>
+            <div>
+              <p class="fs-15 font-bold">
                 <%= story.title %>
-                <div class="text-neutral-500"><%= story.story_builder.title %></div>
-              </td>
-              <td>
-                <%= story.creator.name %>
-              </td>
-              <td><%= story.status.to_s.capitalize %></td>
-              <% if @admin_logged_in %>
-                <td>
-                  <div class="flex items-center w-full">
-                    <label for="viewable<%= story.id %>" class="flex items-center cursor-pointer">
-                      <div class="relative" data-controller="tooltip" data-tippy-content="Make it Viewable/Non-viewable for whole organization">
-                        <input id="viewable<%= story.id %>" type="checkbox" class="sr-only" data-controller="stories"
-                          data-id="<%= story.id %>" data-action="click->stories#toggleStoryVisibility" <%= story.viewable ? "checked" : "" %>>
-                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                      </div>
-                      <div class="ml-3 text-gray-700 font-medium" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
-                    </label>
-                  </div>
-                </td>
-              <% end %>
-              <td>
-                <div class="flex items-center gap-2 justify-end" >
-                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Show" }) do %>
-                    <i class="fa-solid fa-eye"></i>
-                  <% end %>
+              </p>
+              <p class="fs-15 italic"><%= story.story_builder.title %></p>
+            </div>
+          </td>
+          <td>
+            <div class="fs-15 font-bold"><%= story.creator.name %></div>
+          </td>
+          <td>
+            <div class="fs-15 font-bold"><%= story.status.to_s.capitalize %></div>
+          </td>
+          <% if @admin_logged_in %>
+          <td>
+            <div class="flex items-center w-full">
+              <label for="viewable<%= story.id %>" class="flex items-center cursor-pointer">
+                <div class="relative" data-controller="tooltip" data-tippy-content="Make it Viewable/Non-viewable for whole organization">
+                  <input id="viewable<%= story.id %>" type="checkbox" class="sr-only" data-controller="stories"
+                    data-id="<%= story.id %>" data-action="click->stories#toggleStoryVisibility" <%= story.viewable ? "checked" : "" %>>
+                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-              </td>
+                <div class="ml-3 fs-15 font-bold" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
+              </label>
+            </div>
+          </td>
+        <% end %>
+          <td>
+            <div class="flex items-center gap-2 justify-center" >
+              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "fs-15 font-bold", data: { controller: "tooltip", tippy_content: "Show" }) do %>
+                SHOW STORY
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+          <% else %>
+            <tr>
+              <td colspan="6" class="text-center">No Organizations stories found</td>
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td colspan="6" class="text-center">No Organizations stories found</td>
-          </tr>
-        <% end %>
       </tbody>
     </table>
   </div>
   <% if @pagy_1.pages > 1 %>
-    <div class="mt-6 text-right">
-      <%== pagy_nav(@pagy_1) %>
-    </div>
+  <div class="mt-6 text-right">
+    <%== pagy_nav(@pagy_1) %>
+  </div>
   <% end %>
 </div>
 
-<!-- My Stories -->
-<div class="xl:container mx-auto pb-4 px-4">
-  <h4>My Stories</h4>
-  <div class="overflow-x-auto">
-    <table class="border border-collapse mt-5">
+
+<div class="xl:container mx-auto pt-4 px-4">
+  <h3 class="mb-4">My Stories</h3>
+  <div class="pb-4">
+    <p class="font-bold fs-20">Quick Filters</p>
+  </div>
+  <div class="flex flex-wrap mb-8">
+    <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 mb-2">
+      <p class="font-bold fs-20 mb-2">STORY TYPE</p>
+      <div class="flex flex-wrap">
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/star.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Metaphor</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/f2.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Laser Beam</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/f3.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Two Roads Story</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/f4.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Greenlight Story</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/f5.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Magnifier</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img src="/f6.svg" alt="star" height="24px" width="24px">
+            <p class="fs-15">Shrinker</p>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+    <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2">
+      <p class="font-bold fs-20 mb-2">COMMON CHALLENGES</p>
+      <div class="flex flex-wrap">
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Provide Clarity</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Shift Perception</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Share Client Success</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Frame a situation</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Introduce solution</p>
+          </div>
+        </div>
+        <div class="story-type mr-2 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="red-circle-small"></div>
+            <p class="fs-15">Team identity</p>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="flex gap-8 flex-wrap items-center mb-2 mt-15">
+    <div class="flex items-center gap-8">
+      <div>
+        <p class="fs-15 font-bold"><i class="fa-solid fa-arrow-down-short-wide mr-1"></i> Filter</p>
+      </div>
+      <div>
+        <p class="fs-15 font-bold"><i class="fa-regular fa-rectangle-list mr-1"></i> Group</p>
+      </div>
+      <div>
+        <p class="fs-15 font-bold"><i class="fa-solid fa-arrow-up-z-a mr-1"></i> Sort</p>
+      </div>
+    </div>
+    <div class="flex-grow">
+      <input type="search" class="form-control rounded-md bg-F5F5F5 border-0 rounded-full" placeholder="Search" />
+    </div>
+  </div>
+  <div class="">
+    <table class="new-design-table">
       <thead>
         <tr>
           <th>Story Details</th>
+          <th>Story Type</th>
+          <th>Communication Challenge</th>
           <th>Status</th>
           <th>Access</th>
-          <th class="text-right">Actions</th>
+          <th>Organization</th>
+          <th></td>
         </tr>
       </thead>
       <tbody>
         <% if @my_stories.present? %>
-          <% @my_stories.each do |story| %>
-            <tr>
-              <td>
+      <% @org_stories.each do |story| %>
+        <tr>
+          <td>
+            <div class="flex items-center gap-2 small-screen">
+            <div class="circle-72"></div>
+            <div>
+              <p class="fs-15 font-bold">
                 <%= story.title %>
-                <div class="text-neutral-500"><%= story.story_builder.title %></div>
-              </td>
-              <td><%= story.status.to_s.capitalize %></td>
-              <td>
-                <div class="flex items-center w-full">
-                  <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
-                    <div class="relative" data-controller="stories">
-                      <% if story.private_access %>
-                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                          data-id="<%= story.id %>"
-                          checked
-                          data-account-id="<%= current_account.id %>"
-                          data-change-access-mode="on"
-                          data-draft-mode="off"
-                          data-action="change->stories#updateStoryAccessOrDraftMode">
-                      <% else %>
-                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                          data-id="<%= story.id %>"
-                          data-account-id="<%= current_account.id %>"
-                          data-change-access-mode="on"
-                          data-draft-mode="off"
-                          data-action="change->stories#updateStoryAccessOrDraftMode">
-                      <% end %>
-                      <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                      <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                    </div>
-                    <div class="ml-3 text-gray-700 font-medium" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
-                  </label>
-                </div>
-              </td>
-              <td>
-                <div class="flex items-center gap-2 justify-end" >
-                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "btn btn-primary", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
-                    <i class="fa-solid fa-pen"></i>
+              </p>
+              <p class="fs-15 italic"> <%= story.story_builder.title %></p>
+            </div>
+           
+          </td>
+          <td>
+            <div class="flex items-center gap-2 small-screen">
+              <img src="/star.svg" alt="star">
+              <p class="fs-20">Metaphor</p>
+            </div>
+          </td>
+          <td>
+            <div class="flex items-center gap-2 small-screen">
+              <div class="red-circle"></div>
+              <p class="fs-20 mb-1">Provide Clarity</p>
+            </div>
+          </td>
+          <td>
+            <div class="small-screen">
+            <p class="fs-15 font-bold"><%= story.status.to_s.capitalize %></p>
+          </div>
+          </td>
+          <td>
+           <div class="flex items-center w-full">
+              <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+                <div class="relative" data-controller="stories">
+                  <% if story.private_access %>
+                    <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                      data-id="<%= story.id %>"
+                      checked
+                      data-account-id="<%= current_account.id %>"
+                      data-change-access-mode="on"
+                      data-draft-mode="off"
+                      data-action="change->stories#updateStoryAccessOrDraftMode">
+                  <% else %>
+                    <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                      data-id="<%= story.id %>"
+                      data-account-id="<%= current_account.id %>"
+                      data-change-access-mode="on"
+                      data-draft-mode="off"
+                      data-action="change->stories#updateStoryAccessOrDraftMode">
                   <% end %>
+                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-              </td>
-            </tr>
-          <% end %>
+                <div class="ml-3 fs-15 font-bold" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+              </label>
+            </div>
+          </td>
+           <td>
+            <div class="small-screen">
+              <p class="fs-20">Google</p>
+              <p class="fs-20 italic">Cloud Team</p>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="flex items-center gap-2 justify-center" >
+              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
+                EDIT STORY
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% end %>
         <% else %>
           <tr>
-            <td colspan="5" class="text-center">No stories found</td>
+            <td colspan="7" class="text-center">No stories found</td>
           </tr>
         <% end %>
       </tbody>

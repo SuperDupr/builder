@@ -1,10 +1,12 @@
-<div class="p-3 border border-gray-200 rounded-lg">
-  <h5>My Stories</h5>
+<div class="sidebar">
+  <div class="p-4">
+  <p class="fs-30">My Stories</p>
+  </div>
   <% @my_stories.each do |story| %>
-    <div class="p-3 mt-3 border border-gray-200 bg-gray-100 rounded-sm">
-      <div class="font-semibold"><%= story.title %></div>
-      <p>Final highlights will come here..</p>
-      <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="inline-block font-semibold mt-4">Go to Story</a>
+    <div class="bg-F5F5F5 p-4 mb-3">
+      <div class="fs-20 font-bold mb-4"><%= story.title %></div>
+      <p class="fs-20 mb-4">Final highlights will come here..</p>
+      <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="font-bold fs-15">VIEW ></a>
     </div>
   <% end %>
 </div>
