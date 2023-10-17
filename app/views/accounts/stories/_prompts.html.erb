@@ -15,7 +15,7 @@
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary <%= @prompts.count <= 1 ? '!hidden' : '' %>" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
-      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center fs-30 py-40" data-id="<%= @prompt.id %>">
+      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center fs-30 min-h-400" data-id="<%= @prompt.id %>">
         <div id="promptPreText"><%= @prompt.pre_text %></div>
           <select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">
             <option selected value="">Select option</option>
