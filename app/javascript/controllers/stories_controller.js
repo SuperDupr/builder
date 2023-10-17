@@ -264,7 +264,7 @@ export default class extends Controller {
         this.qIndex++
         if(this.qIndex + 1 === questionsCount){
           nextQuestionButton.style.display = "none"
-          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-primary' id="finishLink" data-method="patch">Finish</a>`
+          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-primary' id="finishLink" data-method="patch">Get me a Metaphor</a>`
         }
       }
     }
