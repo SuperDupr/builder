@@ -5,34 +5,39 @@
     <table class="new-design-table">
       <thead>
         <tr>
+          <th>Story Creator</th>
           <th>Story Details</th>
-          <th>Creater Name</th>
           <th>Status</th>
           <% if @admin_logged_in %>
           <th>Team Access</th>
         <% end %>
-          <th></td>
+          <th width="11%"></td>
         </tr>
       </thead>
       <tbody>
         <% if @org_stories.present? %>
         <% @org_stories.each do |story| %>
         <tr>
-          <td>
-            <div class="flex items-center gap-2 small-screen">
-            <div class="circle-72"></div>
-            <div>
-              <p class="fs-15 font-bold">
-                <%= story.title %>
-              </p>
-              <p class="fs-15 italic"><%= story.story_builder.title %></p>
-            </div>
+         <td>
+         <div class="flex items-center gap-3">
+         <%= image_tag avatar_url_for(story.creator), class: 'circle-72' %>
+           <div>
+            <p class="fs-15 font-bold"><%= story.creator.name %></p>
+             <p class="fs-15 italic">Head of Sales</p>
+           </div>
+         </div>
+            
+          
           </td>
           <td>
-            <div class="fs-15 font-bold"><%= story.creator.name %></div>
+            <p class="fs-15 font-bold">
+              <%= story.title %>
+            </p>
+            <p class="fs-15 italic"><%= story.story_builder.title %></p>
           </td>
+         
           <td>
-            <div class="fs-15 font-bold"><%= story.status.to_s.capitalize %></div>
+            <div class="fs-20"><%= story.status.to_s.capitalize %></div>
           </td>
           <% if @admin_logged_in %>
           <td>
@@ -44,14 +49,14 @@
                   <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
                   <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-                <div class="ml-3 fs-15 font-bold" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
+                <div class="ml-3 fs-20" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
               </label>
             </div>
           </td>
         <% end %>
-          <td>
+          <td class="!p-0">
             <div class="flex items-center gap-2 justify-center" >
-              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "fs-15 font-bold", data: { controller: "tooltip", tippy_content: "Show" }) do %>
+              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
                 SHOW STORY
               <% end %>
             </div>
@@ -201,14 +206,11 @@
       <% @org_stories.each do |story| %>
         <tr>
           <td>
-            <div class="flex items-center gap-2 small-screen">
-            <div class="circle-72"></div>
-            <div>
-              <p class="fs-15 font-bold">
+          <p class="fs-15 font-bold">
                 <%= story.title %>
               </p>
-              <p class="fs-15 italic"> <%= story.story_builder.title %></p>
-            </div>
+               <p class="fs-15 italic"> <%= story.story_builder.title %></p>
+          
            
           </td>
           <td>
@@ -225,7 +227,7 @@
           </td>
           <td>
             <div class="small-screen">
-            <p class="fs-15 font-bold"><%= story.status.to_s.capitalize %></p>
+            <p class="fs-20"><%= story.status.to_s.capitalize %></p>
           </div>
           </td>
           <td>
@@ -251,7 +253,7 @@
                   <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
                   <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-                <div class="ml-3 fs-15 font-bold" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+                <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
               </label>
             </div>
           </td>
@@ -261,9 +263,9 @@
               <p class="fs-20 italic">Cloud Team</p>
             </div>
           </td>
-          <td class="text-center">
+          <td class="text-center !p-0">
             <div class="flex items-center gap-2 justify-center" >
-              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15", data: { controller: "tooltip", tippy_content: "Edit" }) do %>
+              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
                 EDIT STORY
               <% end %>
             </div>
