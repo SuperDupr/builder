@@ -130,7 +130,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option>`
+    `<div class="min-h-400 flex-col"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -151,12 +151,13 @@ export default class extends Controller {
       }
     }
 
-    selectHTML += `</select></div>`
+    selectHTML += `</select>`
 
     return `
       <h5 class="w-full mb-6">Select an option</h5>
       ${selectHTML}
       <div id="errorText" class="text-red-500 text-center mt-1 hidden block fs-15">Please select an option to save response</div>
+      </div>
     `
   }
 
@@ -206,8 +207,9 @@ export default class extends Controller {
         <div id="promptPreText" class="fs-30">${promptPreText}</div>
         ${selectHTML}
         <div id="promptPostText" class="fs-30">${promptPostText}</div>
-      </div>
+     
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
+      </div>
     `
   }
 
@@ -218,9 +220,10 @@ export default class extends Controller {
     
     return `
       <h5 class="w-full mb-6">Answer</h5>
-      <div class="min-h-400">
-      <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea></div>
+      <div class="min-h-400 flex-col">
+      <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
+      </div>
       
       
     `

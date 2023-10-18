@@ -13,7 +13,7 @@
 --->
 <div class="xl:container mx-auto px-4">
 <div class="pb-4 pt-0 lg:px-4" data-controller="stories">
-  <div class="grid lg:grid-cols-3 grid-cols-1 gap-4 mb-8">
+  <div class="grid lg:grid-cols-3 grid-cols-1 large-gap mb-8">
     <div class="col-span-2">
 			<div class="mb-5" id="storyDetails" data-story-id="<%= @story.id %>"></div>
       <!--  Questions Start -->
@@ -27,7 +27,7 @@
       <%= render("story_builders") %>
     </div>
     <!-- col -->
-    <div>
+    <div class="mt-5 lg:mt-0">
       <%= render("my_stories") %>
     </div>
   </div>

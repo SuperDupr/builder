@@ -148,17 +148,20 @@ table.new-design-table td{
   font-size: 30px;
   line-height: normal;
   margin-top: 0px !important;
+  color: #878787;
 }
 .slec-without-border option, .slec-without-border optgroup {
   font-size: 20px;
 }
 
 .min-h-400 {
-  min-height: 400px;
+  min-height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+
 
 @media only screen and (max-width: 992px) {
   table.new-design-table td .small-screen{
@@ -167,6 +170,7 @@ table.new-design-table td{
  .table-overflow {
   overflow-x: scroll;
  }
+ 
 }
 @media only screen and (min-width: 992px) {
   .select-box-card {
@@ -176,5 +180,8 @@ table.new-design-table td{
   
   .select-box-card select {
     width: 150px;
+  }
+  .large-gap {
+    gap: 5.5rem;
   }
 }
