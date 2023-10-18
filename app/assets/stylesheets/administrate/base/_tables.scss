@@ -77,9 +77,9 @@ table.new-design-table td{
 }
 
 .circle-72 {
-  width: 72px;
-  height: 72px;
-  background-color: #D9D9D9;
+  width: 72px !important;
+  height: 72px !important;
+  max-height: none;
   border-radius: 100%;
 }
 .fs-15 {
@@ -149,6 +149,7 @@ table.new-design-table td{
   line-height: normal;
   margin-top: 0px !important;
   color: #878787;
+  background-position: right -0.5rem center;
 }
 .slec-without-border option, .slec-without-border optgroup {
   font-size: 20px;
@@ -159,6 +160,11 @@ table.new-design-table td{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.large-height {
+  height: 600px;
+  overflow-y: auto;
 }
 
 

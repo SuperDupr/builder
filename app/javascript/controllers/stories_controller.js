@@ -130,7 +130,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400 flex-col"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option>`
+    `<div class="min-h-400 flex-col"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -166,7 +166,7 @@ export default class extends Controller {
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
     let selectHTML =
-      `<div class=" flex"><select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>Select option</option></div>`
+      `<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option></div>`
     
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -203,11 +203,12 @@ export default class extends Controller {
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary ${totalPromptsCount <= 1 ? '!hidden' : ''}" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
-      <div id="promptContainer" class="flex items-center justify-center min-h-400" data-id="${promptId}">
-        <div id="promptPreText" class="fs-30">${promptPreText}</div>
-        ${selectHTML}
-        <div id="promptPostText" class="fs-30">${promptPostText}</div>
-     
+      <div class="min-h-400 flex-col">
+        <div id="promptContainer" class="flex" data-id="${promptId}">
+          <div id="promptPreText" class="fs-30">${promptPreText}</div>
+          ${selectHTML}
+          <div id="promptPostText" class="fs-30">${promptPostText}</div>
+       </div>
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
       </div>
     `
