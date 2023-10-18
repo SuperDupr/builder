@@ -19,7 +19,7 @@
         <% @org_stories.each do |story| %>
         <tr>
          <td>
-         <div class="flex items-center gap-3">
+         <div class="flex items-center gap-3 small-screen">
          <%= image_tag avatar_url_for(story.creator), class: 'circle-72' %>
            <div>
             <p class="fs-15 font-bold"><%= story.creator.name %></p>
@@ -30,10 +30,12 @@
           
           </td>
           <td>
+          <div class="small-screen">
             <p class="fs-15 font-bold">
               <%= story.title %>
             </p>
             <p class="fs-15 italic"><%= story.story_builder.title %></p>
+            </div>
           </td>
          
           <td>
