@@ -130,7 +130,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400 flex-col"><select id="nodes" class="md:!w-2/3 xl:!w-1/3 mx-auto" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option>`
+    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -204,7 +204,7 @@ export default class extends Controller {
         </div>
       </div>
       <div class="min-h-400 flex-col">
-        <div id="promptContainer" class="flex" data-id="${promptId}">
+        <div id="promptContainer" class="flex items-center" data-id="${promptId}">
           <div id="promptPreText" class="fs-30">${promptPreText}</div>
           ${selectHTML}
           <div id="promptPostText" class="fs-30">${promptPostText}</div>
