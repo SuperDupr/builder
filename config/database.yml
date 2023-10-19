@@ -89,3 +89,4 @@ production:
   database: builder_production
   username: builder
   password: <%= ENV['JUMPSTART_DATABASE_PASSWORD'] %>
+  
