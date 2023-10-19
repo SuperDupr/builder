@@ -194,4 +194,5 @@ Rails.application.routes.draw do
 
   # Public marketing homepage
   root to: "static#index"
+  get "storybuilder", to: "story_builders#storybuilder"
 end
