@@ -7,7 +7,7 @@
 class StoryCreatorJob < ApplicationJob
   queue_as :default
 
-  def perform
+  def perform(options={})
     
   end
 end

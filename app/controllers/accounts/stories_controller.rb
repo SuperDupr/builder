@@ -56,7 +56,7 @@ class Accounts::StoriesController < Accounts::BaseController
 
       format.html do
         @story.complete!
-
+        StoryCreatorJob.perform_later({ raw_data: Question.questionnaires_conversational_data(story_id: @story.id) })
         redirect_to(account_stories_path, notice: "Story marked as completed successfully!")
       end
     end
