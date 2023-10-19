@@ -3,11 +3,9 @@
 # Once this job get's completed we have to emit a completion event to F.E.
 # Send the story content to StimulusController
 
-
 class StoryCreatorJob < ApplicationJob
   queue_as :default
 
-  def perform(options={})
-    
+  def perform(options = {})
   end
 end

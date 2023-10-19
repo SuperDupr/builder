@@ -1,6 +1,6 @@
 module GptBuilders
   class StoryTeller < ApplicationService
-    def initialize(options={})
+    def initialize(options = {})
       @model = options[:model]
       @temperature = options[:temperature] || "some_default_temperature_value"
       @raw_data = options[:raw_data]
