@@ -182,11 +182,19 @@ table.new-design-table td{
  }
  
 }
+
 @media only screen and (min-width: 1024px) {
  .builder-nav-space {
-  margin-right: 70px !important;
+  margin-right: 54px !important;
  }
 }
+
+@media only screen and (min-width: 1200px) {
+  .builder-nav-space {
+    margin-right: 70px !important;
+  }
+}
+
 @media only screen and (min-width: 992px) {
   .select-box-card {
     display: flex;
