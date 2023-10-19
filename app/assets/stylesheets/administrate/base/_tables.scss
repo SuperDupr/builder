@@ -167,6 +167,10 @@ table.new-design-table td{
   overflow-y: auto;
 }
 
+.bulider-link.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
 
 
 @media only screen and (max-width: 992px) {
@@ -177,6 +181,11 @@ table.new-design-table td{
   overflow-x: scroll;
  }
  
+}
+@media only screen and (min-width: 1024px) {
+ .builder-nav-space {
+  margin-right: 70px !important;
+ }
 }
 @media only screen and (min-width: 992px) {
   .select-box-card {
