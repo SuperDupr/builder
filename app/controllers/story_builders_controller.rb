@@ -13,7 +13,4 @@ class StoryBuildersController < ApplicationController
   def set_story_builder
     @story_builder = StoryBuilder.find(params[:id])
   end
-
-  def storybuilder
-  end
 end
