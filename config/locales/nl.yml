@@ -138,6 +138,10 @@ nl:
       password: Wachtwoord
       accounts: Accounts
       sign_out: Uitloggen
+      connected_accounts: Gelinkte accounts
+      billing: Facturering
+      admin: Beheerders
+      dashboard: Dashboard
     footer:
       about: Over ons
       privacy: Privacybeleid

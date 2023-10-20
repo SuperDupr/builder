@@ -210,6 +210,10 @@ en:
       password: "Password"
       accounts: "Accounts"
       sign_out: "Sign Out"
+      connected_accounts: "Connected Accounts"
+      billing: "Billing"
+      dashboard: "Dashboard"
+      admin: "Admin"
     footer:
       about: "About Us"
       privacy: "Privacy Policy"
