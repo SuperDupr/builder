@@ -391,10 +391,16 @@ export default class extends Controller {
         } else {
           errorText.classList.add("hidden");
           answerFieldValue = selectElement.options[selectElement.selectedIndex].text
+          let questionId = document.getElementById("questionContainer").dataset.id
+          let storyId = document.getElementById("storyDetails").dataset.storyId
+          this.trackAnswer(questionId, storyId, "", answerFieldValue)
           return true
         }
       } else {
         answerFieldValue = document.getElementById("answer").value
+        let questionId = document.getElementById("questionContainer").dataset.id
+        let storyId = document.getElementById("storyDetails").dataset.storyId
+        this.trackAnswer(questionId, storyId, "", answerFieldValue)
       }
 
       if (answerFieldValue === "") {
