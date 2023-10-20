@@ -203,6 +203,11 @@ fr:
       title: "Conditions d’utilisation"
 
   shared:
+    settings_dropdown:
+      profile: "Préférences"
+      password: "Mot de passe"
+      accounts: "Comptes"
+      sign_out: "Déconnexion"
     footer:
       about: "À propos"
       privacy: "Vie privée"

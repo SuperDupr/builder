@@ -133,6 +133,11 @@ nl:
     terms:
       title: Servicevoorwaarden
   shared:
+    settings_dropdown:
+      profile: Profiel
+      password: Wachtwoord
+      accounts: Accounts
+      sign_out: Uitloggen
     footer:
       about: Over ons
       privacy: Privacybeleid

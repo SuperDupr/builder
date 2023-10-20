@@ -143,6 +143,11 @@ es-co:
       title: "Términos y condiciones"
 
   shared:
+    settings_dropdown:
+      profile: "Perfil"
+      password: "Contraseña"
+      accounts: "Cuentas"
+      sign_out: "Cerrar sesión"
     footer:
       about: "Sobre nosotros"
       privacy: "Política de protección de datos personales"
