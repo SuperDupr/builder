@@ -1,4 +1,3 @@
-<%= render 'shared/builder_nav'%>
 <div class="py-8 bg-primary"><h1 class="text-center text-white fs-40 fw-medium">Storybank</h1></div>
 <div class="xl:container mx-auto pt-12 px-4">
   <h4>Organization Stories</h4>
@@ -24,7 +23,7 @@
          <%= image_tag avatar_url_for(story.creator), class: 'circle-72' %>
            <div>
             <p class="fs-15 font-bold"><%= story.creator.name %></p>
-             <p class="fs-15 italic">Head of Sales</p>
+             <p class="fs-15 italic"><%= story.creator.work_role %></p>
            </div>
          </div>
             
@@ -59,7 +58,7 @@
         <% end %>
           <td class="!p-0">
             <div class="flex items-center gap-2 justify-center" >
-              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
+              <%= link_to("#", class: "font-bold fs-15 py-8 px-5") do %>
                 SHOW STORY
               <% end %>
             </div>
