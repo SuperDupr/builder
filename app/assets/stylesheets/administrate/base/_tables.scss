@@ -163,8 +163,7 @@ table.new-design-table td{
 }
 
 .large-height {
-  height: 600px;
-  overflow-y: auto;
+  height: calc(100vh - 132px);
 }
 
 .bulider-link.active {
@@ -207,4 +206,9 @@ table.new-design-table td{
   .large-gap {
     gap: 5.5rem;
   }
+}
+
+.story_content{
+  height: calc(100% - 173px);
+  overflow-y: auto;
 }
