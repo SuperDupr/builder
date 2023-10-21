@@ -24,6 +24,7 @@ class Question < ApplicationRecord
     joins("LEFT JOIN answers ON questions.id = answers.question_id AND answers.story_id = #{story_id}
       LEFT JOIN prompts ON questions.id = prompts.question_id")
       .pluck(
+        "questions.id",
         "questions.title",
         "answers.id",
         "answers.response",

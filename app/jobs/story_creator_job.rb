@@ -7,5 +7,8 @@ class StoryCreatorJob < ApplicationJob
   queue_as :default
 
   def perform(options = {})
+    GptBuilders::StoryTeller.call({
+      raw_data: options[:raw_data]
+    })
   end
 end
