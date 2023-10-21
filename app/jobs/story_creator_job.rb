@@ -8,7 +8,14 @@ class StoryCreatorJob < ApplicationJob
 
   def perform(options = {})
     GptBuilders::StoryTeller.call({
-      raw_data: options[:raw_data]
+      raw_data: options[:raw_data],
+      model: "gpt-3.5-turbo",
+      system_ai_prompt: options[:system_ai_prompt],
+      admin_ai_prompt: options[:admin_ai_prompt]
     })
+  end
+
+  after_perform do |job|
+    ActionCable.server.broadcast("story_generation", { body: "It's time to hide spinner!" })
   end
 end
