@@ -1,17 +1,45 @@
 module GptBuilders
   class StoryTeller < ApplicationService
     def initialize(options = {})
+      @openai_client = OpenAI::Client.new
       @model = options[:model]
-      @temperature = options[:temperature] || "some_default_temperature_value"
+      # @temperature = options[:temperature] || "some_default_temperature_value"
+      @system_ai_prompt = options[:system_ai_prompt]
+      @admin_ai_prompt = options[:admin_ai_prompt]
       @data = DataSorter.new(raw_data: options[:raw_data]).sort
     end
 
     def call
       feed_data_to_ai
+      get_story_version
     end
 
+    private
+    
+    def finalized_system_ai_prompt
+      return @system_ai_prompt if @admin_ai_prompt.nil?
+      "#{@system_ai_prompt}. User specific instructions to supersede: #{@admin_ai_prompt}"
+    end
+
+    def finalized_data_feed
+      "Here is the conversational responses data received from user: #{@data}"
+    end
+    
     def feed_data_to_ai
-      @data
+      @response = @openai_client.chat(
+        parameters: {
+          model: @model,
+          messages: [
+            { role: "system", content: finalized_system_ai_prompt },
+            { role: "user", content: finalized_data_feed }
+          ]
+        }
+      )
+    end
+
+    def get_story_version
+      puts @response
+      @response.dig("choices", 0, "message", "content")
     end
   end
 
