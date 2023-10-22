@@ -205,6 +205,15 @@ en:
       title: "Terms Of Service"
 
   shared:
+    settings_dropdown:
+      profile: "Profile"
+      password: "Password"
+      accounts: "Accounts"
+      sign_out: "Sign Out"
+      connected_accounts: "Connected Accounts"
+      billing: "Billing"
+      dashboard: "Dashboard"
+      admin: "Admin"
     footer:
       about: "About Us"
       privacy: "Privacy Policy"

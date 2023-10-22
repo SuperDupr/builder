@@ -203,6 +203,15 @@ fr:
       title: "Conditions d’utilisation"
 
   shared:
+    settings_dropdown:
+      profile: "Préférences"
+      password: "Mot de passe"
+      accounts: "Comptes"
+      sign_out: "Déconnexion"
+      connected_accounts: "Comptes connectés"
+      billing: "Facturation"
+      admin: "Admin"
+      dashboard: "Tableau de bord"
     footer:
       about: "À propos"
       privacy: "Vie privée"

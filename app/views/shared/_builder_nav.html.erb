@@ -20,10 +20,10 @@
 	
 			</div>
 			<div>
-        <div class=" mt-4 lg:mt-0 pl-2 mb-2 lg:mb-0 lg:pl-0 lg:inline-flex z-10 items-center leading-none no-underline align-middle rounded text-gray-700 hover:text-gray-800 dark:text-gray-50 dark:hover:text-gray-200 mr-3 builder-nav-space">
+				<div class="mt-4 lg:mt-0 pl-2 mb-2 lg:mb-0 lg:pl-0 lg:inline-flex z-10 items-center leading-none align-middle rounded text-gray-700 hover:text-gray-800 dark:text-gray-50 dark:hover:text-gray-200 mr-3 builder-nav-space">
 					<div class="relative" data-controller="dropdown">
-						<div data-action="click->dropdown#toggle click@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu"> <span class=" bulider-link flex  items-center fs-15 text-black appearance-none">
-              Story Builders
+						<div data-action="click->dropdown#toggle click@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu"> <span class="<%= (request.path.include? "stories" or request.path === '/story_builders') ? 'active' : '' %> bulider-link flex  items-center fs-15 text-black appearance-none">
+							Story Builders
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="fill-current w-4 h-4">
 								<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
 							</svg>
@@ -31,19 +31,14 @@
 						</div>
 						<div data-dropdown-target="menu" class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu" data-original-class="z-20 mt-2 lg:absolute lg:right-0 dropdown-menu">
 							<div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md"> 
-                  <%= nav_link_to tag.span("Builders"), story_builders_path, class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
-                  <%= nav_link_to tag.span("Stories"), account_stories_path(current_account.id), class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
-					      
+									<%= nav_link_to tag.span("Builders"), story_builders_path, class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
+									<%= nav_link_to tag.span("Stories"), account_stories_path(current_account.id), class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
+								
 							</div>
 						</div>
 					</div>
 				</div>
-				<a class="nav-link text-black fs-15 font-normal builder-nav-space bulider-link" href="#"><span>QuickLearns</span></a> 
-        <a class="nav-link text-black fs-15 font-normal builder-nav-space bulider-link" href="#"><span>Courses</span></a> 
-        <a class="nav-link text-black fs-15 font-normal builder-nav-space bulider-link" href="#"><span>Community</span></a>
-        <a class="nav-link text-black fs-15 font-normal builder-nav-space bulider-link" href="<%= account_stories_path(current_account) %>"><span>Storybank</span></a> 
-        <a class="nav-link text-black fs-15 font-normal bulider-link" href="/accounts"><span>My Dashboard</span></a> 
-				<!-- END app/views/shared/_right_nav.html.erb -->
+				<%= render(partial: "shared/settings_dropdown") %>
 			</div>
 		</div>
 	</nav>
