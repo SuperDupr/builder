@@ -9,7 +9,7 @@ class StoryCreatorJob < ApplicationJob
   def perform(options = {})
     @current_user = options[:current_user]
 
-    GptBuilders::StoryTeller.call({
+    @response = GptBuilders::StoryTeller.call({
       raw_data: options[:raw_data],
       model: "gpt-3.5-turbo",
       system_ai_prompt: options[:system_ai_prompt],
@@ -18,6 +18,6 @@ class StoryCreatorJob < ApplicationJob
   end
 
   after_perform do |job|
-    StoryGenerationChannel.broadcast_to(@current_user, body: "A random message....")
+    StoryGenerationChannel.broadcast_to(@current_user, body: @response)
   end
 end
