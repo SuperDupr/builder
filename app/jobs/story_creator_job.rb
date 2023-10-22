@@ -7,7 +7,9 @@ class StoryCreatorJob < ApplicationJob
   queue_as :default
 
   def perform(options = {})
-    GptBuilders::StoryTeller.call({
+    @current_user = options[:current_user]
+
+    @response = GptBuilders::StoryTeller.call({
       raw_data: options[:raw_data],
       model: "gpt-3.5-turbo",
       system_ai_prompt: options[:system_ai_prompt],
@@ -16,6 +18,6 @@ class StoryCreatorJob < ApplicationJob
   end
 
   after_perform do |job|
-    ActionCable.server.broadcast("story_generation", { body: "It's time to hide spinner!" })
+    StoryGenerationChannel.broadcast_to(@current_user, body: @response)
   end
 end

@@ -57,6 +57,7 @@ class Accounts::StoriesController < Accounts::BaseController
       format.html do
         @story.complete!
         StoryCreatorJob.perform_later({
+          current_user: current_user,
           raw_data: Question.questionnaires_conversational_data(story_id: @story.id),
           system_ai_prompt: @story.story_builder.system_ai_prompt,
           admin_ai_prompt: @story.story_builder.admin_ai_prompt

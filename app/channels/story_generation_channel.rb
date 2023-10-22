@@ -1,6 +1,6 @@
 class StoryGenerationChannel < ApplicationCable::Channel
   def subscribed
-    stream_from("story_generation")
+    stream_for(current_user)
   end
 
   def unsubscribed
