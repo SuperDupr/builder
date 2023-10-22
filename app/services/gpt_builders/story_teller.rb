@@ -15,7 +15,7 @@ module GptBuilders
     end
 
     private
-    
+
     def finalized_system_ai_prompt
       return @system_ai_prompt if @admin_ai_prompt.nil?
       "#{@system_ai_prompt}. User specific instructions to supersede: #{@admin_ai_prompt}"
@@ -24,14 +24,14 @@ module GptBuilders
     def finalized_data_feed
       "Here is the conversational responses data received from user: #{@data}"
     end
-    
+
     def feed_data_to_ai
       @response = @openai_client.chat(
         parameters: {
           model: @model,
           messages: [
-            { role: "system", content: finalized_system_ai_prompt },
-            { role: "user", content: finalized_data_feed }
+            {role: "system", content: finalized_system_ai_prompt},
+            {role: "user", content: finalized_data_feed}
           ],
           temperature: @temperature
         }
@@ -39,7 +39,11 @@ module GptBuilders
     end
 
     def get_story_version
-      puts; puts; puts @response; puts; puts
+      puts
+      puts
+      puts @response
+      puts
+      puts
       @response.dig("choices", 0, "message", "content")
     end
   end
@@ -49,17 +53,17 @@ module GptBuilders
       @raw_data = raw_data
       @sorted_data = {}
     end
-    
+
     def sort
       drop_un_answered_questions!
-      
+
       @raw_data.each do |entry|
         key = entry[1]
 
-        answer_data = { "id" => entry[2], "response" => entry[3] }
-              
+        answer_data = {"id" => entry[2], "response" => entry[3]}
+
         if entry[4].present? || entry[5].present?
-          answer_data["prompt"] = { "pre_text" => entry[4], "post_text" => entry[5] }
+          answer_data["prompt"] = {"pre_text" => entry[4], "post_text" => entry[5]}
         end
 
         @sorted_data[key] ||= []
