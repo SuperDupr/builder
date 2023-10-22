@@ -22,7 +22,7 @@ class AddAiPromptToStoryBuilders < ActiveRecord::Migration[7.0]
     "Each question can have multiple answers. " \
     "Each question can have multiple prompts to help user for answering the question. " \
     "Each prompt has a pre_text and post_text attribute. " \
-    "Do not return an error or vague response. Return a story in any scenario utilizing data in best possible way. "\
+    "Do not return an error or vague response. Return a story in any scenario utilizing data present in hash in best possible way. "\
     "Do not return sentences around data. For example: Here is the response or context about the work you did. Just return the story main content. "\
     "Do not repeat the conversational data hash content in the final story version. "\
     "Do not even discuss about the conversational data in the finalized story version. "\
