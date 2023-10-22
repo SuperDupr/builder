@@ -26,6 +26,8 @@ class AddAiPromptToStoryBuilders < ActiveRecord::Migration[7.0]
     "Do not return sentences around data. For example: Here is the response or context about the work you did. Just return the story main content. "\
     "Do not repeat the conversational data hash content in the final story version. "\
     "Do not even discuss about the conversational data in the finalized story version. "\
+    "Do not mention anything about questions and answer session. "\
+    "Generate a new version every time. Do not return the old response. "\
     "If there are some specific instructions provided by the user regarding story voice tone and format. " \
     "Please cater them and supersede the first two lines of prompt."
   end

@@ -3,7 +3,7 @@ module GptBuilders
     def initialize(options = {})
       @openai_client = OpenAI::Client.new
       @model = options[:model]
-      # @temperature = options[:temperature] || "some_default_temperature_value"
+      @temperature = options[:temperature] || 0.2
       @system_ai_prompt = options[:system_ai_prompt]
       @admin_ai_prompt = options[:admin_ai_prompt]
       @data = DataSorter.new(raw_data: options[:raw_data]).sort
@@ -32,7 +32,8 @@ module GptBuilders
           messages: [
             { role: "system", content: finalized_system_ai_prompt },
             { role: "user", content: finalized_data_feed }
-          ]
+          ],
+          temperature: @temperature
         }
       )
     end
