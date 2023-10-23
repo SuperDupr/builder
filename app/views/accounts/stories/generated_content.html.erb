@@ -48,7 +48,7 @@
         </div>
         <% @my_stories.each do |story| %>
           <div class="bg-F5F5F5 p-4 mb-3">
-            <p class="fs-20 font-bold mb-4"><%= story.id %></p>
+            <p class="fs-20 font-bold mb-4"><%= story.title %></p>
             <p class="fs-20 mb-4">
               <%= story.ai_generated_content&.truncate(50) %>
             </p>
