@@ -60,9 +60,9 @@ class Accounts::StoriesController < Accounts::BaseController
           notice = "Enhancing the story with a new version!"
         else
           @story.complete!
-          notice = "Story marked as completed successfully!"          
+          notice = "Story marked as completed successfully!"
         end
-        
+
         StoryCreatorJob.perform_later({
           current_user: current_user,
           story: @story,
