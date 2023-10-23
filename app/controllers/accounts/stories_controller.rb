@@ -56,7 +56,13 @@ class Accounts::StoriesController < Accounts::BaseController
       end
 
       format.html do
-        @story.complete!
+        if params[:request_new_version].present?
+          notice = "Enhancing the story with a new version!"
+        else
+          @story.complete!
+          notice = "Story marked as completed successfully!"          
+        end
+        
         StoryCreatorJob.perform_later({
           current_user: current_user,
           story: @story,
@@ -64,7 +70,7 @@ class Accounts::StoriesController < Accounts::BaseController
           system_ai_prompt: @story.story_builder.system_ai_prompt,
           admin_ai_prompt: @story.story_builder.admin_ai_prompt
         })
-        redirect_to(generated_content_path(@story.id), notice: "Story marked as completed successfully!")
+        redirect_to(generated_content_path(@story.id), notice: notice)
       end
     end
   end
