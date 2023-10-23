@@ -64,7 +64,7 @@ module ApplicationHelper
     reformed_pages = {
       # controller.name: [action_1.name, action_2.name]
       "story_builders" => ["index"],
-      "stories" => ["index", "edit"]
+      "stories" => ["index", "edit", "generated_content"]
     }
 
     return false unless reformed_pages.has_key?(controller_name)
