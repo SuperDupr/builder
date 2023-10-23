@@ -50,8 +50,7 @@
           <div class="bg-F5F5F5 p-4 mb-3">
             <p class="fs-20 font-bold mb-4"><%= story.id %></p>
             <p class="fs-20 mb-4">
-              <%= story.ai_generated_content&.truncate(100) %>
-              <%= "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.".truncate(100) %>
+              <%= story.ai_generated_content&.truncate(50) %>
             </p>
             <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="font-bold fs-15">VIEW ></a>
           </div>
