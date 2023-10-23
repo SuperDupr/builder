@@ -1,5 +1,11 @@
 import consumer from "./consumer"
 
+const spinnerElement = document.querySelector(".spinnerStory");
+if(spinnerElement) {
+  spinnerElement.style.display = "none";
+}
+
+
 consumer.subscriptions.create("StoryGenerationChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
@@ -13,10 +19,18 @@ consumer.subscriptions.create("StoryGenerationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
+    if(spinnerElement) {
+    spinnerElement.style.display = "block";
+    }
+    console.log(spinnerElement)
     console.log(data.body)
 
     const storyContentElement = document.querySelector(".story_content")
 
     storyContentElement.textContent = data.body
+    
+    if(spinnerElement) {
+    spinnerElement.style.display = "none";
+    }
   }
 });
