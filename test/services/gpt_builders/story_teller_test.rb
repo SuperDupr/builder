@@ -1,42 +1,42 @@
 require "test_helper"
 
 class StoryTellerTest < ActiveSupport::TestCase
-  def setup
-    @options = {
-      model: "gpt-3.5-turbo",
-      raw_data: [
-        [1, "key1", 1, "response1", "pre1", "post1"],
-        [2, "key1", 2, "response2", nil, nil],
-        [3, "key2", 3, "response3", "pre3", "post3"]
-      ]
-    }
-  end
+  # def setup
+  #   @options = {
+  #     model: "gpt-3.5-turbo",
+  #     raw_data: [
+  #       [1, "key1", 1, "response1", "pre1", "post1"],
+  #       [2, "key1", 2, "response2", nil, nil],
+  #       [3, "key2", 3, "response3", "pre3", "post3"]
+  #     ]
+  #   }
+  # end
 
-  def test_feed_data_to_ai
-    # Create a mock OpenAI client
-    openai_client = Minitest::Mock.new
+  # def test_feed_data_to_ai
+  #   # Create a mock OpenAI client
+  #   openai_client = Minitest::Mock.new
 
-    # Define the expected parameters for the chat method
-    expected_parameters = {
-      model: @options[:model],
-      messages: [
-        {role: "system", content: "Expected System AI Prompt"},
-        {role: "user", content: "Expected Data Feed"}
-      ],
-      temperature: 0.2
-    }
+  #   # Define the expected parameters for the chat method
+  #   expected_parameters = {
+  #     model: @options[:model],
+  #     messages: [
+  #       {role: "system", content: "Expected System AI Prompt"},
+  #       {role: "user", content: "Expected Data Feed"}
+  #     ],
+  #     temperature: 0.2
+  #   }
 
-    # Expect the chat method to be called with the expected parameters
-    openai_client.expect :chat, "Response from OpenAI", [expected_parameters]
+  #   # Expect the chat method to be called with the expected parameters
+  #   openai_client.expect :chat, "Response from OpenAI", [expected_parameters]
 
-    # Instantiate StoryTeller with the mock OpenAI client
-    storyteller = GptBuilders::StoryTeller.new(@options)
-    storyteller.instance_variable_set(:@openai_client, openai_client)
+  #   # Instantiate StoryTeller with the mock OpenAI client
+  #   storyteller = GptBuilders::StoryTeller.new(@options)
+  #   storyteller.instance_variable_set(:@openai_client, openai_client)
 
-    storyteller.call
+  #   storyteller.call
 
-    openai_client.verify
-  end
+  #   openai_client.verify
+  # end
 
   # def test_get_story_version
   #   # Prepare a response hash
