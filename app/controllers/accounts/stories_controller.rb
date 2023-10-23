@@ -193,7 +193,7 @@ class Accounts::StoriesController < Accounts::BaseController
   def publish
     @story.published!
     redirect_to(account_stories_path(current_account.id), notice: "Story published successfully!")
-  end  
+  end
 
   private
 

@@ -9,9 +9,9 @@ class StoryCreatorJob < ApplicationJob
   def perform(options = {})
     @current_user = options[:current_user]
     @story = options[:story]
-    
+
     sleep(2)
-    
+
     @response = GptBuilders::StoryTeller.call({
       raw_data: options[:raw_data],
       model: "gpt-3.5-turbo",
