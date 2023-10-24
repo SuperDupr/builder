@@ -162,10 +162,6 @@ table.new-design-table td{
   align-items: center;
 }
 
-.large-height {
-  height: calc(100vh - 132px);
-}
-
 .bulider-link.active {
   font-weight: 700;
   text-decoration: underline;
@@ -209,6 +205,15 @@ table.new-design-table td{
 }
 
 .story_content{
-  height: calc(100% - 173px);
+  max-height: 500px;
   overflow-y: auto;
+}
+
+.spinnerStory {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: #fffffff5;
 }
