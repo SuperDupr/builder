@@ -59,4 +59,15 @@ module ApplicationHelper
   def first_page?
     @pagy.page == 1
   end
+
+  def modern_navbar_needed?
+    reformed_pages = {
+      # controller.name: [action_1.name, action_2.name]
+      "story_builders" => ["index"],
+      "stories" => ["index", "edit", "generated_content"]
+    }
+
+    return false unless reformed_pages.has_key?(controller_name)
+    reformed_pages[controller_name].include?(action_name)
+  end
 end

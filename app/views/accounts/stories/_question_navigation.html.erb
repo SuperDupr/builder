@@ -1,9 +1,9 @@
 <div class="flex justify-between items-center gap-2 w-full" id="questionsNavigationSection">
-  <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-primary btn-outline mr-2 pointer-events-none opacity-50", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
+  <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-gray btn-outline mr-2 pointer-events-none opacity-50", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
   
   <% if @questions.count <= 1 %>
-    <%= link_to("Finish", account_story_path(@story.id, account_id: current_account.id), class: "btn btn-primary", method: :patch) %>
+    <%= link_to("Finish", account_story_path(@story.id, account_id: current_account.id), class: "btn btn-gray", method: :patch) %>
   <% else %>
-    <%= link_to("Next Question", "javascript:void(0)", id:'questionForward', class: "btn btn-primary", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
+    <%= link_to("Next Question", "javascript:void(0)", id:'questionForward', class: "btn btn-gray", data: { action: "stories#questionNavigation", cursor: "forward", story_builder_id: @story.story_builder.id }) %>
   <% end %>
 </div>

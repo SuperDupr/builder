@@ -39,11 +39,6 @@ module GptBuilders
     end
 
     def get_story_version
-      puts
-      puts
-      puts @response
-      puts
-      puts
       @response.dig("choices", 0, "message", "content")
     end
   end

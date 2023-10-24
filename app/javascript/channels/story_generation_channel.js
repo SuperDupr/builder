@@ -13,6 +13,10 @@ consumer.subscriptions.create("StoryGenerationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    alert(data.body)
+    console.log(data.body)
+
+    const storyContentElement = document.querySelector(".story_content")
+
+    storyContentElement.textContent = data.body
   }
 });

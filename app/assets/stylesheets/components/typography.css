@@ -35,3 +35,10 @@ h6, .h6 {
     @apply text-blue-600;
   }
 }
+
+.fs-40 {
+  font-size: 40px;
+}
+.fw-medium {
+  font-weight: 500;
+}

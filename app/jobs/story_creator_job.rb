@@ -8,6 +8,9 @@ class StoryCreatorJob < ApplicationJob
 
   def perform(options = {})
     @current_user = options[:current_user]
+    @story = options[:story]
+
+    sleep(2)
 
     @response = GptBuilders::StoryTeller.call({
       raw_data: options[:raw_data],
@@ -18,6 +21,7 @@ class StoryCreatorJob < ApplicationJob
   end
 
   after_perform do |job|
+    @story.update(ai_generated_content: @response)
     StoryGenerationChannel.broadcast_to(@current_user, body: @response)
   end
 end
