@@ -233,6 +233,7 @@ export default class extends Controller {
   promptNavigation(event) {
     let questionId = document.getElementById("questionContainer").dataset.id
     let storyId = document.getElementById("storyDetails").dataset.storyId
+    this.saveAnswer()
     this.promptNavigationFunction(event, false, questionId, storyId)
   }
 
