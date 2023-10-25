@@ -21,7 +21,7 @@
             <% if @questionnaires_size > 1 %>
               <i class="fa-solid fa-grip"></i>
             <% end %>
-            <div class="text-base break-words"><%= questionnaire.question.title %></div>
+            <div class="text-base break-words"><%= questionnaire.question&.title %></div>
           </div>
           <%= link_to("Go to Question", admin_question_path(questionnaire.question), class:'btn btn-primary btn-small') %>
         </li>
