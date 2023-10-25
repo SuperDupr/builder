@@ -75,6 +75,17 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     # assert_equal(JSON.parse(response.body)["status"], "draft")
   end
 
+  test "should update story (HTML format)" do
+    patch account_story_path(@story, account_id: @account.id)
+
+    enqueued_job = ActiveJob::Base.queue_adapter.enqueued_jobs.first
+        
+    assert_equal(@story.complete?, true)
+    assert_equal(enqueued_job["job_class"], "StoryCreatorJob")
+    assert_enqueued_jobs(1)
+    assert_response(:redirect)
+  end
+
   test "should navigate to a question" do
     story_builder = @story.story_builder
     question = story_builder.questions.first
@@ -131,5 +142,24 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal(JSON.parse(response.body)["viewable"], !@story.viewable)
     assert_response :success
+  end
+
+  test "should generate content" do
+    @story.update(ai_generated_content: "Instructions for GPT-4")
+    get generated_content_path(@story)
+
+    my_stories = controller.instance_variable_get(:@my_stories)
+    response_generated = controller.instance_variable_get(:@response_generated)
+
+    assert_includes(my_stories, @story)
+    assert_equal(response_generated, true)
+    assert_response(:success)
+  end
+
+  test "should publish story" do
+    patch publish_story_path(@story)
+
+    assert_equal(@story.reload.published?, true)
+    assert_response(:redirect)
   end
 end
