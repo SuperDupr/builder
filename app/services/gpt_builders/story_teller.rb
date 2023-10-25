@@ -4,7 +4,6 @@ module GptBuilders
       @openai_client = OpenAI::Client.new
       @model = options[:model]
       @temperature = options[:temperature] || 0.2
-      @system_ai_prompt = options[:system_ai_prompt]
       @admin_ai_prompt = options[:admin_ai_prompt]
       @data = DataSorter.new(raw_data: options[:raw_data]).sort
     end
@@ -16,11 +15,6 @@ module GptBuilders
 
     private
 
-    def finalized_system_ai_prompt
-      return @system_ai_prompt if @admin_ai_prompt.nil?
-      "#{@system_ai_prompt}. User specific instructions to supersede: #{@admin_ai_prompt}"
-    end
-
     def finalized_data_feed
       "Here is the conversational responses data received from user: #{@data}"
     end
@@ -30,7 +24,7 @@ module GptBuilders
         parameters: {
           model: @model,
           messages: [
-            {role: "system", content: finalized_system_ai_prompt},
+            {role: "system", content: @admin_ai_prompt},
             {role: "user", content: finalized_data_feed}
           ],
           temperature: @temperature

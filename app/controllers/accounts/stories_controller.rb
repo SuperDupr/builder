@@ -67,7 +67,6 @@ class Accounts::StoriesController < Accounts::BaseController
           current_user: current_user,
           story: @story,
           raw_data: Question.questionnaires_conversational_data(story_id: @story.id),
-          system_ai_prompt: @story.story_builder.system_ai_prompt,
           admin_ai_prompt: @story.story_builder.admin_ai_prompt
         })
         redirect_to(generated_content_path(@story.id), notice: notice)

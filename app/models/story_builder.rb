@@ -2,12 +2,11 @@
 #
 # Table name: story_builders
 #
-#  id               :bigint           not null, primary key
-#  admin_ai_prompt  :text
-#  system_ai_prompt :text
-#  title            :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id              :bigint           not null, primary key
+#  admin_ai_prompt :text
+#  title           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 class StoryBuilder < ApplicationRecord
   # Associations

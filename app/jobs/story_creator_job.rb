@@ -15,7 +15,6 @@ class StoryCreatorJob < ApplicationJob
     @response = GptBuilders::StoryTeller.call({
       raw_data: options[:raw_data],
       model: "gpt-3.5-turbo",
-      system_ai_prompt: options[:system_ai_prompt],
       admin_ai_prompt: options[:admin_ai_prompt]
     })
   end

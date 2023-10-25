@@ -357,7 +357,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_060623) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "system_ai_prompt"
     t.text "admin_ai_prompt"
   end
 

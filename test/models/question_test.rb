@@ -50,7 +50,7 @@ class QuestionTest < ActiveSupport::TestCase
   # Class methods
   test "#self.questionnaires_conversational_data(story_id:)" do
     raw_data = Question.questionnaires_conversational_data(story_id: stories(:one).id)
-    
+
     assert_includes(Question.methods, :questionnaires_conversational_data)
     assert_includes(raw_data[0], @question.id)
     assert_includes(raw_data[1], questions(:two).id)

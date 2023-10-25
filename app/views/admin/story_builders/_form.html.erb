@@ -3,8 +3,8 @@
   <%= f.text_field(:title, required: true, class: "rounded-lg w-1/2") %>
 
   <%= f.label("Prompt to AI") %>
-  <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", 
-    placeholder: "Example: #{f.object.system_ai_prompt.present? ? f.object.system_ai_prompt.split("We")[0] : ''}") %>
+  <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", required: true,
+    placeholder: "Example: You are a story creator. Create a short concise story in a formal voice!") %>
 
   <h5 class="mt-4 mb-1">Select Questions</h5>
 

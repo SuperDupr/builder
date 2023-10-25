@@ -79,7 +79,7 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     patch account_story_path(@story, account_id: @account.id)
 
     enqueued_job = ActiveJob::Base.queue_adapter.enqueued_jobs.first
-        
+
     assert_equal(@story.complete?, true)
     assert_equal(enqueued_job["job_class"], "StoryCreatorJob")
     assert_enqueued_jobs(1)

@@ -12,18 +12,18 @@ class StoryCreatorJobTest < ActiveJob::TestCase
   def stubbed_ai_request(stubbed_response)
     stub_request(:post, "https://api.openai.com/v1/chat/completions").
     with(
-      body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"A basic prompt. User specific instructions to supersede: Nothing special!\"},{\"role\":\"user\",\"content\":\"Here is the conversational responses data received from user: {}\"}],\"temperature\":0.2}",
+      body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"Nothing special!\"},{\"role\":\"user\",\"content\":\"Here is the conversational responses data received from user: {}\"}],\"temperature\":0.2}",
       headers: {
         'Accept'=>'*/*',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         'Content-Type'=>'application/json',
         'User-Agent'=>'Ruby'
       }).
-      to_return(status: 200, body: {
-        choices: [
-          {message: {content: stubbed_response}}
-        ]
-      }.to_json, headers: {})
+    to_return(status: 200, body: {
+      choices: [
+        {message: {content: stubbed_response}}
+      ]
+    }.to_json, headers: {})
 
     stubbed_response
   end
@@ -37,7 +37,6 @@ class StoryCreatorJobTest < ActiveJob::TestCase
       current_user: @user,
       story: story,
       raw_data: Question.questionnaires_conversational_data(story_id: story.id),
-      system_ai_prompt: "A basic prompt",
       admin_ai_prompt: "Nothing special!"
     })
 
