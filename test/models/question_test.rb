@@ -46,4 +46,13 @@ class QuestionTest < ActiveSupport::TestCase
   test "accepts_nested_attributes_for parent_nodes" do
     assert_respond_to @question, :parent_nodes_attributes=
   end
+
+  # Class methods
+  test "#self.questionnaires_conversational_data(story_id:)" do
+    raw_data = Question.questionnaires_conversational_data(story_id: stories(:one).id)
+    
+    assert_includes(Question.methods, :questionnaires_conversational_data)
+    assert_includes(raw_data[0], @question.id)
+    assert_includes(raw_data[1], questions(:two).id)
+  end
 end
