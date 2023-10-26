@@ -9,74 +9,72 @@
           <th>Story Details</th>
           <th>Status</th>
           <% if @admin_logged_in %>
-          <th>Team Access</th>
-        <% end %>
+            <th>Team Access</th>
+          <% end %>
           <th width="11%"></td>
         </tr>
       </thead>
       <tbody>
         <% if @org_stories.present? %>
-        <% @org_stories.each do |story| %>
-        <tr>
-         <td>
-         <div class="flex items-center gap-3 small-screen">
-         <%= image_tag avatar_url_for(story.creator), class: 'circle-72' %>
-           <div>
-            <p class="fs-15 font-bold"><%= story.creator.name %></p>
-             <p class="fs-15 italic"><%= story.creator.work_role %></p>
-           </div>
-         </div>
-            
-          
-          </td>
-          <td>
-          <div class="small-screen">
-            <p class="fs-15 font-bold">
-              <%= story.title %>
-            </p>
-            <p class="fs-15 italic"><%= story.story_builder.title %></p>
-            </div>
-          </td>
-         
-          <td>
-            <div class="fs-20"><%= story.status.to_s.capitalize %></div>
-          </td>
-          <% if @admin_logged_in %>
-          <td>
-            <div class="flex items-center w-full">
-              <label for="viewable<%= story.id %>" class="flex items-center cursor-pointer">
-                <div class="relative" data-controller="tooltip" data-tippy-content="Make it Viewable/Non-viewable for whole organization">
-                  <input id="viewable<%= story.id %>" type="checkbox" class="sr-only" data-controller="stories"
-                    data-id="<%= story.id %>" data-action="click->stories#toggleStoryVisibility" <%= story.viewable ? "checked" : "" %>>
-                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                </div>
-                <div class="ml-3 fs-20" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
-              </label>
-            </div>
-          </td>
-        <% end %>
-          <td class="!p-0">
-            <div class="flex items-center gap-2 justify-center" >
-              <%= link_to("#", class: "font-bold fs-15 py-8 px-5") do %>
-                SHOW STORY
-              <% end %>
-            </div>
-          </td>
-        </tr>
-        <% end %>
-          <% else %>
+          <% @org_stories.each do |story| %>
             <tr>
-              <td colspan="6" class="text-center">No Organizations stories found</td>
+              <td>
+                <div class="flex items-center gap-3 small-screen">
+                  <%= image_tag avatar_url_for(story.creator), class: 'circle-72' %>
+                  <div>
+                    <p class="fs-15 font-bold"><%= story.creator.name %></p>
+                    <p class="fs-15 italic"><%= story.creator.work_role %></p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="small-screen">
+                  <p class="fs-15 font-bold">
+                    <%= story.title %>
+                  </p>
+                  <p class="fs-15 italic"><%= story.story_builder.title %></p>
+                </div>
+              </td>
+            
+              <td>
+                <div class="fs-20"><%= story.status.to_s.capitalize %></div>
+              </td>
+              <% if @admin_logged_in %>
+                <td>
+                  <div class="flex items-center w-full">
+                    <label for="viewable<%= story.id %>" class="flex items-center cursor-pointer">
+                      <div class="relative" data-controller="tooltip" data-tippy-content="Make it Viewable/Non-viewable for whole organization">
+                        <input id="viewable<%= story.id %>" type="checkbox" class="sr-only" data-controller="stories"
+                          data-id="<%= story.id %>" data-action="click->stories#toggleStoryVisibility" <%= story.viewable ? "checked" : "" %>>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 fs-20" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
+                    </label>
+                  </div>
+                </td>
+              <% end %>
+              <td class="!p-0">
+                <div class="flex items-center gap-2 justify-center" >
+                  <%= link_to("#", class: "font-bold fs-15 py-8 px-5") do %>
+                    SHOW STORY
+                  <% end %>
+                </div>
+              </td>
             </tr>
           <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" class="text-center">No Organizations stories found</td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
   <% if @pagy_1.pages > 1 %>
-  <div class="mt-6 text-right">
-    <%== pagy_nav(@pagy_1) %>
-  </div>
+    <div class="mt-6 text-right">
+      <%== pagy_nav(@pagy_1) %>
+    </div>
   <% end %>
 </div>
 
@@ -205,72 +203,72 @@
       </thead>
       <tbody>
         <% if @my_stories.present? %>
-      <% @org_stories.each do |story| %>
-        <tr>
-          <td>
-          <p class="fs-15 font-bold">
-            <%= story.title %>
-          </p>
-          <p class="fs-15 italic"> <%= story.story_builder.title %></p>
-          </td>
-          <td>
-            <div class="flex items-center gap-2 small-screen">
-              <img src="/star.svg" alt="star">
-              <p class="fs-20">Metaphor</p>
-            </div>
-          </td>
-          <td>
-            <div class="flex items-center gap-2 small-screen">
-              <div class="red-circle"></div>
-              <p class="fs-20 mb-1">Provide Clarity</p>
-            </div>
-          </td>
-          <td>
-            <div class="small-screen">
-            <p class="fs-20"><%= story.status.to_s.capitalize %></p>
-          </div>
-          </td>
-          <td>
-           <div class="flex items-center w-full">
-              <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
-                <div class="relative" data-controller="stories">
-                  <% if story.private_access %>
-                    <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                      data-id="<%= story.id %>"
-                      checked
-                      data-account-id="<%= current_account.id %>"
-                      data-change-access-mode="on"
-                      data-draft-mode="off"
-                      data-action="change->stories#updateStoryAccessOrDraftMode">
-                  <% else %>
-                    <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                      data-id="<%= story.id %>"
-                      data-account-id="<%= current_account.id %>"
-                      data-change-access-mode="on"
-                      data-draft-mode="off"
-                      data-action="change->stories#updateStoryAccessOrDraftMode">
-                  <% end %>
-                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+          <% @my_stories.each do |story| %>
+            <tr>
+              <td>
+              <p class="fs-15 font-bold">
+                <%= story.title %>
+              </p>
+              <p class="fs-15 italic"> <%= story.story_builder.title %></p>
+              </td>
+              <td>
+                <div class="flex items-center gap-2 small-screen">
+                  <img src="/star.svg" alt="star">
+                  <p class="fs-20">Metaphor</p>
                 </div>
-                <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
-              </label>
-            </div>
-          </td>
-           <td>
-            <div class="small-screen">
-              <p class="fs-20"><%= current_account.name || "-" %></p>
-            </div>
-          </td>
-          <td class="text-center !p-0">
-            <div class="flex items-center gap-2 justify-center" >
-              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
-                EDIT STORY
-              <% end %>
-            </div>
-          </td>
-        </tr>
-        <% end %>
+              </td>
+              <td>
+                <div class="flex items-center gap-2 small-screen">
+                  <div class="red-circle"></div>
+                  <p class="fs-20 mb-1">Provide Clarity</p>
+                </div>
+              </td>
+              <td>
+                <div class="small-screen">
+                <p class="fs-20"><%= story.status.to_s.capitalize %></p>
+              </div>
+              </td>
+              <td>
+              <div class="flex items-center w-full">
+                  <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+                    <div class="relative" data-controller="stories">
+                      <% if story.private_access %>
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>"
+                          checked
+                          data-account-id="<%= current_account.id %>"
+                          data-change-access-mode="on"
+                          data-draft-mode="off"
+                          data-action="change->stories#updateStoryAccessOrDraftMode">
+                      <% else %>
+                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                          data-id="<%= story.id %>"
+                          data-account-id="<%= current_account.id %>"
+                          data-change-access-mode="on"
+                          data-draft-mode="off"
+                          data-action="change->stories#updateStoryAccessOrDraftMode">
+                      <% end %>
+                      <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                      <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                    </div>
+                    <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+                  </label>
+                </div>
+              </td>
+              <td>
+                <div class="small-screen">
+                  <p class="fs-20"><%= current_account.name || "-" %></p>
+                </div>
+              </td>
+              <td class="text-center !p-0">
+                <div class="flex items-center gap-2 justify-center" >
+                  <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
+                    EDIT STORY
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
         <% else %>
           <tr>
             <td colspan="7" class="text-center">No stories found</td>

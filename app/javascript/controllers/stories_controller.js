@@ -130,7 +130,9 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option>`
+    answerSelector ?
+    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">` :
+    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option disabled="" value="" selected="">select</option>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -165,8 +167,9 @@ export default class extends Controller {
     document.getElementById("answerProvider").dataset.promptMode = "on"
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
-    let selectHTML =
-      `<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="" selected>select</option></div>`
+    let selectHTML = promptSelector ? 
+      `<select id="nodes" class="!w-auto slec-without-border">` :
+      `<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option disabled="" value="" selected="">select</option>`
     
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -204,10 +207,10 @@ export default class extends Controller {
         </div>
       </div>
       <div class="min-h-400 flex-col">
-        <div id="promptContainer" class="flex items-center" data-id="${promptId}">
-          <div id="promptPreText" class="fs-30">${promptPreText}</div>
+        <div id="promptContainer" class="w-full flex items-center gap-3 flex-wrap justify-center" data-id="${promptId}">
+          <div id="promptPreText" class="fs-20">${promptPreText}</div>
           ${selectHTML}
-          <div id="promptPostText" class="fs-30">${promptPostText}</div>
+          <div id="promptPostText" class="fs-20">${promptPostText}</div>
        </div>
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
       </div>

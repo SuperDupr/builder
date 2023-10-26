@@ -145,7 +145,10 @@ table.new-design-table td{
 .slec-without-border, .slec-without-border:focus {
   box-shadow: none !important;
   border: 0px;
-  font-size: 30px;
+  max-width: 100%;
+  text-align: center;
+  font-size: 20px;
+  padding-right: 16px;
   line-height: normal;
   margin-top: 0px !important;
   color: #878787;
@@ -190,7 +193,7 @@ table.new-design-table td{
   }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: 1024px) {
   .select-box-card {
     display: flex;
     justify-content: center;
