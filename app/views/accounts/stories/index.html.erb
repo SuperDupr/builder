@@ -60,21 +60,32 @@
                     SHOW STORY
                   <% end %>
                 </div>
-              </td>
+                <div class="ml-3 fs-20" id="viewableTextContainer<%= story.id %>"><%= story.viewable ? "Viewable" : "Non-viewable" %></div>
+              </label>
+            </div>
+          </td>
+        <% end %>
+          <td class="!p-0">
+            <div class="flex items-center gap-2 justify-center" >
+              <%= link_to("#", class: "font-bold fs-15 py-8 px-5") do %>
+                SHOW STORY
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+          <% else %>
+            <tr>
+              <td colspan="6" class="text-center">No Organizations stories found</td>
             </tr>
           <% end %>
-        <% else %>
-          <tr>
-            <td colspan="6" class="text-center">No Organizations stories found</td>
-          </tr>
-        <% end %>
       </tbody>
     </table>
   </div>
   <% if @pagy_1.pages > 1 %>
-    <div class="mt-6 text-right">
-      <%== pagy_nav(@pagy_1) %>
-    </div>
+  <div class="mt-6 text-right">
+    <%== pagy_nav(@pagy_1) %>
+  </div>
   <% end %>
 </div>
 
@@ -265,10 +276,27 @@
                   <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
                     EDIT STORY
                   <% end %>
+                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-              </td>
-            </tr>
-          <% end %>
+                <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+              </label>
+            </div>
+          </td>
+           <td>
+            <div class="small-screen">
+              <p class="fs-20"><%= current_account.name || "-" %></p>
+            </div>
+          </td>
+          <td class="text-center !p-0">
+            <div class="flex items-center gap-2 justify-center" >
+              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
+                EDIT STORY
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% end %>
         <% else %>
           <tr>
             <td colspan="7" class="text-center">No stories found</td>
