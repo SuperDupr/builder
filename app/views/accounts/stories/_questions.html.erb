@@ -1,14 +1,19 @@
-<div class="mb-5 flex justify-between items-center">
-  <h5>
+<div class="mb-5 flex justify-between gap-3">
+  <div>
+    <p class="fs-30 mb-3">Welcome to <%= @story.story_builder.title %> Builder! </p>
+    <p class="fs-20 mb-4"> First, answer the questions below to decide what kind of story would be most effective for what you would like to communicate to your audience. </p>
+  </div>
+  <div><%= render("top_level_actions") %></div>
+</div>
+  <p class="fs-20">
     Questions 
     <span class="font-normal">
       <span id="questionNumber">1</span>
       /
       <span id="questionsCount"><%= @questions.count %></span>
     </span>
-  </h5>
-  <%= render("top_level_actions") %>
-</div>
-<h5 id="questionContainer" class="mt-4" data-id=<%= @question.id %>>
+  </p>
+
+<p id="questionContainer" class="fs-20 mb-4" data-id=<%= @question.id %>>
   <%= @question.title %>
-</h5>
+</p>

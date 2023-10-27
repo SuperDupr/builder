@@ -30,6 +30,10 @@ class ActionDispatch::IntegrationTest
   end
 end
 
+class ActiveJob::TestCase
+  include Devise::Test::IntegrationHelpers
+end
+
 WebMock.disable_net_connect!({
   allow_localhost: true,
   allow: [

@@ -90,3 +90,4 @@ gem "roo-xls"
 
 gem "aws-sdk-s3", require: false
 gem "acts_as_list"
+gem "ruby-openai"

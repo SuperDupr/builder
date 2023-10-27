@@ -1,3 +1,7 @@
+<div class="py-8 bg-primary">
+	<h1 class="text-center text-white fs-40 fw-medium">Story Builders</h1>
+</div>
+<!----
 <header class="main-content__header flex justify-between items-center mb-4 px-4 shadow-md py-4" role="banner">
   <div>
     <h3 class="main-content__page-title">
@@ -6,24 +10,25 @@
     <div>Start creating your own stories through our insight driven builders</div>
   </div>
 </header>
+---->
 
 <div class="xl:container mx-auto p-4">
   <% if @story_builders.present? %>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="flex flex-wrap gap-2 mt-5">
       <% @story_builders.each do |story_builder| %>
-        <div class="border p-4 flex items-start flex-col justify-between gap-4 rounded-lg">
-          <h4 class=""><%= story_builder.title %></h4>
+        <div class="story-build-card mr-2 mb-2">
+          <p class="fs-20 font-bold mb-2"><%= story_builder.title %></p>
           
           <% if @redirect_to_registration_section %>
-            <%= link_to("Start Building >", registration_questions_path(fallback: "story_creation"), class: "btn btn-primary btn-small") %>
+            <%= link_to("Start Building >", registration_questions_path(fallback: "story_creation"), class: "fs-15 font-bold uppercase uppercase") %>
           <% else %>
             <% if story_builder.questions.empty? %>
-              <%= link_to("Start Building >", "javascript:void(0)", class: "btn btn-primary btn-small", 
+              <%= link_to("Start Building >", "javascript:void(0)", class: "fs-15 font-bold uppercase", 
                 data: { controller: "stories", action: "stories#showQuestionsAbsenceAlert" }) %>
             <% else %>
               <div class="flex items-center gap-2">
               <div data-controller="modal" data-action="keydown.esc->modal#close" tabindex="-1">
-                <button class="btn btn-primary btn-small" data-action="click->modal#open:prevent">Start Building ></button>
+                <button class="fs-15 font-bold uppercase" data-action="click->modal#open:prevent">Start Building ></button>
 
                 <div class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 overflow-y-auto flex items-center justify-center backdrop-blur-sm dark:bg-gray-800 dark:bg-opacity-80" data-modal-target="background" data-action="click-&gt;modal#closeBackground" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="bg-opacity-0 backdrop-blur-none" data-transition-enter-to="bg-opacity-80 backdrop-blur-sm" data-transition-leave="transition-all ease-in-out duration-200" data-transition-leave-from="bg-opacity-80 backdrop-blur-sm" data-transition-leave-to="bg-opacity-0 backdrop-blur-none">
                   <div class="max-w-sm max-h-screen w-full relative" data-modal-target="container" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="opacity-0" data-transition-enter-to="opacity-100" data-transition-leave="transition ease-in-out duration-200" data-transition-leave-from="opacity-100" data-transition-leave-to="opacity-0">

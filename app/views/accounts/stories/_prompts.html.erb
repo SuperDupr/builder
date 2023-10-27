@@ -1,4 +1,4 @@
-<div class="p-3 border border-gray-200 rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6">
+<div class="py-5 px-4 shadow-box-card  rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6">
   <% if @prompts.any? %>
     <div id="answerProvider" data-prompt-mode="on" class="w-full">
       <div class="flex items-center justify-between w-full gap-2 mb-6">
@@ -15,10 +15,11 @@
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary <%= @prompts.count <= 1 ? '!hidden' : '' %>" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
-      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center" data-id="<%= @prompt.id %>">
+      <div class="min-h-400 flex-col">
+      <div id="promptContainer" class="flex items-center gap-3 flex-wrap justify-center fs-30" data-id="<%= @prompt.id %>">
         <div id="promptPreText"><%= @prompt.pre_text %></div>
-          <select id="nodes" class="!w-auto" data-action="change->stories#disableNavigationButtonsOnChange">
-            <option selected value="">Select option</option>
+          <select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">
+            <option selected value="">select</option>
             <% @nodes.each do |node| %>
               <% if node.child_nodes.any? %>
                 <optgroup label="<%= node.title %>">
@@ -38,13 +39,16 @@
         <div id="promptPostText"><%= @prompt.post_text %></div>
       </div>
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
+      </div>
+      
     </div>
   <% else %>
     <% if @nodes.present? %>
       <div id="answerProvider" class="w-full" data-prompt-mode="off" data-only-node-mode="on">
         <h5 class="w-full mb-6">Select an option</h5>
+        <div class="min-h-400 flex-col">
         <select id="nodes" class="md:!w-2/3 xl:!w-1/3" data-action="change->stories#disableNavigationButtonsOnChange">
-          <option selected value="">Select option</option>
+          <option selected value="">select</option>
           <% @nodes.each do |node| %>
             <% if node.child_nodes.any? %>
               <optgroup label="<%= node.title %>">
@@ -62,6 +66,7 @@
           <% end %>
         </select>
         <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
+        </div>
       </div>
     <% else %>
       <div id="answerProvider" class="w-full" data-prompt-mode="off" data-only-node-mode="off">

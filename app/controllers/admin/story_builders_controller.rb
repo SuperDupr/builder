@@ -73,7 +73,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   private
 
   def story_builder_params
-    params.require(:story_builder).permit(:title, q_ids: [])
+    params.require(:story_builder).permit(:title, :admin_ai_prompt, q_ids: [])
   end
 
   def set_story_builder

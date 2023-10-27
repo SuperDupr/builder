@@ -1,8 +1,9 @@
 class Accounts::StoriesController < Accounts::BaseController
   before_action :authenticate_user!
-  before_action :set_story, only: [:show, :edit, :update, :destroy, :update_visibility]
+  before_action :set_story, only: [:show, :edit, :update, :destroy, :update_visibility, :generated_content, :publish]
   before_action :set_account, only: :update_visibility
   before_action :require_account_admin, only: :update_visibility
+  before_action :is_story_published, only: :edit
 
   def index
     # Fetch organization stories that are shared by the organization admin
@@ -30,7 +31,7 @@ class Accounts::StoriesController < Accounts::BaseController
     @questions = @story.story_builder.questions
 
     if @questions.empty?
-      redirect_to(account_stories_path, alert: "Your chosen story builder has no associated questions!")
+      redirect_to(account_stories_path(current_account), alert: "Your chosen story builder has no associated questions!")
     else
       @question = @questions.order(position: :asc).first
       @answer = @question.answers.find_by(story_id: @story.id)&.response
@@ -55,9 +56,20 @@ class Accounts::StoriesController < Accounts::BaseController
       end
 
       format.html do
-        @story.complete!
+        if params[:request_new_version].present?
+          notice = "Enhancing the story with a new version!"
+        else
+          @story.complete!
+          notice = "Story marked as completed successfully!"
+        end
 
-        redirect_to(account_stories_path, notice: "Story marked as completed successfully!")
+        StoryCreatorJob.perform_later({
+          current_user: current_user,
+          story: @story,
+          raw_data: Question.questionnaires_conversational_data(story_id: @story.id),
+          admin_ai_prompt: @story.story_builder.admin_ai_prompt
+        })
+        redirect_to(generated_content_path(@story.id), notice: notice)
       end
     end
   end
@@ -178,6 +190,16 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
+  def generated_content
+    @my_stories = Story.where(creator_id: current_user.id).limit(5)
+    @response_generated = @story.ai_generated_content.present?
+  end
+
+  def publish
+    @story.published!
+    redirect_to(account_stories_path(current_account.id), notice: "Story published successfully!")
+  end
+
   private
 
   def story_params
@@ -190,6 +212,10 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def set_account
     @account = current_account
+  end
+
+  def is_story_published
+    redirect_to(account_stories_path(current_account), alert: "Story has already been published!") if @story.published?
   end
 
   def track_answer_as_per_prompt(question, prompt)

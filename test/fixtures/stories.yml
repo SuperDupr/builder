@@ -2,16 +2,17 @@
 #
 # Table name: stories
 #
-#  id               :bigint           not null, primary key
-#  private_access   :boolean          default(TRUE)
-#  status           :integer          default("draft")
-#  title            :string
-#  viewable         :boolean          default(FALSE)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  account_id       :bigint
-#  creator_id       :bigint
-#  story_builder_id :bigint
+#  id                   :bigint           not null, primary key
+#  ai_generated_content :text
+#  private_access       :boolean          default(TRUE)
+#  status               :integer          default("draft")
+#  title                :string
+#  viewable             :boolean          default(FALSE)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  account_id           :bigint
+#  creator_id           :bigint
+#  story_builder_id     :bigint
 #
 # Indexes
 #
