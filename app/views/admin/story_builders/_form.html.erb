@@ -2,7 +2,7 @@
   <%= f.label("Name") %>
   <%= f.text_field(:title, required: true, class: "rounded-lg w-1/2") %>
 
-  <%= f.label("Prompt to AI") %>
+  <%= f.label("Prompt to AI", class:'mt-4') %>
   <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", required: true,
     placeholder: "Example: You are a story creator. Create a short concise story in a formal voice!") %>
 
