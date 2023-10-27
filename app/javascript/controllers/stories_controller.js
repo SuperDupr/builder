@@ -130,9 +130,7 @@ export default class extends Controller {
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    answerSelector ?
-    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">` :
-    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option disabled="" value="" selected="">select</option>`
+    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="">select</option>`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -167,10 +165,8 @@ export default class extends Controller {
     document.getElementById("answerProvider").dataset.promptMode = "on"
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
-    let selectHTML = promptSelector ? 
-      `<select id="nodes" class="!w-auto slec-without-border">` :
-      `<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option disabled="" value="" selected="">select</option>`
-    
+    let selectHTML =
+      `<select id="nodes" data-action="change->stories#disableNavigationButtonsOnChange" class="!w-auto slec-without-border"><option value="">select</option>`
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if(node.child_nodes.length > 0){
@@ -179,14 +175,14 @@ export default class extends Controller {
           const child_node = node.child_nodes[j];
           let shouldSelect = child_node.title === promptSelector
   
-          selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+          selectHTML += `<option value="${child_node.title}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
         }
   
         selectHTML += `</optgroup>`
       }
       else{
         let shouldSelect = node.title === promptSelector
-        selectHTML += `<option value="${node.id}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
+        selectHTML += `<option value="${node.title}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
       }
     }
 

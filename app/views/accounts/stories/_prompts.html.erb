@@ -24,13 +24,13 @@
                 <% if node.child_nodes.any? %>
                   <optgroup label="<%= node.title %>">
                     <% node.child_nodes.each do |child_node| %>
-                      <option value="<%= child_node.id %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
+                      <option value="<%= child_node.title %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
                         <%= child_node.title %>
                       </option>
                     <% end %>
                   </optgroup>
                 <% else %>
-                  <option value="<%= node.id %>" <%= node.title == @prompt.selector ? 'selected' : '' %>>
+                  <option value="<%= node.title %>" <%= node.title == @prompt.selector ? 'selected' : '' %>>
                     <%= node.title %>
                   </option>
                 <% end %>
@@ -53,13 +53,13 @@
               <% if node.child_nodes.any? %>
                 <optgroup label="<%= node.title %>">
                   <% node.child_nodes.each do |child_node| %>
-                    <option value="<%= child_node.id %>" <%= child_node.title == @answer ? 'selected' : '' %>>
+                    <option value="<%= child_node.title %>" <%= child_node.title == @answer ? 'selected' : '' %>>
                       <%= child_node.title %>
                     </option>
                   <% end %>
                 </optgroup>
               <% else %>
-                <option value="<%= node.id %>" <%= node.title == @answer ? 'selected' : '' %>>
+                <option value="<%= node.title %>" <%= node.title == @answer ? 'selected' : '' %>>
                   <%= node.title %>
                 </option>
               <% end %>
