@@ -23,13 +23,13 @@
 
 # *Level #2: Validations*
 
-# Each data aggregate is a combination of the sequence: [Q/P][#][(1..100)]
+# Each data aggregate is a combination of the sequence: [Q/P/A][#][(1..100)]
 # A semi-colon must comes after the number except for the last number in the string
 # (A semi-colon after the last number would be ignored)
 
 # *Level #3: Breaking a valid choice*
 
-# For example; choice = "Q#1: P#1"
+# For example; choice = "Q#1: P#1: A#1"
 
 # Extract counter parts:
 
