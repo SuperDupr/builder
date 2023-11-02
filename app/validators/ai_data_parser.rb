@@ -4,7 +4,6 @@
 # P denotes Prompt
 # A denotes Answer
 
-
 # choice = "Q#1: P#1"
 
 # A valid choice must have *Q* alphabet
@@ -13,7 +12,6 @@
 # A number must be preceeded by a hash (#)
 # Each data aggregate is a combination of the sequence: [Q/P][#][(1..100)]
 # A semi-colon must comes after the number except for the last number in the string
-
 
 # Any other character presence except hash and space in the choice will make it invalid
 
@@ -40,11 +38,10 @@
 
 # Find the answer finally
 
-
 class AiDataParser
   attr_accessor :data
-  
-  def initialize(options={})
+
+  def initialize(options = {})
     @data = options[:data]
   end
 end
