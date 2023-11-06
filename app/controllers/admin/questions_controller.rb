@@ -2,7 +2,7 @@ class Admin::QuestionsController < Admin::ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @questions = pagy(Question.includes(:story_builders).all)
+    @pagy, @questions = pagy(Question.includes(:story_builders).where.not(story_builder_id: nil))
   end
 
   def show
