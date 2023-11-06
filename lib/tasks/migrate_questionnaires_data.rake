@@ -13,8 +13,5 @@ task migrate_questionnaires_data: :environment do
       new_question.position = questionnaire.position
       new_question.save!
     end
-
-    # Destroy old questions
-    Question.where(story_builder_id: nil).destroy_all
   end
 end
