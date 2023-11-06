@@ -2,12 +2,17 @@
 #
 # Table name: questions
 #
-#  id         :bigint           not null, primary key
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :bigint           not null, primary key
+#  active           :boolean          default(TRUE)
+#  position         :integer
+#  title            :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  story_builder_id :integer
 #
 class Question < ApplicationRecord
+  acts_as_list
+  
   # Associations
   has_many :prompts, dependent: :destroy
   has_many :parent_nodes, dependent: :destroy
@@ -15,6 +20,8 @@ class Question < ApplicationRecord
 
   has_many :questionnaires
   has_many :story_builders, through: :questionnaires
+
+  belongs_to :story_builder
 
   accepts_nested_attributes_for :prompts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :parent_nodes, reject_if: :all_blank, allow_destroy: true

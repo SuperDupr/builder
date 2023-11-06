@@ -13,4 +13,6 @@ class StoryBuilder < ApplicationRecord
   has_many :questionnaires
   has_many :questions, through: :questionnaires
   has_many :stories, dependent: :destroy
+
+  has_many :questions
 end

@@ -2,10 +2,13 @@
 #
 # Table name: questions
 #
-#  id         :bigint           not null, primary key
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :bigint           not null, primary key
+#  active           :boolean          default(TRUE)
+#  position         :integer
+#  title            :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  story_builder_id :integer
 #
 require "test_helper"
 
