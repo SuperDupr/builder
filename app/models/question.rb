@@ -12,7 +12,7 @@
 #
 class Question < ApplicationRecord
   acts_as_list
-  
+
   # Associations
   has_many :prompts, dependent: :destroy
   has_many :parent_nodes, dependent: :destroy
@@ -26,7 +26,7 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :prompts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :parent_nodes, reject_if: :all_blank, allow_destroy: true
 
-  scope :active, -> { where(active: true)}
+  scope :active, -> { where(active: true) }
   scope :sort_by_position, -> { order(position: :asc) }
 
   # Class methods

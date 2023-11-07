@@ -80,7 +80,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def tweak_questions_status
     supplied_q_ids = params[:builder][:q_ids].compact_blank
-    
+
     @story_builder.questions.where(id: supplied_q_ids).update_all(active: true)
     @story_builder.questions.where.not(id: supplied_q_ids).update_all(active: false)
   end
