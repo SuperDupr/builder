@@ -7,7 +7,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
 
   def new
     @story_builder = StoryBuilder.new
-    @pagy, @questions = pagy(Question.all, items: 30)
+    @pagy, @questions = pagy(@story_builder.questions, items: 30)
     @tracked_question_ids = []
   end
 
@@ -15,8 +15,7 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     @story_builder = StoryBuilder.new(story_builder_params)
 
     if @story_builder.save
-      attach_questions_to_builder if questions_exist?
-      redirect_to(admin_story_builders_path, notice: "Builder created successfully!")
+      handle_redirect_behaviour
     else
       redirect_to(admin_story_builders_path,
         alert: "Unable to create builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
@@ -29,20 +28,15 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def edit
-    @pagy, @questions = pagy(Question.all, items: 30)
-    @tracked_question_ids = @story_builder.questions&.pluck(:id)
+    @pagy, @questions = pagy(@story_builder.questions.sort_by_position, items: 30)
+    @tracked_question_ids = @story_builder.questions.active&.pluck(:id)
   end
 
   def update
-    @tracked_question_ids = @story_builder.questions&.pluck(:id)
+    @tracked_question_ids = @story_builder.questions.active&.pluck(:id)
 
     if @story_builder.update(story_builder_params)
-      if questions_exist?
-        attach_questions_to_builder
-        detach_questions_from_builder
-      end
-
-      redirect_to(admin_story_builders_path, notice: "Builder updated successfully!")
+      handle_redirect_behaviour
     else
       redirect_to(admin_story_builder_path, alert: "Unable to update builder. Errors: #{@story_builder.errors.full_messages.join(", ")}")
     end
@@ -84,30 +78,24 @@ class Admin::StoryBuildersController < Admin::ApplicationController
     params[:builder].present? && params[:builder][:q_ids].present?
   end
 
-  def is_question_id_tracked?(id)
-    return false if action_name == "create"
-    @tracked_question_ids.include?(id)
-  end
-
-  def attach_questions_to_builder
-    position = 0
-    questionnaire_data = params[:builder][:q_ids].compact_blank.map do |id|
-      position += 1
-      {question_id: id, story_builder_id: @story_builder.id, position: position} unless is_question_id_tracked?(id.to_i)
-    end
-
-    questionnaire_data.compact!
-    Questionnaire.insert_all(questionnaire_data) if questionnaire_data.present?
-  end
-
-  def detach_questions_from_builder
-    q_ids_to_be_deleted = []
+  def tweak_questions_status
     supplied_q_ids = params[:builder][:q_ids].compact_blank
+    
+    @story_builder.questions.where(id: supplied_q_ids).update_all(active: true)
+    @story_builder.questions.where.not(id: supplied_q_ids).update_all(active: false)
+  end
 
-    # if already tracked questions ids are not present in q_ids
-    @tracked_question_ids.each { |id| q_ids_to_be_deleted << id unless supplied_q_ids.include?(id.to_s) }
+  def handle_redirect_behaviour
+    if params[:save_builder_and_add_question]
+      redirect_to(new_admin_question_path(fallback_builder_id: @story_builder.id))
+    else
+      if action_name == "update"
+        if questions_exist?
+          tweak_questions_status
+        end
+      end
 
-    # Query the questionnaires and delete them
-    Questionnaire.where(question_id: q_ids_to_be_deleted).delete_all if q_ids_to_be_deleted.present?
+      redirect_to(admin_story_builders_path, notice: "Builder saved successfully!")
+    end
   end
 end

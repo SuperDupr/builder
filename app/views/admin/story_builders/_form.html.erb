@@ -8,6 +8,8 @@
 
   <h5 class="mt-4 mb-1">Select Questions</h5>
 
+  <%= f.submit("Add New Question", class: "btn btn-primary btn-small", name: "save_builder_and_add_question") %>
+  
   <% if @questions.present? %>
     <div class="mt-2">
       <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) do |b| %>
@@ -26,7 +28,7 @@
       </div>
     </div>
   <% else %>
-    <div>No Questions present. <%= link_to("Add New Question", new_admin_question_path, class:'btn btn-primary btn-small') %></div>
+    <div>No Questions present.</div>
   <% end %>
 
   <%= f.submit("Save Builder", class: "btn btn-primary mt-3") %>

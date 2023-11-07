@@ -26,6 +26,9 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :prompts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :parent_nodes, reject_if: :all_blank, allow_destroy: true
 
+  scope :active, -> { where(active: true)}
+  scope :sort_by_position, -> { order(position: :asc) }
+
   # Class methods
   def self.questionnaires_conversational_data(story_id:)
     joins("LEFT JOIN answers ON questions.id = answers.question_id AND answers.story_id = #{story_id}

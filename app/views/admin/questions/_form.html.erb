@@ -1,6 +1,10 @@
 <%= form_for(question, url: url) do |f| %>
   <%= f.label(:title) %>
   <%= f.text_field(:title, required: true, class: "rounded-md xl:w-3/4") %>
+
+  <% if fallback_to_builder %>
+    <%= hidden_field_tag(:fallback_builder_id, params[:fallback_builder_id]) %>
+  <% end %>
   
   <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="my-3 xl:w-3/4">
     <h5 class="mb-1">Prompts</h5>
