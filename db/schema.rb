@@ -338,6 +338,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_113326) do
     t.boolean "active", default: true
     t.integer "story_builder_id"
     t.integer "position"
+    t.boolean "ai_prompt_attached", default: false
+    t.text "ai_prompt"
   end
 
   create_table "stories", force: :cascade do |t|

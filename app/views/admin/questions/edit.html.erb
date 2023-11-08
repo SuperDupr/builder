@@ -4,5 +4,5 @@
 </header>
 
 <div class='px-4'>
-  <%= render(partial: "form", locals: {question: @question, url: admin_question_path(@question)}) %>
+  <%= render(partial: "form", locals: {question: @question, url: admin_question_path(@question), fallback_to_builder: @fallback_to_builder}) %>
 </div>
