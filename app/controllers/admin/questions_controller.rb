@@ -25,6 +25,7 @@ class Admin::QuestionsController < Admin::ApplicationController
   end
 
   def edit
+    @fallback_to_builder = params[:fallback_builder_id].present?
   end
 
   def update
@@ -48,6 +49,8 @@ class Admin::QuestionsController < Admin::ApplicationController
   def question_params
     params.require(:question).permit(
       :title,
+      :ai_prompt_attached,
+      :ai_prompt,
       prompts_attributes: [
         :id,
         :pre_text,
