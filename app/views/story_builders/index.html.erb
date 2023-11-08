@@ -13,6 +13,35 @@
 ---->
 
 <div class="xl:container mx-auto p-4">
+
+  <div data-controller="checkbox" class="flex gap-4 ">
+    <div class="inline-flex z-10 items-center leading-none no-underline align-middle rounded text-gray-700 hover:text-gray-800 dark:text-gray-50 dark:hover:text-gray-200">
+      <div class="relative" data-controller="dropdown">
+        <div data-action="click->dropdown#toggle click@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu"> <span class="flex items-center text-gray-700 dark:text-gray-100 appearance-none">
+              Select
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="fill-current w-4 h-4"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
+            </span> </div>
+        <div data-dropdown-target="menu" class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu" data-original-class="z-20 mt-2 lg:absolute lg:right-0 dropdown-menu">
+          <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">
+            <label for="checkbox1" class="mb-2">
+              <input data-checkbox-target="checkbox" id="checkbox1" type="checkbox" class="mr-1"> Nurse </label>
+            <label for="checkbox2" class="mb-2">
+              <input data-checkbox-target="checkbox" id="checkbox2" type="checkbox" class="mr-1"> Doctor </label>
+            <label for="checkbox3" class="mb-2">
+              <input data-checkbox-target="checkbox" id="checkbox3" type="checkbox" class="mr-1"> Engineer </label>
+            <label for="checkbox4" class="mb-2">
+              <input data-checkbox-target="checkbox" id="checkbox4" type="checkbox" class="mr-1"> Developer </label>
+            <div> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-checkbox-target="buttonContainer" class="flex gap-2 flex-wrap"></div>
+  </div>
+
+
+
+
   <% if @story_builders.present? %>
     <div class="flex flex-wrap gap-2 mt-5">
       <% @story_builders.each do |story_builder| %>
@@ -62,6 +91,7 @@
       </div>
     </div>
   <% end %>
+</div>
 </div>
 <% if @pagy.pages > 1 %>
   <div class="my-6 text-right">
