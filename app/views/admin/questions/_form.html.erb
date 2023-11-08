@@ -40,5 +40,17 @@
     <button type="button" data-action="nested-form#add" class="btn btn-primary btn-small mt-3">Add New Node</button>
   </div>
 
+  <div data-controller="questions">
+    <div data-questions-target="aiPromptAttached">
+      <p>Attach a custom AI prompt</p>
+      <%= f.check_box(:ai_prompt_attached, data: { action: "questions#toggleAiPromptContainerView" }) %>
+    </div> 
+
+    <div data-questions-target="aiPrompt">
+      <p>Provide a custom AI prompt</p>
+      <%= f.text_area(:ai_prompt) %>
+    </div>
+  </div>
+
   <%= f.submit("Save Question", class: "btn btn-primary my-3") %>
 <% end %>
