@@ -3,7 +3,7 @@
 # Table name: answers
 #
 #  id          :bigint           not null, primary key
-#  response    :text
+#  response    :string           is an Array
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  prompt_id   :integer
