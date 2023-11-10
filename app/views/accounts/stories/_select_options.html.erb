@@ -1,0 +1,45 @@
+<div data-controller="checkbox" class="flex gap-2 items-center relative">
+  <div class="inline-flex z-10 items-center leading-none no-underline align-middle rounded">
+    <div data-controller="dropdown">
+      <div class="inline-block select-none" aria-label="Profile Menu">
+        <span class="flex gap-2 items-center text-gray-700 dark:text-gray-100" data-action="click->dropdown#toggle click@window->dropdown#hide" role="button"> 
+          select
+          <i class="fas fa-chevron-down text-xs mt-[2px]"></i>
+        </span>
+      </div>
+      <div data-dropdown-target="menu" class="z-20 hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="z-20 mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+        <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">
+          <% nodes.each do |node| %>
+            <% if node.child_nodes.any? %>
+              <h5><%= node.title %></h5>
+              <% node.child_nodes.each do |child_node| %>
+                <%= render "single_select_option", node: child_node, answer: @answer %>
+              <% end %>
+            <% else %>
+              <%= render "single_select_option", node: node, answer: @answer %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2"></div>
+</div>
+<!--<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">
+  <option selected value="">select</option>
+  <% @nodes.each do |node| %>
+    <% if node.child_nodes.any? %>
+      <optgroup label="<%= node.title %>">
+        <% node.child_nodes.each do |child_node| %>
+          <option value="<%= child_node.title %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
+            <%= child_node.title %>
+          </option>
+        <% end %>
+      </optgroup>
+    <% else %>
+      <option value="<%= node.title %>" <%= node.title == @prompt.selector ? 'selected' : '' %>>
+        <%= node.title %>
+      </option>
+    <% end %>
+  <% end %>
+</select>-->

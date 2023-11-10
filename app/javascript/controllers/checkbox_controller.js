@@ -1,9 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
-
-
-
 export default class extends Controller {
   static targets = ["checkbox", "buttonContainer"];
+  connect() {
+    this.updateButtons();
+  }
 
   initialize() {
     this.checkboxTargets.forEach((checkbox) => {
@@ -27,11 +27,10 @@ export default class extends Controller {
   }
 
   createButton(labelText, checkboxId) {
-    const button = document.createElement("button");
-    button.classList.add("btn", "btn-primary", "select-tag-btn");
-    button.innerHTML = `${labelText} <span class="ml-2 cursor-pointer cross">✖</span>`;
+    const button = document.createElement("div");
+    button.classList.add("select-tag-btn");
+    button.innerHTML = `${labelText} <i class="fas fa-xmark ml-2 p-1 cross cursor-pointer"></i>`;
     const crossIcon = button.querySelector(".cross");
-  
   
     crossIcon.addEventListener("click", () => {
       const associatedCheckbox = document.getElementById(checkboxId);
@@ -43,10 +42,6 @@ export default class extends Controller {
   
     this.buttonContainerTarget.appendChild(button);
   }
-  
-  
-  
-  
 }
 
 
