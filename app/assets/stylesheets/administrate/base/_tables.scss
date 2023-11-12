@@ -219,3 +219,16 @@ table.new-design-table td{
   bottom: 0;
   background: #fffffff5;
 }
+.select-tag-btn {
+  margin-left: 8px;
+  padding: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 0.25rem;
+  background: rgb(245, 245, 245);
+}
+
+.cross{
+  margin-top: 2px;
+}
