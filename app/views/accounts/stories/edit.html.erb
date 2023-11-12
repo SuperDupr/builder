@@ -11,8 +11,10 @@
   </div>
 </header>
 --->
+
 <div class="xl:container mx-auto px-4">
 <div class="pb-4 pt-0 lg:px-4" data-controller="stories">
+  <%= link_to("Get Content", "javascript:void(0)", class: "btn btn-gray", data: { action: "stories#getAiContent" }) %>
   <div class="grid lg:grid-cols-3 grid-cols-1 large-gap mb-8">
     <div class="col-span-2">
 			<div class="mb-5" id="storyDetails" data-story-id="<%= @story.id %>"></div>

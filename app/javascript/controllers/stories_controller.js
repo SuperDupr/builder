@@ -472,6 +472,22 @@ export default class extends Controller {
         })
     }, 1000);
   }
+
+  getAiContent() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`/ai_content`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+  }
   
   reconnect(event) {
     if (consumer.connection.isActive()) {

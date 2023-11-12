@@ -190,6 +190,25 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
+  def ai_based_questions_content
+    respond_to do |format|
+      format.json do
+        render json: {
+          content: "Imagine if protecting your digital 
+            assets could be as robust and 
+            straightforward as putting on a high-
+            tech football helmet before a big 
+            game. Just as these cutting-edge 
+            helmets enhance the safety of 
+            athletes on the field, our product has 
+            been engineered to provide superior security
+            to your data, shielding it from cyber impacts
+            and ensuring a seamless performance."
+          }
+      end
+    end
+  end
+
   def generated_content
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @response_generated = @story.ai_generated_content.present?
