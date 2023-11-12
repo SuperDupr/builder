@@ -291,6 +291,9 @@ export default class extends Controller {
               questionNumber.textContent = this.qIndex + 1
               questionContainer.dataset.id = data.question_id
               questionContainer.textContent = data.question_title
+
+              console.log(data.ai_mode)
+
               if (prevPromptButton) {
                 prevPromptButton.classList.add("pointer-events-none", "opacity-50");
               }

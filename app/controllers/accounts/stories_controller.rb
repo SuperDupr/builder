@@ -83,7 +83,7 @@ class Accounts::StoriesController < Accounts::BaseController
         if @question.nil?
           render json: {question_id: nil, question_title: nil, success: false}
         else
-          render json: {question_id: @question.id, question_title: @question.title, success: true}
+          render json: {question_id: @question.id, question_title: @question.title, ai_mode: @question.ai_prompt_attached, success: true}
         end
       end
     end
