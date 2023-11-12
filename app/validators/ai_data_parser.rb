@@ -41,41 +41,45 @@
 class AiDataParser
   attr_accessor :data, :words
 
-  def initialize(options = {})
-    @story_id = options[:story_id]
-    @data = options[:data]
+  def initialize(story_id:, data:)
+    @story = Story.find(story_id)
+    @data = data
     @words = []
   end
 
   def parse
-    extract_words_and_add_answers
-  end  
-
-  private
-
-  def extract_words_and_add_answers
     scanner = StringScanner.new(data)
 
     while scanner.scan_until(/\{\{([^{}]+)\}\}/)
-      word = scanner[1]
+      word = eliminate_spaces_from_word(scanner[1])
       
       validator = WordValidator.new(word: word).call
-      
-      if validator[:success]
-        # Find answer against the word
-        answer = ExtractAnswer.new(word: validator[:word], story_id: @story_id).call || "answer_value"
-        
-        # Reform the string
-        @words << word
-        @data.sub!(word, answer)
-      else
-        @data.sub!(word, "______")
-      end
+
+      validator[:success] ? find_answer_and_substitute(word) : @data.sub!(word, "______")
     end
-    # Finalize the original AI prompt associated with question
-    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')
+
+    unwrap_dynamic_content
+  end  
+  
+  private
+  
+  # This method removes the curly braces and any surrounding 
+  # spaces and leaves only the content inside.
+  def unwrap_dynamic_content
+    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')    
   end
 
+  def eliminate_spaces_from_word(word)
+    word.gsub(/\s+/, "")
+  end
+
+  def find_answer_and_substitute(word)
+    answer = ExtractAnswer.new(word: word, story: @story).call || "______"
+
+    @words << word
+    @data.sub!(word, answer)
+  end
+  
   class WordValidator
     attr_accessor :word
 
@@ -85,16 +89,11 @@ class AiDataParser
     end
 
     def call
-      eliminate_spaces_from_word
       sequence_and_format_validations
       { success: @success, word: word }
     end
 
     private
-
-    def eliminate_spaces_from_word
-      @word = @word.gsub(/\s+/, "")
-    end
 
     def sequence_and_format_validations
       @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?))?\z/.match?(word)
@@ -104,36 +103,31 @@ class AiDataParser
   class ExtractAnswer
     attr_reader :word
 
-    def initialize(word:, story_id:)
+    def initialize(word:, story:)
       @word = word
-      @story_id = story_id
+      @story = story
     end
 
     def call
       extract_counter_parts
-      # Find question
-      # Find prompt if needed
-      # Find answer
-      # { answer: word }
     end
 
     private
 
     def extract_counter_parts
       target_objects = word.split(":")
+
+      question_position = target_objects[0][-1]
+      prompt_id = target_objects.size > 1 ? target_objects[1][-1] : nil
       
-      question_id = target_objects[0][-1]
-
-      prompt_id = target_objects[1]&[-1]
-
-      query_answer(question_id, prompt_id)
+      query_answer(question_position, prompt_id)
     end
 
-    def query_answer(q_id, p_id)
-      if q_id && p_id
-        @story.answers.find_by(question_id: q_id)&.response
+    def query_answer(position, prompt_id)
+      if position && prompt_id
+        @story.answers.joins(:question).find_by(prompt_id: prompt_id, questions: { position: position })&.response
       else
-        @story.answers.find_by(question_id: q_id, prompt_id: p_id)&.response
+        @story.answers.joins(:question).find_by(questions: { position: position })&.response
       end
     end
   end
