@@ -42,13 +42,13 @@ class AiDataParser
   attr_accessor :data, :words
 
   def initialize(options = {})
+    @story_id = options[:story_id]
     @data = options[:data]
     @words = []
   end
 
   def parse
     extract_words_and_add_answers
-    # level_one_validations
   end  
 
   private
@@ -58,62 +58,83 @@ class AiDataParser
 
     while scanner.scan_until(/\{\{([^{}]+)\}\}/)
       word = scanner[1]
-
-      # Run validations on word
+      
       validator = WordValidator.new(word: word).call
-
+      
       if validator[:success]
-        # Extract counter parts
-        counter_parts = ExtractAnswer.new(word: word).call if validator[:success]
         # Find answer against the word
+        answer = ExtractAnswer.new(word: validator[:word], story_id: @story_id).call || "answer_value"
         
         # Reform the string
-        @data[scanner[1]] = answer
+        @words << word
+        @data.sub!(word, answer)
       else
-        "Please answer according to your own mindset and information!"
+        @data.sub!(word, "______")
       end
-      # To be decided
-      # @words << word
     end
     # Finalize the original AI prompt associated with question
-    @data
+    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')
   end
 
-  # *Level #1: Validations*
-
-  # A valid choice must have *Q* alphabet
-  # A valid choice can't have alphabets except *Q*, *P*
-  # A valid choice must contain alphabets in order of [Q, P] or simply [Q]
-
-  # Q or P
   class WordValidator
+    attr_accessor :word
+
     def initialize(word:)
       @word = word
+      @success = false
     end
 
     def call
-      # level_one_validations
-      # level_two_validations
-      { success: true, word: @word }
+      eliminate_spaces_from_word
+      sequence_and_format_validations
+      { success: @success, word: word }
     end
 
-    def level_one_validations
+    private
+
+    def eliminate_spaces_from_word
+      @word = @word.gsub(/\s+/, "")
     end
-    
-    def level_two_validations
+
+    def sequence_and_format_validations
+      @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?))?\z/.match?(word)
     end
   end
 
   class ExtractAnswer
-    def initialize(word:)
+    attr_reader :word
+
+    def initialize(word:, story_id:)
       @word = word
+      @story_id = story_id
     end
 
     def call
+      extract_counter_parts
       # Find question
       # Find prompt if needed
       # Find answer
-      { answer: @answer }
+      # { answer: word }
+    end
+
+    private
+
+    def extract_counter_parts
+      target_objects = word.split(":")
+      
+      question_id = target_objects[0][-1]
+
+      prompt_id = target_objects[1]&[-1]
+
+      query_answer(question_id, prompt_id)
+    end
+
+    def query_answer(q_id, p_id)
+      if q_id && p_id
+        @story.answers.find_by(question_id: q_id)&.response
+      else
+        @story.answers.find_by(question_id: q_id, prompt_id: p_id)&.response
+      end
     end
   end
 end
