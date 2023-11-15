@@ -268,6 +268,7 @@ class Accounts::StoriesController < Accounts::BaseController
       node.child_nodes.each do |child_node|
         child_nodes_data << {id: child_node.id, title: child_node.title}
       end
+      node_hash[:id] = node.id
       node_hash[:title] = node.title
       node_hash[:child_nodes] = child_nodes_data
       node_selection << node_hash
