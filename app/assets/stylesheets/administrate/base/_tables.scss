@@ -218,6 +218,7 @@ table.new-design-table td{
   left: 0;
   bottom: 0;
   background: #fffffff5;
+  z-index: 1;
 }
 .select-tag-btn {
   margin-left: 8px;
@@ -231,4 +232,10 @@ table.new-design-table td{
 
 .cross{
   margin-top: 2px;
+}
+
+.contentDiv{
+  margin: auto;
+  max-height: 200px;
+  overflow: auto;
 }

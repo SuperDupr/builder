@@ -125,39 +125,62 @@ export default class extends Controller {
   }
 
   constructSelectionElementForNodes(nodes, answerSelector) {
+    console.log(answerSelector)
     const answerProvider = document.getElementById("answerProvider")
     answerProvider.setAttribute("data-only-node-mode", "on")
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400 flex-col"><select id="nodes" class="!w-auto mx-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange"><option value="">select</option>`
+    `<div class="min-h-400 flex-col"><div data-controller="checkbox" class="flex items-center relative">
+    <div class="inline-flex items-center leading-none no-underline align-middle rounded">
+    <div data-controller="dropdown">
+    <div class="inline-block select-none" aria-label="Profile Menu">
+    <span class="flex items-center text-gray-700 dark:text-gray-100" data-action="click->dropdown#toggle click@window->dropdown#hide" role="button"> 
+      select
+      <i class="fas fa-chevron-down text-xs mt-[2px] ml-2"></i>
+    </span>
+    </div>
+    <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+    <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">`
 
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if(node.child_nodes.length > 0){
-        selectHTML += `<optgroup label="${node.title}">`
+        selectHTML += `<h5>${node.title}</h5>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect = child_node.title === answerSelector
+          let shouldSelect = answerSelector.includes(child_node.title)
   
-          selectHTML += `<option value="${child_node.id}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+          selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${child_node.title}" ${shouldSelect ? 'checked' : ''}>
+            ${child_node.title}
+          </label>`;
         }
   
-        selectHTML += `</optgroup>`
       }
       else{
-        let shouldSelect = node.title === answerSelector
-        selectHTML += `<option value="${node.id}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
+        let shouldSelect = answerSelector.includes(node.title)
+        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${node.title}" ${shouldSelect ? 'checked' : ''}>
+          ${node.title}
+        </label>`;
       }
     }
 
-    selectHTML += `</select>`
+    selectHTML += 
+    `</div>
+    </div>
+    </div>
+    </div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap"></div>
+    </div>`
 
     return `
       <h5 class="w-full mb-6">Select an option</h5>
       ${selectHTML}
       <div id="errorText" class="text-red-500 text-center mt-1 hidden block fs-15">Please select an option to save response</div>
       </div>
+      <div id="aiContentDiv"></div>
     `
   }
 
@@ -166,27 +189,46 @@ export default class extends Controller {
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
     console.log(promptSelector)
     let selectHTML =
-      `<select id="nodes" data-action="change->stories#disableNavigationButtonsOnChange" class="!w-auto slec-without-border"><option value="">select</option>`
+      `<div data-controller="checkbox" class="flex items-center relative">
+      <div class="inline-flex items-center leading-none no-underline align-middle rounded">
+      <div data-controller="dropdown">
+      <div class="inline-block select-none" aria-label="Profile Menu">
+      <span class="flex items-center text-gray-700 dark:text-gray-100" data-action="click->dropdown#toggle click@window->dropdown#hide" role="button"> 
+        select
+        <i class="fas fa-chevron-down text-xs mt-[2px] ml-2"></i>
+      </span>
+      </div>
+      <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+      <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">`
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if(node.child_nodes.length > 0){
-        selectHTML += `<optgroup label="${node.title}">`
+        selectHTML += `<h5>${node.title}</h5>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect = child_node.title === promptSelector
-  
-          selectHTML += `<option value="${child_node.title}" ${shouldSelect ? 'selected' : ''}>${child_node.title}</option>`;
+          let shouldSelect =  promptSelector.includes(child_node.title)
+          selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${child_node.title}" ${shouldSelect ? 'checked' : ''}>
+            ${child_node.title}
+          </label>`;
         }
-  
-        selectHTML += `</optgroup>`
       }
       else{
-        let shouldSelect = node.title === promptSelector
-        selectHTML += `<option value="${node.title}" ${shouldSelect ? 'selected' : ''}>${node.title}</option>`;
+        let shouldSelect = promptSelector.includes(node.title)
+        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${node.title}" ${shouldSelect ? 'checked' : ''}>
+          ${node.title}
+        </label>`;
       }
     }
 
-    selectHTML += `</select>`
+    selectHTML += 
+  ` </div>
+    </div>
+    </div>
+    </div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap"></div>
+    </div>`
     return `
       <div class="flex items-center justify-between w-full gap-2 mb-6">
         <h5>
@@ -210,6 +252,7 @@ export default class extends Controller {
        </div>
       <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please select an option to save response</div>
       </div>
+      <div id="aiContentDiv"></div>
     `
   }
 
@@ -224,16 +267,20 @@ export default class extends Controller {
       <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
       </div>
-      
-      
+      <div id="aiContentDiv"></div>
     `
   }
 
   promptNavigation(event) {
     let questionId = document.getElementById("questionContainer").dataset.id
     let storyId = document.getElementById("storyDetails").dataset.storyId
-    this.saveAnswer()
-    this.promptNavigationFunction(event, false, questionId, storyId)
+    const answerProvider = document.getElementById("answerProvider")
+    const aicontentMode = answerProvider.dataset.aicontentMode
+    const contentBtn = document.getElementById("contentBtn");
+    // if(aicontentMode === "off" || contentBtn.innerHTML === 'Create another version'){
+      this.saveAnswer()
+      this.promptNavigationFunction(event, false, questionId, storyId)
+    // }
   }
 
   questionNavigation(event) {
@@ -250,12 +297,15 @@ export default class extends Controller {
     const nextQuestionButton = document.getElementById('questionForward');
     const prevPromptButton = document.getElementById('promptBackward');
     const finishLink = document.getElementById("finishLink")
+    const answerProvider = document.getElementById("answerProvider")
+    const aicontentMode = answerProvider.dataset.aicontentMode
+    const contentBtn = document.getElementById("contentBtn");
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
       if(this.qIndex >= 1){
         if (nextQuestionButton.style.display === "none") {
-          nextQuestionButton.style.display = "flex"
+          nextQuestionButton.style.display = "inline-flex"
         }
         
         if (finishLink) { finishLink.remove() }
@@ -275,8 +325,9 @@ export default class extends Controller {
         }
       }
     }
-
-    this.saveAnswer()
+    // if(aicontentMode === "off" || contentBtn.innerHTML === 'Create another version'){
+      this.saveAnswer()
+    // }
     if(this.saveAnswer()){
       fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
         method: "GET",
@@ -370,8 +421,17 @@ export default class extends Controller {
     const errorText = document.getElementById("errorText")
     
     if (promptMode === "on") {
-      let selectElement = document.getElementById("nodes")
-      if (selectElement.value === "") {
+      let selectCheckbox = document.querySelectorAll(".nodes")
+      
+      let anyChecked = false;
+      const checkedValues = []
+      selectCheckbox.forEach(function(checkbox) {
+        if (checkbox.checked) {
+          anyChecked = true;
+          checkedValues.push(checkbox.value);
+        }
+      });
+      if (!anyChecked) {
         errorText.classList.remove("hidden");
         return false
       } else {
@@ -379,8 +439,9 @@ export default class extends Controller {
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
         let promptId = document.getElementById("promptContainer").dataset.id
-        let selectedText = selectElement.options[selectElement.selectedIndex].text
-        this.trackAnswer(questionId, storyId, promptId, selectedText)
+        // let selectedText = selectElement.options[selectElement.selectedIndex].text
+        console.log(checkedValues)
+        this.trackAnswer(questionId, storyId, promptId, checkedValues)
         return true
       }
     } else if (promptMode === "off") {
@@ -450,6 +511,7 @@ export default class extends Controller {
     // saveAnswerButton.classList.add("pointer-events-none", "opacity-50");
     // saveAnswerButton.textContent = "Saving..."
     setTimeout(() => {
+      console.log(selectedText)
       fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
         method: "POST",
         headers: {
@@ -473,9 +535,14 @@ export default class extends Controller {
     }, 1000);
   }
 
-  getAiContent() {
+  fetchAiContent(){
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
+    const spinnerElement = document.querySelector(".spinnerStory");
+    const contentBtn = document.getElementById("contentBtn");
+    const nextQuestionButton = document.getElementById('questionForward');
+    const aiContentDiv = document.getElementById("aiContentDiv")
+    const questionContent = document.getElementById("questionContent")
+    spinnerElement.style.display = "flex";
     fetch(`/ai_content`, {
       method: "GET",
       headers: {
@@ -483,10 +550,31 @@ export default class extends Controller {
         "X-CSRF-Token": csrfToken
       }
     })
-      .then(response => response.json())
-      .then(data => {
+    .then(response => response.json())
+    .then(data => {
+      setTimeout(() => {
+        spinnerElement.style.display = "none";
+        questionContent.style.display = "none";
+        contentBtn.innerHTML = 'Create another version'
+        nextQuestionButton.style.display = 'inline-flex'
+        aiContentDiv.innerHTML = 
+        `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data ? data.content + data.content + data.content : ""}</div>`
         console.log(data)
-      })
+      }, 1000);
+    })
+  }
+
+  getAiContent() {
+    const contentBtn = document.getElementById("contentBtn");
+    if(contentBtn.innerHTML === 'Get Content'){
+      this.saveAnswer()
+      if(this.saveAnswer()){
+        this.fetchAiContent()
+      }
+    }
+    else{
+      this.fetchAiContent()
+    }
   }
   
   reconnect(event) {

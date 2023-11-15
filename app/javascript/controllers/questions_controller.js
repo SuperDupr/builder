@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["aiPromptAttached", "aiPrompt"]
+  static targets = ["aiPromptAttached", "aiPrompt", "aiPromptTextarea"]
 
   connect() {
     // Instead of hiding the whole component you have to make the text of p tag blurry
@@ -12,13 +12,18 @@ export default class extends Controller {
     if (!aiPromptAttachedCheckBox.checked) {
       this.aiPromptTarget.style.display = "none"
     }
+    else{
+      this.aiPromptTextareaTarget.required = true
+    }
   }
 
   toggleAiPromptContainerView(e) {
     if (e.target.checked) {
       this.aiPromptTarget.style.display = "block"
+      this.aiPromptTextareaTarget.required = true
     } else {
       this.aiPromptTarget.style.display = "none"
+      this.aiPromptTextareaTarget.required = false
     }
   }
 

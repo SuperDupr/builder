@@ -239,7 +239,7 @@
               </div>
               </td>
               <td>
-              <div class="flex items-center w-full">
+                <div class="flex items-center w-full">
                   <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
                     <div class="relative" data-controller="stories">
                       <% if story.private_access %>
@@ -275,27 +275,10 @@
                   <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
                     EDIT STORY
                   <% end %>
-                  <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                  <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                 </div>
-                <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
-              </label>
-            </div>
-          </td>
-           <td>
-            <div class="small-screen">
-              <p class="fs-20"><%= current_account.name || "-" %></p>
-            </div>
-          </td>
-          <td class="text-center !p-0">
-            <div class="flex items-center gap-2 justify-center" >
-              <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
-                EDIT STORY
-              <% end %>
-            </div>
-          </td>
-        </tr>
-        <% end %>
+              </td>
+            </tr>
+          <% end %>
         <% else %>
           <tr>
             <td colspan="7" class="text-center">No stories found</td>

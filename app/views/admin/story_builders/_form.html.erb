@@ -2,21 +2,21 @@
   <%= f.label("Name") %>
   <%= f.text_field(:title, required: true, class: "rounded-lg w-1/2") %>
 
-  <%= f.label("Prompt to AI", class:'mt-4') %>
+  <label class="mt-4">Prompt to AI</label>
   <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", required: true,
-    placeholder: "Example: You are a story creator. Create a short concise story in a formal voice!") %>
+    placeholder: "Example: You are a story creator. Create a short concise story in a formal voice!", rows: 3) %>
 
-  <h5 class="mt-4 mb-1">Select Questions</h5>
-
-  <%= f.submit("Add New Question", class: "btn btn-primary btn-small", name: "save_builder_and_add_question") %>
+  <h5 class="mt-4 mb-1">Existing Questions</h5>
   
   <% if @questions.present? %>
-    <div class="mt-2">
+    <div class="my-2">
       <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) do |b| %>
-        <div class="mb-3 items-center flex">
-          <%= b.check_box(checked: @tracked_question_ids.include?(b.object.id), class:'mr-3') %>
+        <div class="mb-1 items-center flex">
+          <%= b.object.position %>.
+          <div class="ml-2 mb-[4px]" data-controller="tooltip" data-tippy-content="Marking the checkbox will make question Active inside builder. This showing in story creation process.">
+            <%= b.check_box(checked: @tracked_question_ids.include?(b.object.id)) %>
+          </div>
           <!-- Use this column for showing position of the question -->
-          <%#= b.object.position %>
           <%= b.label class:'inline-block mb-0 text-base leading-none' %>
         </div>
       <% end %>
@@ -30,8 +30,12 @@
       </div>
     </div>
   <% else %>
-    <div>No Questions present.</div>
+    <div class="mb-2">No Questions present.</div>
   <% end %>
 
-  <%= f.submit("Save Builder", class: "btn btn-primary mt-3") %>
+  <div>
+    <%= f.submit("Add New Question", class: "btn btn-primary btn-small", name: "save_builder_and_add_question") %>
+  </div>
+
+  <%= f.submit("Save Builder", class: "btn btn-primary mt-5") %>
 <% end %>

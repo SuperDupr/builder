@@ -5,8 +5,26 @@
   <% if fallback_to_builder %>
     <%= hidden_field_tag(:fallback_builder_id, params[:fallback_builder_id]) %>
   <% end %>
+
+  <div data-controller="questions" class="mt-3">
+    
+    <div class="flex items-center mt-2" data-questions-target="aiPromptAttached">
+      <label for="question_ai_prompt_attached" class="flex items-center cursor-pointer mb-0">
+        <div class="relative">
+          <%= f.check_box(:ai_prompt_attached, data: { action: "questions#toggleAiPromptContainerView" }, class:'sr-only') %>
+          <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+          <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+        </div>
+        <h5 class="ml-3 mt-1">Custom AI Prompt</h5>
+      </label>
+    </div> 
+
+    <div class="mt-3" data-questions-target="aiPrompt">
+      <%= f.text_area(:ai_prompt, placeholder:'Write custom AI prompt here', rows: 4, class:'rounded-md xl:w-3/4', data: { questions_target: "aiPromptTextarea" }) %>
+    </div>
+  </div>
   
-  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="my-3 xl:w-3/4">
+  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="mb-3 mt-4 xl:w-3/4">
     <h5 class="mb-1">Prompts</h5>
     <template data-nested-form-target="template">
       <%= f.fields_for :prompts, Prompt.new, child_index: 'NEW_RECORD' do |prompt_fields| %>
@@ -40,17 +58,5 @@
     <button type="button" data-action="nested-form#add" class="btn btn-primary btn-small mt-3">Add New Node</button>
   </div>
 
-  <div data-controller="questions">
-    <div data-questions-target="aiPromptAttached">
-      <p>Attach a custom AI prompt</p>
-      <%= f.check_box(:ai_prompt_attached, data: { action: "questions#toggleAiPromptContainerView" }) %>
-    </div> 
-
-    <div data-questions-target="aiPrompt">
-      <p>Provide a custom AI prompt</p>
-      <%= f.text_area(:ai_prompt) %>
-    </div>
-  </div>
-
-  <%= f.submit("Save Question", class: "btn btn-primary my-3") %>
+  <%= f.submit("Save Question", class: "btn btn-primary mt-6 mb-4") %>
 <% end %>
