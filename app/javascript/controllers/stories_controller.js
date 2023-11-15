@@ -125,7 +125,7 @@ export default class extends Controller {
   }
 
   constructSelectionElementForNodes(nodes, answerSelector) {
-    console.log(answerSelector)
+    console.log(nodes)
     const answerProvider = document.getElementById("answerProvider")
     answerProvider.setAttribute("data-only-node-mode", "on")
     answerProvider.setAttribute("data-prompt-mode", "off")
@@ -140,7 +140,7 @@ export default class extends Controller {
       <i class="fas fa-chevron-down text-xs mt-[2px] ml-2"></i>
     </span>
     </div>
-    <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+    <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-1" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-1">
     <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">`
 
     for (let i = 0; i < nodes.length; i++) {
@@ -172,7 +172,7 @@ export default class extends Controller {
     </div>
     </div>
     </div>
-    <div data-checkbox-target="buttonContainer" class="flex flex-wrap"></div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2"></div>
     </div>`
 
     return `
@@ -187,7 +187,7 @@ export default class extends Controller {
   constructDataPerPrompt(totalPromptsCount, promptIndex, promptId, promptPreText, promptPostText, promptSelector, nodes) {
     document.getElementById("answerProvider").dataset.promptMode = "on"
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
-    console.log(promptSelector)
+    console.log(nodes)
     let selectHTML =
       `<div data-controller="checkbox" class="flex items-center relative">
       <div class="inline-flex items-center leading-none no-underline align-middle rounded">
@@ -198,7 +198,7 @@ export default class extends Controller {
         <i class="fas fa-chevron-down text-xs mt-[2px] ml-2"></i>
       </span>
       </div>
-      <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+      <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-1" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-1">
       <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">`
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
@@ -227,7 +227,7 @@ export default class extends Controller {
     </div>
     </div>
     </div>
-    <div data-checkbox-target="buttonContainer" class="flex flex-wrap"></div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2"></div>
     </div>`
     return `
       <div class="flex items-center justify-between w-full gap-2 mb-6">
@@ -244,7 +244,7 @@ export default class extends Controller {
           <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary ${totalPromptsCount <= 1 ? '!hidden' : ''}" id="promptForward" data-action="click->stories#promptNavigation" data-cursor="forward"></i>
         </div>
       </div>
-      <div class="min-h-400 flex-col">
+      <div class="min-h-400 flex-col" id="questionContent">
         <div id="promptContainer" class="w-full flex items-center gap-3 flex-wrap justify-center" data-id="${promptId}">
           <div id="promptPreText" class="fs-20">${promptPreText}</div>
           ${selectHTML}
@@ -263,7 +263,7 @@ export default class extends Controller {
     
     return `
       <h5 class="w-full mb-6">Answer</h5>
-      <div class="min-h-400 flex-col">
+      <div class="min-h-400 flex-col" id="questionContent">
       <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
       </div>

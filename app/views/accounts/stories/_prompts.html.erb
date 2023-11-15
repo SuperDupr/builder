@@ -46,7 +46,7 @@
     <% else %>
       <div id="answerProvider" class="w-full" data-aicontent-mode="<% @question.ai_prompt_attached ? 'on' : 'off' %>" data-prompt-mode="off" data-only-node-mode="off">
         <h5 class="w-full mb-6">Answer</h5>
-        <div id="questionContent">
+        <div class="min-h-400 flex-col" id="questionContent">
           <%= text_area_tag(:answer, @answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3, data: {action: 'input->stories#disableNavigationButtonsOnChange'}) %>
           <div id="errorText" class="text-red-500 text-center mt-1 hidden">Please write answer to save response</div>
         </div>

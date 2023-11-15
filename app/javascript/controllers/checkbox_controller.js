@@ -3,6 +3,7 @@ export default class extends Controller {
   static targets = ["checkbox", "buttonContainer"];
   connect() {
     this.updateButtons();
+    const buttons = document.querySelectorAll('.select-tag-btn')
   }
 
   initialize() {
@@ -31,7 +32,7 @@ export default class extends Controller {
     button.classList.add("select-tag-btn");
     button.innerHTML = `${labelText} <i class="fas fa-xmark ml-2 p-1 cross cursor-pointer"></i>`;
     const crossIcon = button.querySelector(".cross");
-  
+    
     crossIcon.addEventListener("click", () => {
       const associatedCheckbox = document.getElementById(checkboxId);
       if (associatedCheckbox) {
@@ -39,7 +40,7 @@ export default class extends Controller {
         button.remove();
       }
     });
-  
+    
     this.buttonContainerTarget.appendChild(button);
   }
 }

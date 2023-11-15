@@ -1,4 +1,4 @@
-<%= answer %>
+<%= @prompt.selector %>
 <div data-controller="checkbox" class="flex items-center relative">
   <div class="inline-flex items-center leading-none no-underline align-middle rounded">
     <div data-controller="dropdown">
@@ -8,7 +8,7 @@
           <i class="fas fa-chevron-down text-xs mt-[2px] ml-2"></i>
         </span>
       </div>
-      <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px]">
+      <div data-dropdown-target="menu" class="hidden mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-10" data-original-class="mt-2 absolute left-0 dropdown-menu min-w-[250px] max-w-[350px] z-10">
         <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">
           <% nodes.each do |node| %>
             <% if node.child_nodes.any? %>
@@ -24,7 +24,7 @@
       </div>
     </div>
   </div>
-  <div data-checkbox-target="buttonContainer" class="flex flex-wrap"></div>
+  <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2 ml-2"></div>
 </div>
 <!--<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">
   <option selected value="">select</option>
