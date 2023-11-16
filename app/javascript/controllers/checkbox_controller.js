@@ -3,7 +3,6 @@ export default class extends Controller {
   static targets = ["checkbox", "buttonContainer"];
   connect() {
     this.updateButtons();
-    const buttons = document.querySelectorAll('.select-tag-btn')
   }
 
   initialize() {

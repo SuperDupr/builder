@@ -125,13 +125,13 @@ export default class extends Controller {
   }
 
   constructSelectionElementForNodes(nodes, answerSelector) {
-    console.log(nodes)
+    console.log(answerSelector)
     const answerProvider = document.getElementById("answerProvider")
     answerProvider.setAttribute("data-only-node-mode", "on")
     answerProvider.setAttribute("data-prompt-mode", "off")
 
     let selectHTML =
-    `<div class="min-h-400 flex-col"><div data-controller="checkbox" class="flex items-center relative">
+    `<div class="min-h-400 flex-col" id="questionContent"><div data-controller="checkbox" class="flex items-center relative">
     <div class="inline-flex items-center leading-none no-underline align-middle rounded">
     <div data-controller="dropdown">
     <div class="inline-block select-none" aria-label="Profile Menu">
@@ -149,19 +149,19 @@ export default class extends Controller {
         selectHTML += `<h5>${node.title}</h5>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect = answerSelector.includes(child_node.title)
+          let shouldSelect = answerSelector.includes(child_node.id.toString())
   
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
-            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${child_node.title}" ${shouldSelect ? 'checked' : ''}>
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
             ${child_node.title}
           </label>`;
         }
   
       }
       else{
-        let shouldSelect = answerSelector.includes(node.title)
+        let shouldSelect = answerSelector.includes(node.id.toString())
         selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
-          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${node.title}" ${shouldSelect ? 'checked' : ''}>
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
           ${node.title}
         </label>`;
       }
@@ -172,13 +172,13 @@ export default class extends Controller {
     </div>
     </div>
     </div>
-    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2"></div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2 ml-2"></div>
     </div>`
 
     return `
       <h5 class="w-full mb-6">Select an option</h5>
       ${selectHTML}
-      <div id="errorText" class="text-red-500 text-center mt-1 hidden block fs-15">Please select an option to save response</div>
+      <div id="errorText" class="text-red-500 text-center mt-1 hidden fs-15">Please select an option to save response</div>
       </div>
       <div id="aiContentDiv"></div>
     `
@@ -187,7 +187,7 @@ export default class extends Controller {
   constructDataPerPrompt(totalPromptsCount, promptIndex, promptId, promptPreText, promptPostText, promptSelector, nodes) {
     document.getElementById("answerProvider").dataset.promptMode = "on"
     document.getElementById("answerProvider").setAttribute("data-only-node-mode", "off")
-    console.log(nodes)
+    console.log(promptSelector)
     let selectHTML =
       `<div data-controller="checkbox" class="flex items-center relative">
       <div class="inline-flex items-center leading-none no-underline align-middle rounded">
@@ -206,17 +206,17 @@ export default class extends Controller {
         selectHTML += `<h5>${node.title}</h5>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect =  promptSelector.includes(child_node.title)
+          let shouldSelect =  promptSelector.includes(child_node.id.toString())
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
-            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${child_node.title}" ${shouldSelect ? 'checked' : ''}>
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
             ${child_node.title}
           </label>`;
         }
       }
       else{
-        let shouldSelect = promptSelector.includes(node.title)
+        let shouldSelect = promptSelector.includes(node.id.toString())
         selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
-          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value="${node.title}" ${shouldSelect ? 'checked' : ''}>
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
           ${node.title}
         </label>`;
       }
@@ -227,7 +227,7 @@ export default class extends Controller {
     </div>
     </div>
     </div>
-    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2"></div>
+    <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2 ml-2"></div>
     </div>`
     return `
       <div class="flex items-center justify-between w-full gap-2 mb-6">
@@ -264,7 +264,7 @@ export default class extends Controller {
     return `
       <h5 class="w-full mb-6">Answer</h5>
       <div class="min-h-400 flex-col" id="questionContent">
-      <textarea name="answer" id="answer" data-action="input->stories#disableNavigationButtonsOnChange" value="${answer}" class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer ? answer : ""}</textarea>
+      <textarea name="answer" id="answer" value='${answer?.[1] ? answer[1] : ""}' class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer?.[1] ? answer[1] : ""}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
       </div>
       <div id="aiContentDiv"></div>
@@ -300,6 +300,7 @@ export default class extends Controller {
     const answerProvider = document.getElementById("answerProvider")
     const aicontentMode = answerProvider.dataset.aicontentMode
     const contentBtn = document.getElementById("contentBtn");
+    const questionContent = document.getElementById("questionContent");
     
     // TODO: Add validations to handle index value correctly
     if (cursor == "backward") {
@@ -311,9 +312,9 @@ export default class extends Controller {
         if (finishLink) { finishLink.remove() }
 
         this.qIndex--
-        if(this.qIndex + 1 === 1){
-          event.target.classList.add("pointer-events-none", "opacity-50");
-        }
+        // if(this.qIndex + 1 === 1){
+        //   event.target.classList.add("pointer-events-none", "opacity-50");
+        // }
       }
     } else if (cursor == "forward") {
       if(this.qIndex + 1 < questionsCount){
@@ -325,9 +326,7 @@ export default class extends Controller {
         }
       }
     }
-    // if(aicontentMode === "off" || contentBtn.innerHTML === 'Create another version'){
-      this.saveAnswer()
-    // }
+    this.saveAnswer()
     if(this.saveAnswer()){
       fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
         method: "GET",
@@ -342,8 +341,21 @@ export default class extends Controller {
               questionNumber.textContent = this.qIndex + 1
               questionContainer.dataset.id = data.question_id
               questionContainer.textContent = data.question_title
-
+              questionContent.style.display = "block";
               console.log(data.ai_mode)
+              if(data.ai_mode){
+                if(contentBtn){
+                  contentBtn.innerHTML = 'Get Content'
+                  contentBtn.style.display = 'inline-flex'
+                }
+                nextQuestionButton.style.display = 'none'
+              }
+              else{
+                if(contentBtn){
+                  contentBtn.style.display = 'none'
+                }
+                nextQuestionButton.style.display = 'inline-flex'
+              }
 
               if (prevPromptButton) {
                 prevPromptButton.classList.add("pointer-events-none", "opacity-50");
@@ -358,32 +370,28 @@ export default class extends Controller {
         }
       })
     }
-    else{
-      nextQuestionButton?.classList.add("pointer-events-none");
-      finishLink?.classList.add("pointer-events-none");
-    }
   }
 
-  disableNavigationButtonsOnChange(event){
-    const promptForward = document.getElementById('promptForward')
-    const nextQuestionButton = document.getElementById('questionForward');
-    const finishButton = document.getElementById('finishLink');
-    const errorText = document.getElementById("errorText")
+  // disableNavigationButtonsOnChange(event){
+  //   const promptForward = document.getElementById('promptForward')
+  //   const nextQuestionButton = document.getElementById('questionForward');
+  //   const finishButton = document.getElementById('finishLink');
+  //   const errorText = document.getElementById("errorText")
     
-    if(event.target.value === ''){
-      nextQuestionButton?.classList.add("pointer-events-none");
-      promptForward?.classList.add("pointer-events-none");
-      finishButton?.classList.add("pointer-events-none");
-      errorText.classList.remove("hidden");
-    }
-    else{
-      nextQuestionButton?.classList.remove("pointer-events-none");
-      promptForward?.classList.remove("pointer-events-none");
-      finishButton?.classList.remove("pointer-events-none");
-      errorText.classList.add("hidden");
-    }
+  //   if(event.target.value === ''){
+  //     nextQuestionButton?.classList.add("pointer-events-none");
+  //     promptForward?.classList.add("pointer-events-none");
+  //     finishButton?.classList.add("pointer-events-none");
+  //     errorText.classList.remove("hidden");
+  //   }
+  //   else{
+  //     nextQuestionButton?.classList.remove("pointer-events-none");
+  //     promptForward?.classList.remove("pointer-events-none");
+  //     finishButton?.classList.remove("pointer-events-none");
+  //     errorText.classList.add("hidden");
+  //   }
 
-  }
+  // }
 
   // stopNavigation() {
   //   const answerProvider = document.getElementById("answerProvider")
@@ -431,6 +439,7 @@ export default class extends Controller {
           checkedValues.push(checkbox.value);
         }
       });
+      console.log(anyChecked)
       if (!anyChecked) {
         errorText.classList.remove("hidden");
         return false
@@ -439,7 +448,6 @@ export default class extends Controller {
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
         let promptId = document.getElementById("promptContainer").dataset.id
-        // let selectedText = selectElement.options[selectElement.selectedIndex].text
         console.log(checkedValues)
         this.trackAnswer(questionId, storyId, promptId, checkedValues)
         return true
@@ -448,33 +456,53 @@ export default class extends Controller {
       let answerFieldValue
 
       if (answerProvider.dataset.onlyNodeMode === "on") {
-        let selectElement = document.getElementById("nodes")
-        if (selectElement.value === "") {
+        let selectCheckbox = document.querySelectorAll(".nodes")
+      
+        let anyChecked = false;
+        const checkedValues = []
+        selectCheckbox.forEach(function(checkbox) {
+          if (checkbox.checked) {
+            anyChecked = true;
+            checkedValues.push(checkbox.value);
+          }
+        });
+        if (!anyChecked) {
           errorText.classList.remove("hidden");
           return false
         } else {
           errorText.classList.add("hidden");
-          answerFieldValue = selectElement.options[selectElement.selectedIndex].text
           let questionId = document.getElementById("questionContainer").dataset.id
           let storyId = document.getElementById("storyDetails").dataset.storyId
-          this.trackAnswer(questionId, storyId, "", answerFieldValue)
+          this.trackAnswer(questionId, storyId, "", checkedValues)
           return true
         }
       } else {
         answerFieldValue = document.getElementById("answer").value
-        let questionId = document.getElementById("questionContainer").dataset.id
-        let storyId = document.getElementById("storyDetails").dataset.storyId
-        this.trackAnswer(questionId, storyId, "", answerFieldValue)
+        const checkedValues = []
+        if (answerFieldValue === '') {
+          errorText.classList.remove("hidden");
+          return false
+        } else {
+          checkedValues.push(answerFieldValue)
+          errorText.classList.add("hidden");
+          let questionId = document.getElementById("questionContainer").dataset.id
+          let storyId = document.getElementById("storyDetails").dataset.storyId
+          this.trackAnswer(questionId, storyId, "", checkedValues)
+          // return true
+        }
       }
-
-      if (answerFieldValue === "") {
+      answerFieldValue = document.getElementById("answer").value
+      const checkedValues = []
+      console.log(checkedValues)
+      if (answerFieldValue === '') {
         errorText.classList.remove("hidden");
         return false
       } else {
+        checkedValues.push(answerFieldValue)
         errorText.classList.add("hidden");
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
-        this.trackAnswer(questionId, storyId, "", answerFieldValue)
+        this.trackAnswer(questionId, storyId, "", checkedValues)
         return true
       }
 

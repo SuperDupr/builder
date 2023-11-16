@@ -11,22 +11,17 @@
   <h5>Title</h5>
   <div class="text-lg mb-4"><%= @question.title %></div>
 
-  <!--<div class="border p-2 mb-4">
+  <div class="border p-2 mb-4">
     <h5 class="mb-2">Builder</h5>
-    <% if @question.story_builders.present? %>
-      <% @question.story_builders.each_with_index do |story_builder, index| %>
-        <div class="flex items-center justify-between gap-3">
-          <div><%= story_builder.title %></div>
-          <%= link_to("Go to Builder", admin_story_builder_path(story_builder), class:'btn btn-primary btn-small') %>
-        </div>
-        <% if index != @question.story_builders.size - 1 %>
-          <hr class="my-2"/>
-        <% end %>
-      <% end %>
+    <% if @question.story_builder.present? %>
+      <div class="flex items-center justify-between gap-3">
+        <div><%= @question.story_builder.title %></div>
+        <a class="btn btn-primary btn-small" href="/admin/story_builders/<%= @question.story_builder&.id %>">Go to Builder</a>
+      </div>
     <% else %>
       <div>This question is not present in any story builder.</div>
     <% end %>
-  </div>-->
+  </div>
 
   <div class="border p-2 mb-4">
     <h5 class="mb-2">Custom AI Prompt</h5>
