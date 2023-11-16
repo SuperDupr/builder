@@ -13,7 +13,7 @@
 #  story_builder_id   :integer
 #
 class Question < ApplicationRecord
-  acts_as_list
+  acts_as_list scope: :story_builder
 
   # Associations
   has_many :prompts, dependent: :destroy
