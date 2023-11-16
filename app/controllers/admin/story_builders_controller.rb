@@ -23,8 +23,8 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def show
-    @questionnaires = @story_builder.questionnaires.order(position: :asc)
-    @questionnaires_size = @questionnaires.size
+    @questions = @story_builder.questions.order(position: :asc)
+    @questions_size = @questions.size
   end
 
   def edit
@@ -51,14 +51,14 @@ class Admin::StoryBuildersController < Admin::ApplicationController
   end
 
   def sort_questions
-    questionnaire = @story_builder.questionnaires.find_by(question_id: params[:question_id])
+    question = @story_builder.questions.find(params[:question_id])
 
     respond_to do |format|
       format.json do
-        if questionnaire.update(position: params[:question][:position].to_i)
-          render json: {success: true, questionnaire: questionnaire}
+        if question.update(position: params[:question][:position].to_i)
+          render json: {success: true, question: question}
         else
-          render json: {success: false, questionnaire: nil}
+          render json: {success: false, question: nil}
         end
       end
     end
