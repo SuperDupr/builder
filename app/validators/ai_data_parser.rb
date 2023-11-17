@@ -96,7 +96,7 @@ class AiDataParser
     private
 
     def sequence_and_format_validations
-      @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?))?\z/.match?(word)
+      @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?)(:A#(100|[1-9]\d?))?)?\z/.match?(word)
     end
   end
 
@@ -118,13 +118,19 @@ class AiDataParser
       target_objects = word.split(":")
 
       question_position = target_objects[0][-1]
-      prompt_id = target_objects.size > 1 ? target_objects[1][-1] : nil
+
+      if target_objects.size > 1
+        prompt_id = target_objects[1][-1] || nil
+        answer_position = target_objects.size == 3 ? target_objects[2][-1] : nil
+      end
       
-      query_answer(question_position, prompt_id)
+      query_answer(question_position, prompt_id, answer_position)
     end
 
-    def query_answer(position, prompt_id)
-      if position && prompt_id
+    def query_answer(position, prompt_id, answer_position)
+      if position && prompt_id && answer_position
+        @story.answers.joins(:question).where(prompt_id: prompt_id, position: answer_position, questions: { position: position })&.response
+      elsif position && prompt_id
         @story.answers.joins(:question).find_by(prompt_id: prompt_id, questions: { position: position })&.response
       else
         @story.answers.joins(:question).find_by(questions: { position: position })&.response
