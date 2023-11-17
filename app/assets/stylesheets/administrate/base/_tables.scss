@@ -227,6 +227,7 @@ table.new-design-table td{
   align-items: center;
   border-radius: 0.25rem;
   background: rgb(245, 245, 245);
+  max-width: 245px;
 }
 
 .cross{
@@ -237,4 +238,11 @@ table.new-design-table td{
   margin: auto;
   max-height: 200px;
   overflow: auto;
+}
+
+#ai_prompt_label:hover{
+  #question_ai_prompt_attached{
+    outline: 3px solid rgba(37, 99, 235, 0.4);
+    outline-offset: 1.5px;
+  }
 }

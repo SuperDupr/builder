@@ -1,4 +1,3 @@
-<%= @prompt.selector %>
 <div data-controller="checkbox" class="flex items-center relative">
   <div class="inline-flex items-center leading-none no-underline align-middle rounded">
     <div data-controller="dropdown">
@@ -12,7 +11,7 @@
         <div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md p-3">
           <% nodes.each do |node| %>
             <% if node.child_nodes.any? %>
-              <h5><%= node.title %></h5>
+              <h6 class="mb-1"><%= node.title %></h6>
               <% node.child_nodes.each do |child_node| %>
                 <%= render "single_select_option", node: child_node, prompt: @prompt %>
               <% end %>

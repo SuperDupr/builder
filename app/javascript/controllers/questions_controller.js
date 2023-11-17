@@ -18,10 +18,13 @@ export default class extends Controller {
   }
 
   toggleAiPromptContainerView(e) {
+    const aiPromptLabel = document.getElementById("aiPromptLabel")
     if (e.target.checked) {
+      aiPromptLabel.classList.remove('opacity-50')
       this.aiPromptTarget.style.display = "block"
       this.aiPromptTextareaTarget.required = true
     } else {
+      aiPromptLabel.classList.add('opacity-50')
       this.aiPromptTarget.style.display = "none"
       this.aiPromptTextareaTarget.required = false
     }
