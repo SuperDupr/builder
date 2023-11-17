@@ -129,7 +129,11 @@ class AiDataParser
 
     def query_answer(position, prompt_id, answer_position)
       if position && prompt_id && answer_position
-        @story.answers.joins(:question).where(prompt_id: prompt_id, position: answer_position, questions: { position: position })&.response
+        @story.answers.joins(:question).find_by(
+          prompt_id: prompt_id, 
+          position: answer_position, 
+          questions: { position: position 
+        })&.response
       elsif position && prompt_id
         @story.answers.joins(:question).find_by(prompt_id: prompt_id, questions: { position: position })&.response
       else
