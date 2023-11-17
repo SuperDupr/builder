@@ -3,8 +3,8 @@
   <%= f.text_field(:title, required: true, class: "rounded-lg w-1/2") %>
 
   <label class="mt-4">Prompt to AI</label>
-  <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2",
-    placeholder: "Instructions provided here will be served to finalize the story version. For example: Four delivery formats for your metaphor!", rows: 3) %>
+  <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", required: true,
+    placeholder: "Instructions provided here will be served  to finalize the story version. For example: Four delivery formats for your metaphor!", rows: 3) %>
 
   <h5 class="mt-4 mb-1">Existing Questions</h5>
   
