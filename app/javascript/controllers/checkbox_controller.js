@@ -29,7 +29,7 @@ export default class extends Controller {
   createButton(labelText, checkboxId) {
     const button = document.createElement("div");
     button.classList.add("select-tag-btn");
-    button.innerHTML = `${labelText} <i class="fas fa-xmark ml-2 p-1 cross cursor-pointer"></i>`;
+    button.innerHTML = `${labelText.length > 15 ? labelText.slice(0, 15) + '...' : labelText} <i class="fas fa-xmark ml-2 p-1 cross cursor-pointer"></i>`;
     const crossIcon = button.querySelector(".cross");
     
     crossIcon.addEventListener("click", () => {

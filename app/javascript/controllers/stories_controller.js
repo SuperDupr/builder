@@ -50,18 +50,17 @@ export default class extends Controller {
     const promptForward = document.getElementById('promptForward')
     const promptBackward = document.getElementById('promptBackward')
 
-    if (!fetchAfterQuestion) {
-      if (cursor === "backward") {
-        this.index--
-      } else if (cursor === "forward") {
-        this.index++
-      }
-    } else {
-      this.index = 0
-    }
     this.saveAnswer()
     if(this.saveAnswer()){
-
+      if (!fetchAfterQuestion) {
+        if (cursor === "backward") {
+          this.index--
+        } else if (cursor === "forward") {
+          this.index++
+        }
+      } else {
+        this.index = 0
+      }
       fetch(`/question/${questionId}/prompts?index=${this.index}&story_id=${storyId}`, {
         method: "GET",
         headers: {
@@ -146,10 +145,10 @@ export default class extends Controller {
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if(node.child_nodes.length > 0){
-        selectHTML += `<h5>${node.title}</h5>`
+        selectHTML += `<h6 class="mb-1">${node.title}</h6>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect = answerSelector.includes(child_node.id.toString())
+          let shouldSelect = answerSelector?.includes(child_node.id.toString())
   
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
             <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
@@ -159,7 +158,7 @@ export default class extends Controller {
   
       }
       else{
-        let shouldSelect = answerSelector.includes(node.id.toString())
+        let shouldSelect = answerSelector?.includes(node.id.toString())
         selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
           <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
           ${node.title}
@@ -203,10 +202,10 @@ export default class extends Controller {
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if(node.child_nodes.length > 0){
-        selectHTML += `<h5>${node.title}</h5>`
+        selectHTML += `<h6 class="mb-1">${node.title}</h6>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect =  promptSelector.includes(child_node.id.toString())
+          let shouldSelect =  promptSelector?.includes(child_node.id.toString())
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
             <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
             ${child_node.title}
@@ -214,7 +213,7 @@ export default class extends Controller {
         }
       }
       else{
-        let shouldSelect = promptSelector.includes(node.id.toString())
+        let shouldSelect = promptSelector?.includes(node.id.toString())
         selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
           <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
           ${node.title}
@@ -303,31 +302,31 @@ export default class extends Controller {
     const questionContent = document.getElementById("questionContent");
     
     // TODO: Add validations to handle index value correctly
-    if (cursor == "backward") {
-      if(this.qIndex >= 1){
-        if (nextQuestionButton.style.display === "none") {
-          nextQuestionButton.style.display = "inline-flex"
-        }
-        
-        if (finishLink) { finishLink.remove() }
-
-        this.qIndex--
-        // if(this.qIndex + 1 === 1){
-        //   event.target.classList.add("pointer-events-none", "opacity-50");
-        // }
-      }
-    } else if (cursor == "forward") {
-      if(this.qIndex + 1 < questionsCount){
-        prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
-        this.qIndex++
-        if(this.qIndex + 1 === questionsCount){
-          nextQuestionButton.style.display = "none"
-          questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch">Get me a Metaphor</a>`
-        }
-      }
-    }
     this.saveAnswer()
     if(this.saveAnswer()){
+      if (cursor == "backward") {
+        if(this.qIndex >= 1){
+          if (nextQuestionButton.style.display === "none") {
+            nextQuestionButton.style.display = "inline-flex"
+          }
+          
+          if (finishLink) { finishLink.remove() }
+  
+          this.qIndex--
+          // if(this.qIndex + 1 === 1){
+          //   event.target.classList.add("pointer-events-none", "opacity-50");
+          // }
+        }
+      } else if (cursor == "forward") {
+        if(this.qIndex + 1 < questionsCount){
+          prevQuestionButton.classList.remove("pointer-events-none", "opacity-50");
+          this.qIndex++
+          if(this.qIndex + 1 === questionsCount){
+            nextQuestionButton.style.display = "none"
+            questionsNavigationSection.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch">Get me a Metaphor</a>`
+          }
+        }
+      }
       fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
         method: "GET",
         headers: {
