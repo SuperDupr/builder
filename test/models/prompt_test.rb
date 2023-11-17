@@ -3,6 +3,7 @@
 # Table name: prompts
 #
 #  id          :bigint           not null, primary key
+#  position    :integer
 #  post_text   :string
 #  pre_text    :string
 #  selector    :string           is an Array

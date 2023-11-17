@@ -321,6 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_10_113740) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "selector", array: true
+    t.integer "position"
     t.index ["question_id"], name: "index_prompts_on_question_id"
   end
 

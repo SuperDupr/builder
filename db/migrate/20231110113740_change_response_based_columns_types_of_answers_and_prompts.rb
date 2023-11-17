@@ -3,9 +3,11 @@ class ChangeResponseBasedColumnsTypesOfAnswersAndPrompts < ActiveRecord::Migrati
     change_column :answers, :response, "varchar[] USING (string_to_array(response, ','))"
     change_column :prompts, :selector, "varchar[] USING (string_to_array(selector, ','))"
     add_column :answers, :position, :integer
+    add_column :prompts, :position, :integer
   end
   
   def down
+    remove_column :prompts, :position
     remove_column :answers, :position
     change_column :prompts, :selector, :string
     change_column :answers, :response, :text
