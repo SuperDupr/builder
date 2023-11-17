@@ -4,7 +4,7 @@
 
   <label class="mt-4">Prompt to AI</label>
   <%= f.text_area(:admin_ai_prompt, class: "rounded-lg w-1/2", required: true,
-    placeholder: "Example: You are a story creator. Create a short concise story in a formal voice!", rows: 3) %>
+    placeholder: "Instructions provided here will be served  to finalize the story version. For example: Four delivery formats for your metaphor!", rows: 3) %>
 
   <h5 class="mt-4 mb-1">Existing Questions</h5>
   
@@ -12,8 +12,8 @@
     <div class="my-2">
       <%= collection_check_boxes(:builder, :q_ids, @questions, :id, :title) do |b| %>
         <div class="mb-1 items-center flex">
-          <%= b.object.position %>.
-          <div class="ml-2 mb-[4px]" data-controller="tooltip" data-tippy-content="Marking the checkbox will make question Active inside builder. This showing in story creation process.">
+          #<%= b.object.position %>.
+          <div class="ml-2 mb-[4px]" data-controller="tooltip" data-tippy-content="Marking the checkbox will make question Active inside builder. Thus showing in story creation process.">
             <%= b.check_box(checked: @tracked_question_ids.include?(b.object.id)) %>
           </div>
           <!-- Use this column for showing position of the question -->

@@ -239,3 +239,10 @@ table.new-design-table td{
   max-height: 200px;
   overflow: auto;
 }
+
+#ai_prompt_label:hover{
+  #question_ai_prompt_attached{
+    outline: 3px solid rgba(37, 99, 235, 0.4);
+    outline-offset: 1.5px;
+  }
+}
