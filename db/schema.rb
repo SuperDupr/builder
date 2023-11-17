@@ -133,6 +133,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_10_113740) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "prompt_id"
+    t.integer "position"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["story_id"], name: "index_answers_on_story_id"
   end

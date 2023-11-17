@@ -3,6 +3,7 @@
 # Table name: answers
 #
 #  id          :bigint           not null, primary key
+#  position    :integer
 #  response    :string           is an Array
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -21,6 +22,7 @@
 #  fk_rails_...  (story_id => stories.id)
 #
 class Answer < ApplicationRecord
+  acts_as_list scope: [:question_id]
   # Associations
   belongs_to :question
   belongs_to :story
