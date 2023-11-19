@@ -435,7 +435,7 @@ export default class extends Controller {
       selectCheckbox.forEach(function(checkbox) {
         if (checkbox.checked) {
           anyChecked = true;
-          checkedValues.push(checkbox.value);
+          checkedValues.push(checkbox.dataset.text.trim());
         }
       });
       console.log(anyChecked)
@@ -462,7 +462,7 @@ export default class extends Controller {
         selectCheckbox.forEach(function(checkbox) {
           if (checkbox.checked) {
             anyChecked = true;
-            checkedValues.push(checkbox.value);
+            checkedValues.push(checkbox.dataset.text.trim());
           }
         });
         if (!anyChecked) {
