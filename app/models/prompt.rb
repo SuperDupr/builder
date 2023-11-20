@@ -6,7 +6,7 @@
 #  position    :integer
 #  post_text   :string
 #  pre_text    :string
-#  selector    :string           is an Array
+#  selector    :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  question_id :bigint

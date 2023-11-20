@@ -116,28 +116,36 @@ class AiDataParser
 
     def extract_counter_parts
       target_objects = word.split(":")
-
       question_position = target_objects[0][-1]
 
       if target_objects.size > 1
-        prompt_id = target_objects[1][-1] || nil
+        prompt_position = target_objects[1][-1] || nil
         answer_position = target_objects.size == 3 ? target_objects[2][-1] : nil
       end
       
-      query_answer(question_position, prompt_id, answer_position)
+      query_answer(question_position, prompt_position, answer_position)
     end
 
-    def query_answer(position, prompt_id, answer_position)
-      if position && prompt_id && answer_position
-        @story.answers.joins(:question).find_by(
-          prompt_id: prompt_id, 
+    def query_answer(question_position, prompt_position, answer_position)
+      if question_position && prompt_position && answer_position
+        @story.answers.joins(question: :prompts).find_by(
           position: answer_position, 
-          questions: { position: position 
-        })&.response
-      elsif position && prompt_id
-        @story.answers.joins(:question).find_by(prompt_id: prompt_id, questions: { position: position })&.response
+          questions: { 
+            position: question_position,
+            prompts: { position: prompt_position }
+          }
+        )&.response
+      elsif question_position && prompt_position
+        @story.answers.joins(question: :prompts).find_by(
+          questions: { 
+            position: question_position, 
+            prompts: { 
+              position: prompt_position 
+            }
+          }
+        )&.response
       else
-        @story.answers.joins(:question).find_by(questions: { position: position })&.response
+        @story.answers.joins(:question).find_by(questions: { position: question_position })&.response
       end
     end
   end

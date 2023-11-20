@@ -4,7 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  position    :integer
-#  response    :string           is an Array
+#  response    :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  prompt_id   :integer

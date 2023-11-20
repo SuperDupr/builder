@@ -35,7 +35,7 @@ class Accounts::StoriesController < Accounts::BaseController
     else
       @question = @questions.order(position: :asc).first
       @answer = @question.answers.find_by(story_id: @story.id)&.response
-      @prompts = @question.prompts.order(created_at: :asc)
+      @prompts = @question.prompts
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
     end
@@ -163,17 +163,26 @@ class Accounts::StoriesController < Accounts::BaseController
   def track_answers
     question = Question.find(params[:id])
     prompt = Prompt.find_by(id: params[:prompt_id])
+    answers = []
+    success = true
 
-    @answer = track_answer_as_per_prompt(question, prompt)
+    selectors = params[:selector].split(",")
+    
+    selectors.each do |selector|
+      answers << track_answer_as_per_prompt(question, prompt, selector)
+    end
+
+    answers.each do |answer| 
+      unless answer.save
+        success = false 
+      else
+        prompt.update(selector: params[:selector]) if prompt.present?
+      end
+    end
 
     respond_to do |format|
       format.json do
-        if @answer.save
-          prompt.update(selector: params[:selector]) if prompt.present?
-          render json: {answer: @answer, success: true}
-        else
-          render json: {answer: nil, success: false}
-        end
+        render json: {answers: answers, success: success}
       end
     end
   end
@@ -237,24 +246,14 @@ class Accounts::StoriesController < Accounts::BaseController
     redirect_to(account_stories_path(current_account), alert: "Story has already been published!") if @story.published?
   end
 
-  def track_answer_as_per_prompt(question, prompt)
+  def track_answer_as_per_prompt(question, prompt, selector)
     if prompt.present?
-      answer = question.answers.find_by(story_id: params[:story_id], prompt_id: prompt.id)
-
-      if answer.present?
-        answer.response = params[:selector]
-        answer
-      else
-        question.answers.new(story_id: params[:story_id], prompt_id: prompt.id, response: params[:selector])
+      question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id) do |answer|
+        answer.response = selector
       end
     else
-      answer = question.answers.find_by(story_id: params[:story_id])
-
-      if answer.present?
-        answer.response = params[:selector]
-        answer
-      else
-        question.answers.new(story_id: params[:story_id], response: params[:selector])
+      question.answers.find_or_initialize_by(story_id: params[:story_id]) do |answer|
+        answer.response = selector
       end
     end
   end
@@ -275,5 +274,12 @@ class Accounts::StoriesController < Accounts::BaseController
     end
 
     node_selection
+  end
+
+  def mutate_question_title(story_id)
+    AiDataParser.new(
+      story_id: story_id,
+      data: @question.title
+    ).parse
   end
 end

@@ -50,8 +50,9 @@ export default class extends Controller {
     const promptForward = document.getElementById('promptForward')
     const promptBackward = document.getElementById('promptBackward')
 
-    this.saveAnswer()
-    if(this.saveAnswer()){
+    let res = fetchAfterQuestion ? true : this.saveAnswer()
+    
+    if(res){
       if (!fetchAfterQuestion) {
         if (cursor === "backward") {
           this.index--
@@ -124,7 +125,6 @@ export default class extends Controller {
   }
 
   constructSelectionElementForNodes(nodes, answerSelector) {
-    console.log(answerSelector)
     const answerProvider = document.getElementById("answerProvider")
     answerProvider.setAttribute("data-only-node-mode", "on")
     answerProvider.setAttribute("data-prompt-mode", "off")
@@ -148,19 +148,19 @@ export default class extends Controller {
         selectHTML += `<h6 class="mb-1">${node.title}</h6>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect = answerSelector?.includes(child_node.id.toString())
+          let shouldSelect = answerSelector?.includes(child_node.title)
   
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
-            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''} data-text="${child_node.title}">
             ${child_node.title}
           </label>`;
         }
   
       }
       else{
-        let shouldSelect = answerSelector?.includes(node.id.toString())
-        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
-          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
+        let shouldSelect = answerSelector?.includes(node.title)
+        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1" data-text="${node.title}">
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''} data-text="${node.title}">
           ${node.title}
         </label>`;
       }
@@ -205,17 +205,17 @@ export default class extends Controller {
         selectHTML += `<h6 class="mb-1">${node.title}</h6>`
         for (let j = 0; j < node.child_nodes.length; j++) {
           const child_node = node.child_nodes[j];
-          let shouldSelect =  promptSelector?.includes(child_node.id.toString())
+          let shouldSelect =  promptSelector?.includes(child_node.title)
           selectHTML += `<label for="${child_node.id}" class="mb-2 flex gap-1">
-            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''}>
+            <input data-checkbox-target="checkbox" id="${child_node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${child_node.id}' ${shouldSelect ? 'checked' : ''} data-text="${child_node.title}">
             ${child_node.title}
           </label>`;
         }
       }
       else{
-        let shouldSelect = promptSelector?.includes(node.id.toString())
-        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1">
-          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''}>
+        let shouldSelect = promptSelector?.includes(node.title)
+        selectHTML += `<label for="${node.id}" class="mb-2 flex gap-1" data-text="${node.title}">
+          <input data-checkbox-target="checkbox" id="${node.id}" type="checkbox" class="mr-1 mt-[2px] nodes" value='${node.id}' ${shouldSelect ? 'checked' : ''} data-text="${node.title}">
           ${node.title}
         </label>`;
       }
@@ -277,7 +277,7 @@ export default class extends Controller {
     const aicontentMode = answerProvider.dataset.aicontentMode
     const contentBtn = document.getElementById("contentBtn");
     // if(aicontentMode === "off" || contentBtn.innerHTML === 'Create another version'){
-      this.saveAnswer()
+      // this.saveAnswer()
       this.promptNavigationFunction(event, false, questionId, storyId)
     // }
   }
@@ -302,8 +302,8 @@ export default class extends Controller {
     const questionContent = document.getElementById("questionContent");
     
     // TODO: Add validations to handle index value correctly
-    this.saveAnswer()
-    if(this.saveAnswer()){
+    let res = this.saveAnswer()
+    if(res){
       if (cursor == "backward") {
         if(this.qIndex >= 1){
           if (nextQuestionButton.style.display === "none") {
@@ -327,7 +327,7 @@ export default class extends Controller {
           }
         }
       }
-      fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}`, { 
+      fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}&story_id=${storyId}`, { 
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -371,58 +371,8 @@ export default class extends Controller {
     }
   }
 
-  // disableNavigationButtonsOnChange(event){
-  //   const promptForward = document.getElementById('promptForward')
-  //   const nextQuestionButton = document.getElementById('questionForward');
-  //   const finishButton = document.getElementById('finishLink');
-  //   const errorText = document.getElementById("errorText")
-    
-  //   if(event.target.value === ''){
-  //     nextQuestionButton?.classList.add("pointer-events-none");
-  //     promptForward?.classList.add("pointer-events-none");
-  //     finishButton?.classList.add("pointer-events-none");
-  //     errorText.classList.remove("hidden");
-  //   }
-  //   else{
-  //     nextQuestionButton?.classList.remove("pointer-events-none");
-  //     promptForward?.classList.remove("pointer-events-none");
-  //     finishButton?.classList.remove("pointer-events-none");
-  //     errorText.classList.add("hidden");
-  //   }
-
-  // }
-
-  // stopNavigation() {
-  //   const answerProvider = document.getElementById("answerProvider")
-  //   const promptMode = answerProvider.dataset.promptMode
-  //   let response = false
-
-  //   if (promptMode === "on") {
-  //     let selectedValue = document.getElementById("nodes").value
-  //     if (selectedValue === "") {
-  //       alert('aaa')
-  //       response = true
-  //     }
-  //   } else if (promptMode === "off") {
-  //     let answerFieldValue
-
-  //     if (answerProvider.dataset.onlyNodeMode === "on") {
-  //       let selectElement = document.getElementById("nodes")
-  //       answerFieldValue = selectElement.options[selectElement.selectedIndex].text
-  //     } else {
-  //       answerFieldValue = document.getElementById("answer").value
-  //     }
-
-  //     if (answerFieldValue === "") {
-  //       alert('aaa')
-  //       response = true
-  //     }
-  //   }
-
-  //   return response
-  // }
-
   saveAnswer() {
+    console.log("Called #saveAnswer")
     const answerProvider = document.getElementById("answerProvider")
     const promptMode = answerProvider.dataset.promptMode
     const errorText = document.getElementById("errorText")
@@ -549,14 +499,14 @@ export default class extends Controller {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            console.log("Answer saved successfully:", data.answer);
+            console.log("Answer saved successfully:", data.answers);
             // saveAnswerButton.textContent = "Saved"
             // setTimeout(() => {
               // saveAnswerButton.classList.remove("pointer-events-none", "opacity-50");
               // saveAnswerButton.textContent = "Save"
             // }, 800);
           } else {
-            console.error("Failed to save answer:", data.answer);
+            console.error("Failed to save answer:", data.answers);
           }
         })
     }, 1000);
@@ -569,8 +519,12 @@ export default class extends Controller {
     const nextQuestionButton = document.getElementById('questionForward');
     const aiContentDiv = document.getElementById("aiContentDiv")
     const questionContent = document.getElementById("questionContent")
+    let storyId = document.getElementById("storyDetails").dataset.storyId
+    let questionId = document.getElementById("questionContainer").dataset.id
+
     spinnerElement.style.display = "flex";
-    fetch(`/ai_content`, {
+    
+    fetch(`/ai_content?question_id=${questionId}&story_id=${storyId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -589,19 +543,6 @@ export default class extends Controller {
         console.log(data)
       }, 1000);
     })
-  }
-
-  getAiContent() {
-    const contentBtn = document.getElementById("contentBtn");
-    if(contentBtn.innerHTML === 'Get Content'){
-      this.saveAnswer()
-      if(this.saveAnswer()){
-        this.fetchAiContent()
-      }
-    }
-    else{
-      this.fetchAiContent()
-    }
   }
   
   reconnect(event) {

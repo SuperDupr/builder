@@ -1,7 +1,7 @@
 <div class="flex justify-between items-center gap-2 w-full">
   <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-gray btn-outline mr-2 pointer-events-none opacity-50", data: { action: "stories#questionNavigation", cursor: "backward", story_builder_id: @story.story_builder.id }) %>
   <div id="questionsNavigationSection">
-    <%= link_to("Get Content", "javascript:void(0)", id:'contentBtn', class: "btn btn-gray me-1 #{!@question.ai_prompt_attached ? 'hidden' : ''}", data: { action: "stories#getAiContent" }) %>
+    <%= link_to("Get Content", "javascript:void(0)", id:'contentBtn', class: "btn btn-gray me-1 #{!@question.ai_prompt_attached ? 'hidden' : ''}", data: { action: "stories#fetchAiContent" }) %>
     <% if @questions.count <= 1 %>
       <%= link_to("Get me a Metaphor", account_story_path(@story.id, account_id: current_account.id), class: "btn btn-gray", method: :patch) %>
     <% else %>
