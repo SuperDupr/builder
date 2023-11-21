@@ -83,7 +83,7 @@ class Accounts::StoriesController < Accounts::BaseController
         if @question.nil?
           render json: {question_id: nil, question_title: nil, success: false}
         else
-          render json: {question_id: @question.id, question_title: @question.title, ai_mode: @question.ai_prompt_attached, success: true}
+          render json: {question_id: @question.id, question_title: nil, ai_mode: @question.ai_prompt_attached, success: true}
         end
       end
     end
@@ -174,15 +174,23 @@ class Accounts::StoriesController < Accounts::BaseController
 
     answers.each do |answer| 
       unless answer.save
-        success = false 
+        success = false
       else
         prompt.update(selector: params[:selector]) if prompt.present?
       end
     end
 
+    story = Story.find_by(id: answers.first.story_id)
+
+    if story.present?
+      next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
+      next_question = story.story_builder.questions.find_by(position: next_position)
+      question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
+    end
+    
     respond_to do |format|
       format.json do
-        render json: {answers: answers, success: success}
+        render json: {answers: answers, next_question_title: question_title, success: success}
       end
     end
   end
@@ -247,15 +255,11 @@ class Accounts::StoriesController < Accounts::BaseController
   end
 
   def track_answer_as_per_prompt(question, prompt, selector)
-    if prompt.present?
-      question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id) do |answer|
-        answer.response = selector
-      end
-    else
-      question.answers.find_or_initialize_by(story_id: params[:story_id]) do |answer|
-        answer.response = selector
-      end
-    end
+    answer = prompt.present? ?
+      question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id) :
+      question.answers.find_or_initialize_by(story_id: params[:story_id])
+    answer.response = selector
+    answer
   end
 
   def build_node_selection_structure(parent_nodes)

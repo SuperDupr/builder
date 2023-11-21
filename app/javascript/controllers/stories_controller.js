@@ -289,6 +289,7 @@ export default class extends Controller {
     let questionContainer = document.getElementById("questionContainer")
     let questionsNavigationSection = document.getElementById("questionsNavigationSection")
     let cursor = event.target.dataset.cursor
+    this.cursor = cursor
     let storyBuilderId = event.target.dataset.storyBuilderId
     let storyId = document.getElementById("storyDetails").dataset.storyId
     let accountId = document.getElementById("access").dataset.accountId
@@ -484,12 +485,14 @@ export default class extends Controller {
   // Request to track answer of a question
   trackAnswer(questionId, storyId, promptId, selectedText) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    let questionContainer = document.getElementById("questionContainer")
+    let cursor = this.cursor
     // let saveAnswerButton = document.getElementById("saveAnswer")
     // saveAnswerButton.classList.add("pointer-events-none", "opacity-50");
     // saveAnswerButton.textContent = "Saving..."
     setTimeout(() => {
       console.log(selectedText)
-      fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}`, {
+      fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}&cursor=${cursor}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -500,6 +503,7 @@ export default class extends Controller {
         .then(data => {
           if (data.success) {
             console.log("Answer saved successfully:", data.answers);
+            questionContainer.textContent = data.next_question_title
             // saveAnswerButton.textContent = "Saved"
             // setTimeout(() => {
               // saveAnswerButton.classList.remove("pointer-events-none", "opacity-50");
