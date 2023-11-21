@@ -50,6 +50,8 @@ class AiDataParser
   def parse
     scanner = StringScanner.new(data)
 
+    eliminate_spaces_from_wrapped_tags
+
     while scanner.scan_until(/\{\{([^{}]+)\}\}/)
       word = eliminate_spaces_from_word(scanner[1])
       
@@ -57,11 +59,15 @@ class AiDataParser
 
       validator[:success] ? find_answer_and_substitute(word) : @data.sub!(word, "______")
     end
-
+    
     unwrap_dynamic_content
   end  
   
   private
+  
+  def eliminate_spaces_from_wrapped_tags
+    @data = @data.gsub(/\{\{([^{}]+)\}\}/) { |match| match.gsub(/\s+/, '') }
+  end
   
   # This method removes the curly braces and any surrounding 
   # spaces and leaves only the content inside.
