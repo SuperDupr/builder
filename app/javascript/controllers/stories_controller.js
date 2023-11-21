@@ -263,7 +263,7 @@ export default class extends Controller {
     return `
       <h5 class="w-full mb-6">Answer</h5>
       <div class="min-h-400 flex-col" id="questionContent">
-      <textarea name="answer" id="answer" value='${answer?.[1] ? answer[1] : ""}' class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer?.[1] ? answer[1] : ""}</textarea>
+      <textarea name="answer" id="answer" value='${answer?.[1] ? answer[1] : ""}' class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
       </div>
       <div id="aiContentDiv"></div>
