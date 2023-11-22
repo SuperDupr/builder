@@ -170,22 +170,21 @@ class Accounts::StoriesController < Accounts::BaseController
     answers = []
     success = true
 
-    if params[:ai_mode] == "on"
-      selectors = [params[:selector]]
+    selectors = if params[:ai_mode] == "on"
+      [params[:selector]]
     else
-      selectors = params[:selector].split(",")
+      params[:selector].split(",")
     end
-    
-    
+
     selectors.each do |selector|
       answers << track_answer_as_per_prompt(question, prompt, selector)
     end
 
-    answers.each do |answer| 
-      unless answer.save
-        success = false
-      else
+    answers.each do |answer|
+      if answer.save
         prompt.update(selector: params[:selector]) if prompt.present?
+      else
+        success = false
       end
     end
 
@@ -193,15 +192,14 @@ class Accounts::StoriesController < Accounts::BaseController
       question_title = question.title
     else
       story = Story.find_by(id: answers.first.story_id)
-  
+
       if story.present?
-        next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
+        next_position = (params[:cursor] == "backward") ? question.position - 1 : question.position + 1
         next_question = story.story_builder.questions.find_by(position: next_position)
         question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
       end
     end
 
-    
     respond_to do |format|
       format.json do
         render json: {answers: answers, next_question_title: question_title, success: success}
@@ -223,9 +221,9 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def ai_based_questions_content
     question = Question.find(params[:question_id])
-    
+
     dynamic_content = AiDataParser.new(
-      story_id: params[:story_id], 
+      story_id: params[:story_id],
       data: question.ai_prompt
     ).parse
 
@@ -233,7 +231,7 @@ class Accounts::StoriesController < Accounts::BaseController
       current_user: current_user,
       content: dynamic_content
     })
-    
+
     respond_to do |format|
       format.json do
         render json: {
