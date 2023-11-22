@@ -35,7 +35,7 @@ class Accounts::StoriesController < Accounts::BaseController
     else
       @question = @questions.order(position: :asc).first
       @answer = @question.answers.find_by(story_id: @story.id)&.response
-      @prompts = @question.prompts
+      @prompts = @question.prompts.order(position: :asc)
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
     end
@@ -63,11 +63,14 @@ class Accounts::StoriesController < Accounts::BaseController
           notice = "Story marked as completed successfully!"
         end
 
+        dynamic_prompt = AiDataParser.new(story_id: @story.id, data: @story.story_builder.admin_ai_prompt).parse
+
+        puts dynamic_prompt
+
         StoryCreatorJob.perform_later({
           current_user: current_user,
           story: @story,
-          raw_data: Question.questionnaires_conversational_data(story_id: @story.id),
-          admin_ai_prompt: @story.story_builder.admin_ai_prompt
+          admin_ai_prompt: dynamic_prompt
         })
         redirect_to(generated_content_path(@story.id), notice: notice)
       end
@@ -92,7 +95,8 @@ class Accounts::StoriesController < Accounts::BaseController
   def prompt_navigation
     # TODO: Shorten the scope by querying the questions of story object
     question = Question.find(params[:id])
-    @prompt = question.prompts[params[:index].to_i]
+    index = params[:index].to_i + 1
+    @prompt = question.prompts.find_by(position: index)
     answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
     node_selection = build_node_selection_structure(question.parent_nodes)
@@ -166,7 +170,12 @@ class Accounts::StoriesController < Accounts::BaseController
     answers = []
     success = true
 
-    selectors = params[:selector].split(",")
+    if params[:ai_mode] == "on"
+      selectors = [params[:selector]]
+    else
+      selectors = params[:selector].split(",")
+    end
+    
     
     selectors.each do |selector|
       answers << track_answer_as_per_prompt(question, prompt, selector)
@@ -180,13 +189,18 @@ class Accounts::StoriesController < Accounts::BaseController
       end
     end
 
-    story = Story.find_by(id: answers.first.story_id)
-
-    if story.present?
-      next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
-      next_question = story.story_builder.questions.find_by(position: next_position)
-      question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
+    if params[:cursor] == "undefined"
+      question_title = question.title
+    else
+      story = Story.find_by(id: answers.first.story_id)
+  
+      if story.present?
+        next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
+        next_question = story.story_builder.questions.find_by(position: next_position)
+        question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
+      end
     end
+
     
     respond_to do |format|
       format.json do
@@ -208,20 +222,20 @@ class Accounts::StoriesController < Accounts::BaseController
   end
 
   def ai_based_questions_content
+    question = Question.find(params[:question_id])
+    
+    dynamic_content = AiDataParser.new(story_id: params[:story_id], data: question.ai_prompt).parse
+
+    content = GptBuilders::StoryTeller.call({
+      model: "gpt-3.5-turbo",
+      admin_ai_prompt: dynamic_content
+    })
+    
     respond_to do |format|
       format.json do
         render json: {
-          content: "Imagine if protecting your digital 
-            assets could be as robust and 
-            straightforward as putting on a high-
-            tech football helmet before a big 
-            game. Just as these cutting-edge 
-            helmets enhance the safety of 
-            athletes on the field, our product has 
-            been engineered to provide superior security
-            to your data, shielding it from cyber impacts
-            and ensuring a seamless performance."
-          }
+          content: content
+        }
       end
     end
   end

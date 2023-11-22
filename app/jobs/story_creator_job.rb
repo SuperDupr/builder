@@ -13,7 +13,6 @@ class StoryCreatorJob < ApplicationJob
     sleep(2)
 
     @response = GptBuilders::StoryTeller.call({
-      raw_data: options[:raw_data],
       model: "gpt-3.5-turbo",
       admin_ai_prompt: options[:admin_ai_prompt]
     })

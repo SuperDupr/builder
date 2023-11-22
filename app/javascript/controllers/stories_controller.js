@@ -73,6 +73,8 @@ export default class extends Controller {
           response.json().then((data) => {
             if (data.success) {
               answerProviderArea.innerHTML = ""
+
+              console.log(data)
   
               if (data.nodes_without_prompt) {
                 console.log("I am here!")
@@ -263,7 +265,7 @@ export default class extends Controller {
     return `
       <h5 class="w-full mb-6">Answer</h5>
       <div class="min-h-400 flex-col" id="questionContent">
-      <textarea name="answer" id="answer" value='${answer?.[1] ? answer[1] : ""}' class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer}</textarea>
+      <textarea name="answer" id="answer" value='${answer}' class="form-control lg:w-2/3 xl:w-1/2 mx-auto" placeholder="Provide your answer here.." rows="3">${answer}</textarea>
       <div id="errorText" class="text-red-500 text-center fs-15 mt-1 hidden">Please write answer to save response</div>
       </div>
       <div id="aiContentDiv"></div>
@@ -341,6 +343,7 @@ export default class extends Controller {
               questionNumber.textContent = this.qIndex + 1
               questionContainer.dataset.id = data.question_id
               questionContainer.textContent = data.question_title
+              answerProvider.dataset.aicontentMode = data.ai_mode ? "on" : "off"
               questionContent.style.display = "block";
               console.log(data.ai_mode)
               if(data.ai_mode){
@@ -348,7 +351,6 @@ export default class extends Controller {
                   contentBtn.innerHTML = 'Get Content'
                   contentBtn.style.display = 'inline-flex'
                 }
-                nextQuestionButton.style.display = 'none'
               }
               else{
                 if(contentBtn){
@@ -377,6 +379,7 @@ export default class extends Controller {
     const answerProvider = document.getElementById("answerProvider")
     const promptMode = answerProvider.dataset.promptMode
     const errorText = document.getElementById("errorText")
+    let answerTrackedBefore = false
     
     if (promptMode === "on") {
       let selectCheckbox = document.querySelectorAll(".nodes")
@@ -423,10 +426,11 @@ export default class extends Controller {
           errorText.classList.add("hidden");
           let questionId = document.getElementById("questionContainer").dataset.id
           let storyId = document.getElementById("storyDetails").dataset.storyId
+          console.log("only-node-mode-on")
           this.trackAnswer(questionId, storyId, "", checkedValues)
           return true
         }
-      } else {
+      } else if (answerProvider.dataset.onlyNodeMode === "off") {
         answerFieldValue = document.getElementById("answer").value
         const checkedValues = []
         if (answerFieldValue === '') {
@@ -437,11 +441,20 @@ export default class extends Controller {
           errorText.classList.add("hidden");
           let questionId = document.getElementById("questionContainer").dataset.id
           let storyId = document.getElementById("storyDetails").dataset.storyId
-          this.trackAnswer(questionId, storyId, "", checkedValues)
+          console.log("only-node-mode-off")
           // return true
+          if (!answerTrackedBefore) {
+            this.trackAnswer(questionId, storyId, "", checkedValues)
+            answerTrackedBefore = true
+          }
         }
       }
-      answerFieldValue = document.getElementById("answer").value
+
+      if (answerProvider.dataset.aicontentMode === "on") {
+        answerFieldValue = document.getElementById("answer").textContent
+      } else if (answerProvider.dataset.aicontentMode === "off") {
+        answerFieldValue = document.getElementById("answer").value
+      }
       const checkedValues = []
       console.log(checkedValues)
       if (answerFieldValue === '') {
@@ -452,7 +465,10 @@ export default class extends Controller {
         errorText.classList.add("hidden");
         let questionId = document.getElementById("questionContainer").dataset.id
         let storyId = document.getElementById("storyDetails").dataset.storyId
-        this.trackAnswer(questionId, storyId, "", checkedValues)
+        console.log("When answer field is not empty string")
+        if (!answerTrackedBefore) {
+          this.trackAnswer(questionId, storyId, "", checkedValues)
+        }
         return true
       }
 
@@ -486,13 +502,14 @@ export default class extends Controller {
   trackAnswer(questionId, storyId, promptId, selectedText) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let questionContainer = document.getElementById("questionContainer")
+    const aicontentMode = document.getElementById("answerProvider").dataset.aicontentMode
     let cursor = this.cursor
     // let saveAnswerButton = document.getElementById("saveAnswer")
     // saveAnswerButton.classList.add("pointer-events-none", "opacity-50");
     // saveAnswerButton.textContent = "Saving..."
     setTimeout(() => {
       console.log(selectedText)
-      fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}&cursor=${cursor}`, {
+      fetch(`/question/${questionId}/answers?story_id=${storyId}&prompt_id=${promptId}&selector=${selectedText}&cursor=${cursor}&ai_mode=${aicontentMode}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -525,6 +542,7 @@ export default class extends Controller {
     const questionContent = document.getElementById("questionContent")
     let storyId = document.getElementById("storyDetails").dataset.storyId
     let questionId = document.getElementById("questionContainer").dataset.id
+    let answerField = document.getElementById("answer")
 
     spinnerElement.style.display = "flex";
     
@@ -543,8 +561,10 @@ export default class extends Controller {
         contentBtn.innerHTML = 'Create another version'
         nextQuestionButton.style.display = 'inline-flex'
         aiContentDiv.innerHTML = 
-        `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data ? data.content + data.content + data.content : ""}</div>`
-        console.log(data)
+        `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.content}</div>`
+        console.log(data.content)
+        answerField.value = data.content
+        answerField.textContent = data.content
       }, 1000);
     })
   }
