@@ -224,17 +224,20 @@ class Accounts::StoriesController < Accounts::BaseController
   def ai_based_questions_content
     question = Question.find(params[:question_id])
     
-    dynamic_content = AiDataParser.new(story_id: params[:story_id], data: question.ai_prompt).parse
+    dynamic_content = AiDataParser.new(
+      story_id: params[:story_id], 
+      data: question.ai_prompt
+    ).parse
 
-    content = GptBuilders::StoryTeller.call({
-      model: "gpt-3.5-turbo",
-      admin_ai_prompt: dynamic_content
+    AiContentCreatorJob.perform_later({
+      current_user: current_user,
+      content: dynamic_content
     })
     
     respond_to do |format|
       format.json do
         render json: {
-          content: content
+          success: true
         }
       end
     end
@@ -292,12 +295,5 @@ class Accounts::StoriesController < Accounts::BaseController
     end
 
     node_selection
-  end
-
-  def mutate_question_title(story_id)
-    AiDataParser.new(
-      story_id: story_id,
-      data: @question.title
-    ).parse
   end
 end
