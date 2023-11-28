@@ -1,0 +1,32 @@
+<div class="mb-5 flex justify-between gap-3">
+  <div>
+    <p class="fs-30 mb-3">Welcome to <%= story.story_builder.title %> Builder! </p>
+    <p class="fs-20 mb-4"> First, answer the questions below to decide what kind of story would be most effective for what you would like to communicate to your audience. </p>
+  </div>
+  <div>
+    <div class="flex items-center gap-5">
+      <label for="access" class="flex items-center cursor-pointer mb-0" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+        <div class="relative">
+          <input id="access" type="checkbox" class="sr-only"
+            data-id="<%= @story.id %>"
+            <%= @story.private_access ? 'checked' : '' %>
+            data-account-id="<%= current_account.id %>"
+            data-change-access-mode="on"
+            data-draft-mode="off"
+            data-action="change->stories#updateStoryAccessOrDraftMode">
+          <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+          <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+        </div>
+        <div class="ml-3 text-gray-700 font-medium" id="privateAccess<%= @story.id %>"><%= @story.private_access === true ? 'Private' : 'Public' %></div>
+      </label>
+      <%= link_to("Save as Draft", "javascript:void(0)", 
+        data: {
+          id: @story.id,
+          account_id: current_account.id,
+          change_access_mode: "off",
+          draft_mode: "on",
+          action: "stories#updateStoryAccessOrDraftMode"      
+        }, class: "btn btn-gray") %>
+    </div>
+  </div>
+</div>
