@@ -11,7 +11,7 @@
         <%= render(partial: "story_builder_details_and_controls", locals: { story: @story }) %>
         
         <!--  Questions Start -->
-        <%= render("questions") %>
+        <%= render(partial: "questions", locals: { questions_count: @questions.count, question: @question }) %>
         <!--  Questions End -->
 
         <!-- Prompts section start -->
