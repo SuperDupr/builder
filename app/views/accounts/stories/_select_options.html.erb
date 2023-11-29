@@ -13,10 +13,10 @@
             <% if node.child_nodes.any? %>
               <h6 class="mb-1"><%= node.title %></h6>
               <% node.child_nodes.each do |child_node| %>
-                <%= render "single_select_option", node: child_node, prompt: @prompt %>
+                <%= render "single_select_option", node: child_node, prompt: prompt %>
               <% end %>
             <% else %>
-              <%= render "single_select_option", node: node, prompt: @prompt %>
+              <%= render "single_select_option", node: node, prompt: prompt %>
             <% end %>
           <% end %>
         </div>
@@ -25,21 +25,3 @@
   </div>
   <div data-checkbox-target="buttonContainer" class="flex flex-wrap gap-2 ml-2"></div>
 </div>
-<!--<select id="nodes" class="!w-auto slec-without-border" data-action="change->stories#disableNavigationButtonsOnChange">
-  <option selected value="">select</option>
-  <% @nodes.each do |node| %>
-    <% if node.child_nodes.any? %>
-      <optgroup label="<%= node.title %>">
-        <% node.child_nodes.each do |child_node| %>
-          <option value="<%= child_node.title %>" <%= child_node.title == @prompt.selector ? 'selected' : '' %>>
-            <%= child_node.title %>
-          </option>
-        <% end %>
-      </optgroup>
-    <% else %>
-      <option value="<%= node.title %>" <%= node.title == @prompt.selector ? 'selected' : '' %>>
-        <%= node.title %>
-      </option>
-    <% end %>
-  <% end %>
-</select>-->

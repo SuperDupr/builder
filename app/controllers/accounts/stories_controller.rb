@@ -38,6 +38,20 @@ class Accounts::StoriesController < Accounts::BaseController
       @prompts = @question.prompts.order(position: :asc)
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
+
+      @prompt_mode = @prompts.any? ? "on" : "off"
+      @ai_content_mode = @question.ai_prompt_attached ? "on" : "off"
+      @only_node_mode = @prompt_mode == "off" && @nodes.present? ? "on" : "off"
+      
+      if @prompt_mode == "on"
+        @renderer = "wrap_prompts_container"
+      elsif @prompt_mode == "off"
+        if @only_node_mode == "on"
+          @renderer = "nodes_prompts_container"
+        else
+          @renderer = "without_nodes_prompts_container"
+        end
+      end
     end
   end
 
@@ -196,6 +210,7 @@ class Accounts::StoriesController < Accounts::BaseController
   
       if story.present?
         next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
+        puts next_position
         next_question = story.story_builder.questions.find_by(position: next_position)
         question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
       end
