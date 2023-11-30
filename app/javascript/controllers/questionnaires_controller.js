@@ -35,7 +35,7 @@ export default class extends Controller {
 
         if(incrementedQIndex + 1 === parsedQuestionsCount){
           this.questionForwardTarget.style.display = "none"
-          this.questionsNavigationSectionTarget.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch">Get me a Metaphor</a>`
+          this.questionsNavigationSectionTarget.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch" data-questionnaires-target="finishLink">Get me a Metaphor</a>`
         }
       }
     }
@@ -44,7 +44,10 @@ export default class extends Controller {
   handleContentBtnAndNavigation(aiMode) {
     if(aiMode){
       if(this.hasContentBtnTarget){
-        this.contentBtnTarget.innerHTML = 'Get Content'
+        this.answerTarget.value.length > 0 ?
+          this.contentBtnTarget.textContent = "Create another version" :
+          this.contentBtnTarget.textContent = 'Get Content'
+          
         this.contentBtnTarget.style.display = 'inline-flex'
       }
     } else {
@@ -82,8 +85,8 @@ export default class extends Controller {
             this.answerProviderTarget.dataset.aicontentMode = data.ai_mode ? "on" : "off"
             this.questionContentTarget.style.display = "block"
             
-            this.handleContentBtnAndNavigation(data.ai_mode)
-            this.displayPrompt(event, true, data.question_id, storyId)
+            this.displayPrompt(event, true, data.question_id, storyId, data.ai_mode)
+            // this.handleContentBtnAndNavigation(data.ai_mode)
 
           } else {
             this.questionContainerTarget.textContent = 'An error occurred in fetching this question'
@@ -169,7 +172,7 @@ export default class extends Controller {
     return html
   }
 
-  displayPrompt(event, fetchAfterQuestion, questionId, storyId) {
+  displayPrompt(event, fetchAfterQuestion, questionId, storyId, aiMode = false) {
     let cursor = event.target.dataset.cursor
 
     // let answerSaved = fetchAfterQuestion ? true : this.saveAnswer()
@@ -195,6 +198,7 @@ export default class extends Controller {
               this.answerProviderTarget.innerHTML = ""
               this.answerProviderTarget.innerHTML = this.constructDataPerAnswerTextArea(data.html)
             }
+            this.handleContentBtnAndNavigation(aiMode)
           })
         }
       })
