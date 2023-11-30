@@ -385,4 +385,10 @@ export default class extends Controller {
       console.log("Request forwarded!")
     })
   }
+
+  reconnect(event) {
+    if (consumer.connection.isActive()) {
+      consumer.connection.reopen()
+    }
+  }
 }
