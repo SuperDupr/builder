@@ -100,7 +100,7 @@ class Accounts::StoriesController < Accounts::BaseController
         if @question.nil?
           render json: {question_id: nil, question_title: nil, success: false}
         else
-          render json: {question_id: @question.id, question_title: nil, ai_mode: @question.ai_prompt_attached, success: true}
+          render json: {question_id: @question.id, question_title: @question.title, ai_mode: @question.ai_prompt_attached, success: true}
         end
       end
     end
@@ -110,6 +110,7 @@ class Accounts::StoriesController < Accounts::BaseController
     # TODO: Shorten the scope by querying the questions of story object
     question = Question.find(params[:id])
     index = params[:index].to_i + 1
+    @prompts = question.prompts
     @prompt = question.prompts.find_by(position: index)
     answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
@@ -120,6 +121,17 @@ class Accounts::StoriesController < Accounts::BaseController
         if @prompt.nil?
           if node_selection.empty?
             render json: {
+              html: render_to_string(partial: "display_question_content", locals: { 
+                renderer: "without_nodes_prompts_container",
+                ai_content_mode: question.ai_prompt_attached,
+                only_node_mode: "off",
+                prompt_mode: "off",
+                prompts: @prompts,
+                prompt: @prompt,
+                nodes: question.parent_nodes,
+                answer: answer_response
+              },
+              formats: [:html]),
               nodes_without_prompt: false,
               prompt_id: nil,
               prompt_pretext: nil,
@@ -130,6 +142,17 @@ class Accounts::StoriesController < Accounts::BaseController
             }
           else
             render json: {
+              html: render_to_string(partial: "display_question_content", locals: { 
+                renderer: "nodes_prompts_container",
+                ai_content_mode: question.ai_prompt_attached,
+                only_node_mode: "on",
+                prompt_mode: "off",
+                prompts: @prompts,
+                prompt: @prompt,
+                nodes: question.parent_nodes,
+                answer: answer_response
+              },
+              formats: [:html]),
               nodes_without_prompt: true,
               nodes: node_selection,
               answer: answer_response,
@@ -138,6 +161,17 @@ class Accounts::StoriesController < Accounts::BaseController
           end
         else
           render json: {
+            html: render_to_string(partial: "display_question_content", locals: { 
+              renderer: "wrap_prompts_container",
+              ai_content_mode: question.ai_prompt_attached,
+              only_node_mode: "off",
+              prompt_mode: "on",
+              prompts: @prompts,
+              prompt: @prompt,
+              nodes: question.parent_nodes,
+              answer: answer_response
+            },
+            formats: [:html]),
             nodes_without_prompt: false,
             prompt_id: @prompt.id,
             prompt_pretext: @prompt.pre_text,
@@ -210,7 +244,7 @@ class Accounts::StoriesController < Accounts::BaseController
   
       if story.present?
         next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
-        puts next_position
+        next_position += 1 if next_position == 0
         next_question = story.story_builder.questions.find_by(position: next_position)
         question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
       end

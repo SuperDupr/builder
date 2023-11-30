@@ -1,22 +1,22 @@
-<div id="answerProvider" class="w-full" data-aicontent-mode="<% ai_content_mode %>" data-prompt-mode="<%= prompt_mode %>" data-only-node-mode="<%= only_node_mode %>">
+<div id="answerProvider" class="w-full" data-aicontent-mode="<% ai_content_mode %>" data-prompt-mode="<%= prompt_mode %>" data-only-node-mode="<%= only_node_mode %>" data-questionnaires-target="answerProvider">
   <% if renderer == "wrap_prompts_container" %>
     <%= render(partial: "prompt_navigation", locals: { prompts: prompts }) %>
-    <div class="min-h-400 flex-col" id="questionContent">
+    <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
       <%= render(partial: "wrap_options_in_prompts_container", locals: { prompt: prompt, nodes: nodes, answer: answer }) %>
       <%= render_error_container %>
     </div>
   <% elsif renderer == "nodes_prompts_container" %>
     <%= render_prompt_heading(text_content: "Select an option") %>
 
-    <div class="min-h-400 flex-col" id="questionContent">
+    <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
       <%= render(partial: "select_options", locals: { prompt: prompt, nodes: nodes, answer: answer }) %>
       <%= render_error_container %>
     </div>
   <% elsif renderer == "without_nodes_prompts_container" %>
     <%= render_prompt_heading(text_content: "Answer") %>
 
-    <div class="min-h-400 flex-col" id="questionContent">
-      <%= text_area_tag(:answer, answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3) %>
+    <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
+      <%= text_area_tag(:answer, answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3, data: { questionnaires_target: "answer" }) %>
       <%= render_error_container %>
     </div>
   <% end %>

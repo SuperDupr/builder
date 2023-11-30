@@ -1,11 +1,11 @@
 <p class="fs-20">
   Questions 
   <span class="font-normal">
-    <span id="questionNumber">1</span>/
-    <span id="questionsCount"><%= questions_count %></span>
+    <span id="questionNumber" data-questionnaires-target="questionNumber">1</span>/
+    <span id="questionsCount" data-questionnaires-target="questionsCount"><%= questions_count %></span>
   </span>
 </p>
 
-<p id="questionContainer" class="fs-20 mb-4" data-id=<%= question.id %>>
+<p id="questionContainer" class="fs-20 mb-4" data-id=<%= question.id %> data-questionnaires-target="questionContainer">
   <%= question.title %>
 </p>
