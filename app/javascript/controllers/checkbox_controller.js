@@ -24,6 +24,14 @@ export default class extends Controller {
         this.createButton(labelText, checkbox.id);
       }
     });
+    const dropdownMenu = document.getElementById('dropdown')
+    const selectText = document.getElementById('selectText')
+    if(this.buttonContainerTarget.children.length > 0){
+      selectText.style.display = 'none';
+    }
+    else{
+      selectText.style.display = 'block';
+    }
   }
 
   createButton(labelText, checkboxId) {
@@ -37,6 +45,10 @@ export default class extends Controller {
       if (associatedCheckbox) {
         associatedCheckbox.checked = false;
         button.remove();
+      }
+      const selectText = document.getElementById('selectText')
+      if(this.buttonContainerTarget.children.length === 0){
+        selectText.style.display = 'block';
       }
     });
     
