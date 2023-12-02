@@ -28,7 +28,8 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
-    @questions = @story.story_builder.questions
+    @questions = @story.story_builder.questions.active
+    @active_positions = @questions.pluck(:position).join(",")
 
     if @questions.empty?
       redirect_to(account_stories_path(current_account), alert: "Your chosen story builder has no associated questions!")
@@ -93,7 +94,7 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def question_navigation
     story_builder = StoryBuilder.find(params[:story_builder_id])
-    @question = story_builder.questions.order(position: :asc)[params[:q_index].to_i]
+    @question = story_builder.questions.active.find_by(position: params[:position].to_i)
 
     respond_to do |format|
       format.json do

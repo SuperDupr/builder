@@ -12,9 +12,12 @@ export default class extends Controller {
     this.qIndex = 0
     this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     this.spinner = document.querySelector(".spinnerStory")
+    this.activePositions = this.questionsCountTarget.dataset.activePositions
+                              .split(",").map(elem => +elem)
+    this.currentQuestionPosition = this.activePositions[0]
   }
 
-  adjustQuestionPositionIndex(cursor) {
+  adjustQuestionCountIndex(cursor) {
     let accountId = document.getElementById("access").dataset.accountId
     let storyId = document.getElementById("storyDetails").dataset.storyId
     this.cursor = cursor
@@ -41,6 +44,15 @@ export default class extends Controller {
     }
   }
 
+  adjustQuestionPositionIndex(cursor) {
+    let currentPositionIndex
+    let toBeNavigatedPositionIndex
+    
+    currentPositionIndex = this.activePositions.indexOf(this.currentQuestionPosition)
+    toBeNavigatedPositionIndex = cursor === "backward" ? currentPositionIndex - 1 : currentPositionIndex + 1
+    this.currentQuestionPosition = this.activePositions[toBeNavigatedPositionIndex]
+  }
+
   handleContentBtnAndNavigation(aiMode) {
     if(aiMode){
       if(this.hasContentBtnTarget){
@@ -65,10 +77,12 @@ export default class extends Controller {
     console.log(event)
     let storyBuilderId = event.target.dataset.storyBuilderId
     let storyId = document.getElementById("storyDetails").dataset.storyId
+    let cursor = event.target.dataset.cursor
       
-    this.adjustQuestionPositionIndex(event.target.dataset.cursor)
+    this.adjustQuestionCountIndex(cursor)
+    this.adjustQuestionPositionIndex(cursor)
 
-    fetch(`/stories/${storyBuilderId}/questions?q_index=${this.qIndex}&story_id=${storyId}`, { 
+    fetch(`/stories/${storyBuilderId}/questions?position=${this.currentQuestionPosition}&story_id=${storyId}`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
