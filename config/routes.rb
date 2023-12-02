@@ -103,7 +103,7 @@ Rails.application.routes.draw do
   get "stories/:story_builder_id/question/:id/nodes", to: "accounts/stories#question_nodes", as: :question_nodes
   patch "stories/:id/update_visibility", to: "accounts/stories#update_visibility", as: :update_visibility
   patch "stories/:id/publish", to: "accounts/stories#publish", as: :publish_story
-  get "stories/:id/generated_content", to: "accounts/stories#generated_content", as: :generated_content
+  get "stories/:id/final_version", to: "accounts/stories#final_version", as: :final_version
   get "question/:id/prompts", to: "accounts/stories#prompt_navigation", as: :prompt_navigation
   get "question/:id/nodes/:node_id/child_nodes", to: "accounts/stories#sub_nodes_per_node", as: :child_nodes_per_node
   post "question/:id/answers", to: "accounts/stories#track_answers", as: :track_answers

@@ -1,6 +1,6 @@
 class Accounts::StoriesController < Accounts::BaseController
   before_action :authenticate_user!
-  before_action :set_story, only: [:show, :edit, :update, :destroy, :update_visibility, :generated_content, :publish]
+  before_action :set_story, only: [:show, :edit, :update, :destroy, :update_visibility, :final_version, :publish]
   before_action :set_account, only: :update_visibility
   before_action :require_account_admin, only: :update_visibility
   before_action :is_story_published, only: :edit
@@ -65,29 +65,16 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
-
           render json: {status: @story.status.to_s, operation: "draft_mode"}
+        else
+          create_story_version(reset_old: true)
+          render json: { url: final_version_path(@story.id) }
         end
       end
 
       format.html do
-        if params[:request_new_version].present?
-          notice = "Enhancing the story with a new version!"
-        else
-          @story.complete!
-          notice = "Story marked as completed successfully!"
-        end
-
-        dynamic_prompt = AiDataParser.new(story_id: @story.id, data: @story.story_builder.admin_ai_prompt).parse
-
-        puts dynamic_prompt
-
-        StoryCreatorJob.perform_later({
-          current_user: current_user,
-          story: @story,
-          admin_ai_prompt: dynamic_prompt
-        })
-        redirect_to(generated_content_path(@story.id), notice: notice)
+        create_story_version(reset_old: false)
+        redirect_to(final_version_path(@story.id), notice: "Enhancing the story with a new version!")
       end
     end
   end
@@ -293,7 +280,7 @@ class Accounts::StoriesController < Accounts::BaseController
     end
   end
 
-  def generated_content
+  def final_version
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @response_generated = @story.ai_generated_content.present?
   end
@@ -345,5 +332,26 @@ class Accounts::StoriesController < Accounts::BaseController
     end
 
     node_selection
+  end
+  
+  def create_story_version(reset_old:)
+    if params[:request_new_version].present?
+      notice = "Enhancing the story with a new version!"
+    else
+      @story.complete!
+      notice = "Story marked as completed successfully!"
+    end
+
+    @story.update(ai_generated_content: nil) if reset_old
+
+    dynamic_prompt = AiDataParser.new(story_id: @story.id, data: @story.story_builder.admin_ai_prompt).parse
+
+    puts dynamic_prompt
+
+    StoryCreatorJob.perform_later({
+      current_user: current_user,
+      story: @story,
+      admin_ai_prompt: dynamic_prompt
+    })
   end
 end

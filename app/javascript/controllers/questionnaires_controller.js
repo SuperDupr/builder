@@ -18,8 +18,6 @@ export default class extends Controller {
   }
 
   adjustQuestionCountIndex(cursor) {
-    let accountId = document.getElementById("access").dataset.accountId
-    let storyId = document.getElementById("storyDetails").dataset.storyId
     this.cursor = cursor
     
     if (cursor === "backward") {
@@ -38,7 +36,7 @@ export default class extends Controller {
 
         if(incrementedQIndex + 1 === parsedQuestionsCount){
           this.questionForwardTarget.style.display = "none"
-          this.questionsNavigationSectionTarget.innerHTML +=  `<a href='/accounts/${accountId}/stories/${storyId}' class='btn btn-gray' id="finishLink" data-method="patch" data-questionnaires-target="finishLink">Get me a Metaphor</a>`
+          this.questionsNavigationSectionTarget.innerHTML +=  `<a href='javascript:void(0)' class='btn btn-gray' id="finishLink" data-method="patch" data-questionnaires-target="finishLink" data-action="questionnaires#prepareAnswer">Get me a Metaphor</a>`
         }
       }
     }
@@ -316,6 +314,8 @@ export default class extends Controller {
       return "question"
     } else if (target.includes("prompt")) {
       return "prompt"
+    } else if (target.includes("finish")) {
+      return "finish"
     }
   }
 
@@ -349,6 +349,16 @@ export default class extends Controller {
     }
   }
 
+  performNavigation(event, navigator, storyId) {
+    if (navigator === "question") {
+      this.questionNavigation(event)
+    } else if (navigator === "prompt") {
+      this.promptNavigation(event)
+    } else if (navigator === "finish") {
+      this.generateFinalVersion(storyId)
+    }
+  }
+
   trackAnswer(event, navigator, questionId, storyId, promptId, selectedText) {
     const aicontentMode = this.answerProviderTarget.dataset.aicontentMode
     let cursor = event.target.dataset.cursor
@@ -365,20 +375,30 @@ export default class extends Controller {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          console.log("Answer saved successfully:", data.answers);
-
-          if (navigator === "question") {
-            // this.questionContainerTarget.textContent = data.next_question_title
-            this.questionNavigation(event)
-          } else if (navigator === "prompt") {
-            this.promptNavigation(event)
-          } 
+          console.log("Answer saved successfully:", data.answers)
+          this.performNavigation(event, navigator, storyId)
           this.spinner.style.display = "none"
         } else {
           console.error("Failed to save answer:", data.answers);
         }
       })
     
+  }
+
+  generateFinalVersion(storyId) {
+    let accountId = document.getElementById("access").dataset.accountId
+
+    fetch(`/accounts/${accountId}/stories/${storyId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": this.csrfToken
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      window.location.href = data.url
+    })
   }
 
   fetchAiContent(){
