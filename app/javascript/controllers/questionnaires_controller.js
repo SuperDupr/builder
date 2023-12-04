@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["questionNumber", "questionsCount", "questionContainer", "questionsNavigationSection",
                     "storyDetails", "questionBackward", "questionForward", "promptBackward", 
                     "finishLink", "answerProvider", "contentBtn", "questionContent", "promptContainer",
-                    "promptBackward", "promptForward", "promptsCount", "errorText", "answer"]
+                    "promptNumber", "promptBackward", "promptForward", "promptsCount", "errorText", "answer"]
 
   connect() {
     this.index = 0
@@ -130,16 +130,20 @@ export default class extends Controller {
             this.promptBackwardTarget?.classList.add("pointer-events-none", "opacity-50");
           }
         }
+
+        this.promptNumberTarget.textContent = this.index - 1
       } else if (cursor == "forward") {
         let promptsCount = parseInt(this.promptsCountTarget.innerText)
-
+      
         if(this.index < promptsCount) {
           this.promptBackwardTarget?.classList.remove("pointer-events-none", "opacity-50");
-
+          
           if ((this.index + 1) === promptsCount) {
             this.promptForwardTarget?.classList.add("pointer-events-none", "opacity-50");
           }
         }
+
+        this.promptNumberTarget.textContent = this.index + 1
       }
     } else {
       if(dataCount <= 1){
