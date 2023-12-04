@@ -65,9 +65,9 @@ export default class extends Controller {
         this.contentBtnTarget.style.display = 'none'
       }
       this.questionForwardTarget.style.display = 'inline-flex'
-      if (this.hasPromptBackwardTarget) {
-        this.promptBackwardTarget.classList.add("pointer-events-none", "opacity-50");
-      }
+      // if (this.hasPromptBackwardTarget) {
+      //   this.promptBackwardTarget.classList.add("pointer-events-none", "opacity-50");
+      // }
     }
   }
 
@@ -96,7 +96,7 @@ export default class extends Controller {
             console.log("Multiple Node Selection Mode", data.multiple_node_selection_mode)
             this.questionContainerTarget.textContent = data.question_title
             this.answerProviderTarget.dataset.aicontentMode = data.ai_mode ? "on" : "off"
-            this.questionContentTarget.style.display = "block"
+            this.questionContentTarget.style.display = "flex"
             
             this.displayPrompt(event, true, data.question_id, storyId, data.ai_mode)
             // this.handleContentBtnAndNavigation(data.ai_mode)
@@ -131,7 +131,7 @@ export default class extends Controller {
           }
         }
       } else if (cursor == "forward") {
-        let promptsCount = parseInt(this.promptsCountTarget.innerText)
+        let promptsCount = parseInt(parseInt(this.promptsCountTarget.innerText))
 
         if(this.index < promptsCount) {
           this.promptBackwardTarget?.classList.remove("pointer-events-none", "opacity-50");
