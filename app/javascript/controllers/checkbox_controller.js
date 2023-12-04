@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
-  static targets = ["checkbox", "buttonContainer"];
+  static targets = ["checkbox", "buttonContainer", "selectText"];
   connect() {
     this.updateButtons();
   }
@@ -11,6 +11,16 @@ export default class extends Controller {
         this.updateButtons();
       });
     });
+  }
+
+  toggleSelectTextVisibility() {
+    console.log(this.selectTextTarget)
+    if(this.buttonContainerTarget.children.length > 0){
+      this.selectTextTarget.style.display = 'none';
+    }
+    else{
+      this.selectTextTarget.style.display = 'block';
+    }
   }
 
   updateButtons() {
@@ -24,14 +34,7 @@ export default class extends Controller {
         this.createButton(labelText, checkbox.id);
       }
     });
-    const dropdownMenu = document.getElementById('dropdown')
-    const selectText = document.getElementById('selectText')
-    if(this.buttonContainerTarget.children.length > 0){
-      selectText.style.display = 'none';
-    }
-    else{
-      selectText.style.display = 'block';
-    }
+    this.toggleSelectTextVisibility();
   }
 
   createButton(labelText, checkboxId) {
@@ -46,20 +49,9 @@ export default class extends Controller {
         associatedCheckbox.checked = false;
         button.remove();
       }
-      const selectText = document.getElementById('selectText')
-      if(this.buttonContainerTarget.children.length === 0){
-        selectText.style.display = 'block';
-      }
+      this.toggleSelectTextVisibility();
     });
     
     this.buttonContainerTarget.appendChild(button);
   }
 }
-
-
-
-
-
-
-
-
