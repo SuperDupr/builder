@@ -93,6 +93,7 @@ export default class extends Controller {
             this.questionNumberTarget.textContent = this.qIndex + 1
             this.questionContainerTarget.dataset.id = data.question_id
             console.log(data)
+            console.log("Multiple Node Selection Mode", data.multiple_node_selection_mode)
             this.questionContainerTarget.textContent = data.question_title
             this.answerProviderTarget.dataset.aicontentMode = data.ai_mode ? "on" : "off"
             this.questionContentTarget.style.display = "block"
