@@ -46,8 +46,10 @@ class AiDataParser
     @data = data
     @words = []
   end
-
+  
   def parse
+    return "" if @data.nil?
+    
     scanner = StringScanner.new(data)
 
     eliminate_spaces_from_wrapped_tags

@@ -2,15 +2,16 @@
 #
 # Table name: questions
 #
-#  id                 :bigint           not null, primary key
-#  active             :boolean          default(TRUE)
-#  ai_prompt          :text
-#  ai_prompt_attached :boolean          default(FALSE)
-#  position           :integer
-#  title              :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  story_builder_id   :integer
+#  id                      :bigint           not null, primary key
+#  active                  :boolean          default(TRUE)
+#  ai_prompt               :text
+#  ai_prompt_attached      :boolean          default(FALSE)
+#  multiple_node_selection :boolean          default(FALSE)
+#  position                :integer
+#  title                   :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  story_builder_id        :integer
 #
 class Question < ApplicationRecord
   acts_as_list scope: :story_builder

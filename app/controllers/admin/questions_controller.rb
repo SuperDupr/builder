@@ -50,6 +50,7 @@ class Admin::QuestionsController < Admin::ApplicationController
     params.require(:question).permit(
       :title,
       :ai_prompt_attached,
+      :multiple_node_selection,
       :ai_prompt,
       prompts_attributes: [
         :id,

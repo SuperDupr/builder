@@ -1,15 +1,20 @@
 import consumer from "./consumer"
 
-const spinnerElement = document.querySelector(".spinnerStory");
-if(spinnerElement) {
-  spinnerElement.style.display = "none";
-}
-
-
 consumer.subscriptions.create("StoryGenerationChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
     console.log("We are connected to StoryGenerationChannel!")
+    this.spinnerElement = document.querySelector(".spinnerStory")
+    this.storyContentElement = document.querySelector(".story_content")
+    this.aiContentElement = document.getElementById("aiContent")
+    
+    if (this.storyContentElement && this.aiContentElement) {
+      this.spinnerElement.style.display = "flex"
+  
+      if (this.aiContentElement.textContent.length > 0) {
+        this.spinnerElement.style.display = "none"
+      }
+    }
   },
 
   disconnected() {
@@ -19,18 +24,7 @@ consumer.subscriptions.create("StoryGenerationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    if(spinnerElement) {
-    spinnerElement.style.display = "block";
-    }
-    console.log(spinnerElement)
-    console.log(data.body)
-
-    const storyContentElement = document.querySelector(".story_content")
-
-    storyContentElement.textContent = data.body
-    
-    if(spinnerElement) {
-    spinnerElement.style.display = "none";
-    }
+    this.spinnerElement.style.display = "none"
+    this.aiContentElement.textContent = data.body
   }
 });
