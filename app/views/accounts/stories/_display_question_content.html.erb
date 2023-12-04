@@ -2,14 +2,14 @@
   <% if renderer == "wrap_prompts_container" %>
     <%= render(partial: "prompt_navigation", locals: { prompts: prompts }) %>
     <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
-      <%= render(partial: "wrap_options_in_prompts_container", locals: { prompt: prompt, nodes: nodes, answer: answer }) %>
+      <%= render(partial: "wrap_options_in_prompts_container", locals: { prompt: prompt, prompt_pretext: prompt_pretext, prompt_posttext: prompt_posttext, nodes: nodes, answer: answer, selector: selector }) %>
       <%= render_error_container %>
     </div>
   <% elsif renderer == "nodes_prompts_container" %>
     <%= render_prompt_heading(text_content: "Select an option") %>
 
     <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
-      <%= render(partial: "select_options", locals: { prompt: prompt, nodes: nodes, answer: answer }) %>
+      <%= render(partial: "select_options", locals: { prompt: prompt, nodes: nodes, answer: answer, selector: selector }) %>
       <%= render_error_container %>
     </div>
   <% elsif renderer == "without_nodes_prompts_container" %>

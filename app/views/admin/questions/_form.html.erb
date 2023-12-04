@@ -29,6 +29,8 @@
     <div class="mt-3" data-questions-target="aiPrompt">
       <%= f.text_area(:ai_prompt, placeholder:'Write custom AI prompt here', rows: 4, class:'rounded-md xl:w-3/4', data: { questions_target: "aiPromptTextarea" }) %>
     </div>
+
+    <%= f.check_box(:multiple_node_selection, data: { action: "", class: "form-checkbox" }) %>
   </div>
   
   <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="mb-3 mt-4 xl:w-3/4">

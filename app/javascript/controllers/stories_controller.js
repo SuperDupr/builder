@@ -39,6 +39,48 @@ export default class extends Controller {
       }
     })
   }
+
+  generateFinalVersion() {
+    let finalStoryContainer = document.getElementById("finalStoryContainer")
+    let accountId = finalStoryContainer.dataset.accountId
+    let storyId = finalStoryContainer.dataset.storyId
+    let spinner = document.querySelector(".spinnerStory")
+
+    spinner.style.display = "flex"
+
+    fetch(`/accounts/${accountId}/stories/${storyId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": this.csrfToken
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Work under process!")
+    })
+  }
+
+  toggleStoryVisibility(event) {
+    const storyId = event.target.dataset.id
+    const viewableTextContainer = document.getElementById(`viewableTextContainer${storyId}`)
+    
+    fetch(`/stories/${storyId}/update_visibility`, { 
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": this.csrfToken
+      },
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          if (data.success) {
+            viewableTextContainer.textContent = data.viewable ? "Viewable" : "Non-viewable"
+          }
+        })
+      }
+    })
+  }
   
   reconnect(event) {
     if (consumer.connection.isActive()) {
