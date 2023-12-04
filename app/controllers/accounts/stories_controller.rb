@@ -29,7 +29,7 @@ class Accounts::StoriesController < Accounts::BaseController
   def edit
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @questions = @story.story_builder.questions.active
-    @active_positions = @questions.pluck(:position).join(",")
+    @active_positions = @questions.pluck(:position).sort.join(",")
 
     if @questions.empty?
       redirect_to(account_stories_path(current_account), alert: "Your chosen story builder has no associated questions!")
@@ -39,6 +39,7 @@ class Accounts::StoriesController < Accounts::BaseController
       @prompts = @question.prompts.order(position: :asc)
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
+      @prompt_pre_text, @prompt_post_text = parse_prompt_title(@story.id) if @prompt.present?
 
       @prompt_mode = @prompts.any? ? "on" : "off"
       @ai_content_mode = @question.ai_prompt_attached ? "on" : "off"
@@ -101,11 +102,11 @@ class Accounts::StoriesController < Accounts::BaseController
   end
 
   def prompt_navigation
-    # TODO: Shorten the scope by querying the questions of story object
     question = Question.find(params[:id])
     index = params[:index].to_i + 1
     @prompts = question.prompts
     @prompt = question.prompts.find_by(position: index)
+    @prompt_pre_text, @prompt_post_text = parse_prompt_title(params[:story_id]) if @prompt.present?
     answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
 
     node_selection = build_node_selection_structure(question.parent_nodes)
@@ -122,6 +123,8 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt_mode: "off",
                 prompts: @prompts,
                 prompt: @prompt,
+                prompt_pretext: @prompt_pre_text,
+                prompt_posttext: @prompt_post_text,
                 nodes: question.parent_nodes,
                 answer: answer_response
               },
@@ -143,6 +146,8 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt_mode: "off",
                 prompts: @prompts,
                 prompt: @prompt,
+                prompt_pretext: @prompt_pre_text,
+                prompt_posttext: @prompt_post_text,
                 nodes: question.parent_nodes,
                 answer: answer_response
               },
@@ -162,14 +167,16 @@ class Accounts::StoriesController < Accounts::BaseController
               prompt_mode: "on",
               prompts: @prompts,
               prompt: @prompt,
+              prompt_pretext: @prompt_pre_text,
+              prompt_posttext: @prompt_post_text,
               nodes: question.parent_nodes,
               answer: answer_response
             },
             formats: [:html]),
             nodes_without_prompt: false,
             prompt_id: @prompt.id,
-            prompt_pretext: @prompt.pre_text,
-            prompt_posttext: @prompt.post_text,
+            prompt_pretext: @prompt_pre_text,
+            prompt_posttext: @prompt_post_text,
             prompt_selector: @prompt.selector,
             count: question.prompts.count,
             nodes: node_selection,
@@ -359,5 +366,15 @@ class Accounts::StoriesController < Accounts::BaseController
       story: @story,
       admin_ai_prompt: dynamic_prompt
     })
+  end
+
+  def parse_prompt_title(story_id)
+    parsed_data = []
+
+    [@prompt.pre_text, @prompt.post_text].each do |data_element|
+      parsed_data << AiDataParser.new(story_id: story_id, data: data_element).parse
+    end
+
+    parsed_data
   end
 end
