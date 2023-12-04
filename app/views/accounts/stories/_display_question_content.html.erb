@@ -16,7 +16,7 @@
     <%= render_prompt_heading(text_content: "Answer") %>
 
     <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
-      <%= text_area_tag(:answer, answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 3, data: { questionnaires_target: "answer" }) %>
+      <%= text_area_tag(:answer, answer, class: "form-control lg:w-2/3 xl:w-1/2", placeholder: "Provide your answer here..", rows: 5, data: { questionnaires_target: "answer" }) %>
       <%= render_error_container %>
     </div>
   <% end %>
