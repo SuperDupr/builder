@@ -22,7 +22,7 @@
 #  fk_rails_...  (story_id => stories.id)
 #
 class Answer < ApplicationRecord
-  acts_as_list scope: [:question_id]
+  acts_as_list scope: [:question_id, :story_id]
   # Associations
   belongs_to :question
   belongs_to :story

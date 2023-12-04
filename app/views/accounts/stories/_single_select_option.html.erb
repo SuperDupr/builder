@@ -1,6 +1,6 @@
 <label for="<%= node.id %>" class="flex gap-1">
   <input data-checkbox-target="checkbox" id="<%= node.id %>" type="checkbox" 
     class="mr-1 mt-[2px] nodes" value="<%= node.id %>" data-text="<%= node.title %>" 
-    <%=  prompt.selector&.include?(node.title) ? 'checked' : '' %>>
+    <%= selector == node.title ? 'checked' : '' %>>
   <%= node.title %>
 </label>

@@ -35,10 +35,12 @@ class Accounts::StoriesController < Accounts::BaseController
       redirect_to(account_stories_path(current_account), alert: "Your chosen story builder has no associated questions!")
     else
       @question = @questions.order(position: :asc).first
-      @answer = @question.answers.find_by(story_id: @story.id)&.response
+      question_answers = @question.answers
+      @answer = question_answers&.find_by(story_id: @story.id)&.response
       @prompts = @question.prompts.order(position: :asc)
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
+      @selector = question_answers.find_by(story_id: @story.id, prompt_id: @prompt.id)&.response if @prompt.present?
       @prompt_pre_text, @prompt_post_text = parse_prompt_title(@story.id) if @prompt.present?
 
       @prompt_mode = @prompts.any? ? "on" : "off"
@@ -107,7 +109,12 @@ class Accounts::StoriesController < Accounts::BaseController
     @prompts = question.prompts
     @prompt = question.prompts.find_by(position: index)
     @prompt_pre_text, @prompt_post_text = parse_prompt_title(params[:story_id]) if @prompt.present?
-    answer_response = question.answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
+    question_answers = question.answers
+    answer_response = question_answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
+    
+    if params[:story_id].present? && @prompt.present?
+      @selector = question_answers.find_by(story_id: params[:story_id], prompt_id: @prompt.id)&.response
+    end
 
     node_selection = build_node_selection_structure(question.parent_nodes)
 
@@ -125,6 +132,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt: @prompt,
                 prompt_pretext: @prompt_pre_text,
                 prompt_posttext: @prompt_post_text,
+                selector: @selector,
                 nodes: question.parent_nodes,
                 answer: answer_response
               },
@@ -148,6 +156,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt: @prompt,
                 prompt_pretext: @prompt_pre_text,
                 prompt_posttext: @prompt_post_text,
+                selector: @selector,
                 nodes: question.parent_nodes,
                 answer: answer_response
               },
@@ -169,6 +178,7 @@ class Accounts::StoriesController < Accounts::BaseController
               prompt: @prompt,
               prompt_pretext: @prompt_pre_text,
               prompt_posttext: @prompt_post_text,
+              selector: @selector,
               nodes: question.parent_nodes,
               answer: answer_response
             },
@@ -358,9 +368,6 @@ class Accounts::StoriesController < Accounts::BaseController
     @story.update(ai_generated_content: nil) if reset_old
 
     dynamic_prompt = AiDataParser.new(story_id: @story.id, data: @story.story_builder.admin_ai_prompt).parse
-
-    puts dynamic_prompt
-
     StoryCreatorJob.perform_later({
       current_user: current_user,
       story: @story,

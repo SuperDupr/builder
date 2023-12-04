@@ -135,7 +135,6 @@ class AiDataParser
     end
 
     def query_answer(question_position, prompt_position, answer_position)
-      puts question_position
       if question_position && prompt_position && answer_position
         @story.answers.joins(question: :prompts).find_by(
           position: answer_position, 
