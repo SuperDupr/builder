@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
-  static targets = ["checkbox", "buttonContainer"];
+  static targets = ["checkbox", "buttonContainer", "selectText"];
   connect() {
     this.updateButtons();
   }
@@ -13,6 +13,45 @@ export default class extends Controller {
     });
   }
 
+  toggleSelectTextVisibility() {
+    if(this.buttonContainerTarget.children.length > 0){
+      this.selectTextTarget.style.display = 'none';
+    }
+    else{
+      this.selectTextTarget.style.display = 'block';
+    }
+  }
+
+  disableCheckboxesOnSingleSelection(checkboxId) {
+    const allCheckboxLabels = document.querySelectorAll('.checkboxLabel');
+    const isSingleSelection = this.isSingleSelection();
+  
+    allCheckboxLabels.forEach((checkboxLabel) => {
+      const isTargetCheckbox = checkboxLabel.getAttribute('for') === checkboxId;
+      if (isSingleSelection) {
+        checkboxLabel.classList.toggle("pointer-events-none", !isTargetCheckbox);
+        checkboxLabel.classList.toggle("opacity-50", !isTargetCheckbox);
+      } else {
+        checkboxLabel.classList.remove("pointer-events-none", "opacity-50");
+      }
+    });
+  }
+  
+  enableCheckboxesOnNoSelection() {
+    const allCheckboxLabels = document.querySelectorAll('.checkboxLabel');
+    const isSingleSelection = this.isSingleSelection();
+  
+    allCheckboxLabels.forEach((checkboxLabel) => {
+      if (!isSingleSelection) {
+        checkboxLabel.classList.remove("pointer-events-none", "opacity-50");
+      }
+    });
+  }
+  
+  isSingleSelection() {
+    return this.buttonContainerTarget.children.length === 1 && this.buttonContainerTarget.dataset.multiple_node === "false";
+  }
+
   updateButtons() {
     this.buttonContainerTarget.innerHTML = ""; 
 
@@ -22,16 +61,13 @@ export default class extends Controller {
 
       if (checkbox.checked) {
         this.createButton(labelText, checkbox.id);
+        this.disableCheckboxesOnSingleSelection(checkbox.id);
+      }
+      else{
+        this.enableCheckboxesOnNoSelection(checkbox.id);
       }
     });
-    const dropdownMenu = document.getElementById('dropdown')
-    const selectText = document.getElementById('selectText')
-    if(this.buttonContainerTarget.children.length > 0){
-      selectText.style.display = 'none';
-    }
-    else{
-      selectText.style.display = 'block';
-    }
+    this.toggleSelectTextVisibility();
   }
 
   createButton(labelText, checkboxId) {
@@ -46,20 +82,10 @@ export default class extends Controller {
         associatedCheckbox.checked = false;
         button.remove();
       }
-      const selectText = document.getElementById('selectText')
-      if(this.buttonContainerTarget.children.length === 0){
-        selectText.style.display = 'block';
-      }
+      this.enableCheckboxesOnNoSelection()
+      this.toggleSelectTextVisibility();
     });
     
     this.buttonContainerTarget.appendChild(button);
   }
 }
-
-
-
-
-
-
-
-

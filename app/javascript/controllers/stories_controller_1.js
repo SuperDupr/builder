@@ -308,7 +308,7 @@ export default class extends Controller {
               questionContainer.dataset.id = data.question_id
               questionContainer.textContent = data.question_title
               answerProvider.dataset.aicontentMode = data.ai_mode ? "on" : "off"
-              questionContent.style.display = "block";
+              questionContent.style.display = "flex";
               console.log(data.ai_mode)
               if(data.ai_mode){
                 if(contentBtn){

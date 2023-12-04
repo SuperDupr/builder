@@ -14,6 +14,7 @@ export default class extends Controller {
     }
     else{
       this.aiPromptTextareaTarget.required = true
+      aiPromptLabel.classList.remove('opacity-50')
     }
   }
 
