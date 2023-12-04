@@ -1,9 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["checkbox", "buttonContainer", "selectText"];
-  connect() {
-    this.updateButtons();
-  }
 
   initialize() {
     this.checkboxTargets.forEach((checkbox) => {
@@ -11,6 +8,10 @@ export default class extends Controller {
         this.updateButtons();
       });
     });
+  }
+
+  connect() {
+    this.updateButtons();
   }
 
   toggleSelectTextVisibility() {
