@@ -25,7 +25,7 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
     const answerField = document.getElementById("answer")
     // Called when there's incoming data on the websocket for this channel
     if(spinnerElement) {
-      spinnerElement.style.display = "block";
+      spinnerElement.style.display = "flex";
     }
 
     console.log(data.body)
