@@ -13,10 +13,10 @@
               <% if node.child_nodes.any? %>
                 <h6 class="mb-1"><%= node.title %></h6>
                 <% node.child_nodes.each do |child_node| %>
-                  <%= render "single_select_option", node: child_node, prompt: prompt, selector: selector %>
+                  <%= render "single_select_option", node: child_node, prompt: prompt, selectors: selectors %>
                 <% end %>
               <% else %>
-                <%= render "single_select_option", node: node, prompt: prompt, selector: selector %>
+                <%= render "single_select_option", node: node, prompt: prompt, selectors: selectors %>
               <% end %>
             <% end %>
           </div>

@@ -40,7 +40,8 @@ class Accounts::StoriesController < Accounts::BaseController
       @prompts = @question.prompts.order(position: :asc)
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
-      @selector = question_answers.find_by(story_id: @story.id, prompt_id: @prompt.id)&.response if @prompt.present?
+      @selectors = question_answers.where(story_id: @story.id, prompt_id: @prompt.id)&.pluck(:response) if @prompt.present?
+      puts @selectors
       @prompt_pre_text, @prompt_post_text = parse_prompt_title(@story.id) if @prompt.present?
 
       @prompt_mode = @prompts.any? ? "on" : "off"
@@ -113,7 +114,7 @@ class Accounts::StoriesController < Accounts::BaseController
     answer_response = question_answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
     
     if params[:story_id].present? && @prompt.present?
-      @selector = question_answers.find_by(story_id: params[:story_id], prompt_id: @prompt.id)&.response
+      @selectors = question_answers.where(story_id: params[:story_id], prompt_id: @prompt.id)&.pluck(:response)
     end
 
     node_selection = build_node_selection_structure(question.parent_nodes)
@@ -132,7 +133,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt: @prompt,
                 prompt_pretext: @prompt_pre_text,
                 prompt_posttext: @prompt_post_text,
-                selector: @selector,
+                selectors: @selectors,
                 nodes: question.parent_nodes,
                 multiple_selection_mode: question.multiple_node_selection,
                 answer: answer_response
@@ -157,7 +158,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt: @prompt,
                 prompt_pretext: @prompt_pre_text,
                 prompt_posttext: @prompt_post_text,
-                selector: @selector,
+                selectors: @selectors,
                 nodes: question.parent_nodes,
                 multiple_selection_mode: question.multiple_node_selection,
                 answer: answer_response
@@ -180,7 +181,7 @@ class Accounts::StoriesController < Accounts::BaseController
               prompt: @prompt,
               prompt_pretext: @prompt_pre_text,
               prompt_posttext: @prompt_post_text,
-              selector: @selector,
+              selectors: @selectors,
               nodes: question.parent_nodes,
               multiple_selection_mode: question.multiple_node_selection,
               answer: answer_response
@@ -242,6 +243,8 @@ class Accounts::StoriesController < Accounts::BaseController
     selectors.each do |selector|
       answers << track_answer_as_per_prompt(question, prompt, selector)
     end
+
+    puts answers.inspect
 
     answers.each do |answer| 
       unless answer.save
@@ -336,9 +339,8 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def track_answer_as_per_prompt(question, prompt, selector)
     answer = prompt.present? ?
-      question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id) :
-      question.answers.find_or_initialize_by(story_id: params[:story_id])
-    answer.response = selector
+      question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id, response: selector) :
+      question.answers.find_or_initialize_by(story_id: params[:story_id], response: selector)
     answer
   end
 
