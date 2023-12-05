@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_23_060623) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_04_032555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,6 +133,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_060623) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "prompt_id"
+    t.integer "position"
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["story_id"], name: "index_answers_on_story_id"
   end
@@ -320,6 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_060623) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "selector"
+    t.integer "position"
     t.index ["question_id"], name: "index_prompts_on_question_id"
   end
 
@@ -335,6 +337,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_060623) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.integer "story_builder_id"
+    t.integer "position"
+    t.boolean "ai_prompt_attached", default: false
+    t.text "ai_prompt"
+    t.boolean "multiple_node_selection", default: false
   end
 
   create_table "stories", force: :cascade do |t|

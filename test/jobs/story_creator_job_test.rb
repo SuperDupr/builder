@@ -12,7 +12,7 @@ class StoryCreatorJobTest < ActiveJob::TestCase
   def stubbed_ai_request(stubbed_response)
     stub_request(:post, "https://api.openai.com/v1/chat/completions")
       .with(
-        body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"Nothing special!\"},{\"role\":\"user\",\"content\":\"Here is the conversational responses data received from user: {}\"}],\"temperature\":0.2}",
+        body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"Nothing special!\"}],\"temperature\":0.2}",
         headers: {
           "Accept" => "*/*",
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",

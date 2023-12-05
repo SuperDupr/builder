@@ -2,7 +2,7 @@ class Admin::QuestionsController < Admin::ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @questions = pagy(Question.includes(:story_builders).all)
+    @pagy, @questions = pagy(Question.includes(:story_builders).where.not(story_builder_id: nil))
   end
 
   def show
@@ -10,19 +10,22 @@ class Admin::QuestionsController < Admin::ApplicationController
 
   def new
     @question = Question.new
+    @fallback_to_builder = params[:fallback_builder_id].present?
   end
 
   def create
-    @question = Question.new(question_params)
+    @story_builder = StoryBuilder.find(params[:fallback_builder_id])
+    @question = @story_builder.questions.new(question_params)
 
     if @question.save
-      redirect_to(admin_questions_path, notice: "Question created successfully!")
+      handle_redirect_behaviour
     else
       redirect_to(admin_questions_path, alert: "Unable to create question. Errors: #{@question.errors.full_messages.join(", ")}")
     end
   end
 
   def edit
+    @fallback_to_builder = params[:fallback_builder_id].present?
   end
 
   def update
@@ -46,6 +49,9 @@ class Admin::QuestionsController < Admin::ApplicationController
   def question_params
     params.require(:question).permit(
       :title,
+      :ai_prompt_attached,
+      :multiple_node_selection,
+      :ai_prompt,
       prompts_attributes: [
         :id,
         :pre_text,
@@ -68,5 +74,13 @@ class Admin::QuestionsController < Admin::ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def handle_redirect_behaviour
+    if params[:fallback_builder_id].present?
+      redirect_to(edit_admin_story_builder_path(@story_builder), notice: "Question added successfully!")
+    else
+      redirect_to(admin_questions_path, notice: "Question created successfully!")
+    end
   end
 end

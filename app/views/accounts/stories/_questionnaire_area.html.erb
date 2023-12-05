@@ -1,0 +1,25 @@
+<div class="py-5 px-4 shadow-box-card relative rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6">
+  <%= render("spinner") %>
+  
+  <%= render(partial: "display_question_content", locals: { 
+    renderer: @renderer,
+    ai_content_mode: @ai_content_mode,
+    only_node_mode: @only_node_mode,
+    prompt_mode: @prompt_mode,
+    prompts: @prompts,
+    prompt: @prompt,
+    prompt_pretext: @prompt_pre_text,
+    prompt_posttext: @prompt_post_text,
+    selectors: @selectors,
+    nodes: @nodes,
+    multiple_selection_mode: @question.multiple_node_selection,
+    answer: @answer
+  }) %>
+  
+  <%= render(partial: "question_navigation", locals: { 
+    story: @story,
+    ai_content_mode: @ai_content_mode, 
+    questions: @questions, 
+    question: @question
+  }) %>
+</div>

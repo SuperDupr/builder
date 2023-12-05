@@ -39,9 +39,122 @@
 # Find the answer finally
 
 class AiDataParser
-  attr_accessor :data
+  attr_accessor :data, :words
 
-  def initialize(options = {})
-    @data = options[:data]
+  def initialize(story_id:, data:)
+    @story = Story.find(story_id)
+    @data = data
+    @words = []
+  end
+
+  def parse
+    return "" if @data.nil?
+
+    scanner = StringScanner.new(data)
+
+    eliminate_spaces_from_wrapped_tags
+
+    while scanner.scan_until(/\{\{([^{}]+)\}\}/)
+      word = eliminate_spaces_from_word(scanner[1])
+
+      validator = WordValidator.new(word: word).call
+
+      validator[:success] ? find_answer_and_substitute(word) : @data.sub!(word, "______")
+    end
+
+    unwrap_dynamic_content
+  end
+
+  private
+
+  def eliminate_spaces_from_wrapped_tags
+    @data = @data.gsub(/\{\{([^{}]+)\}\}/) { |match| match.gsub(/\s+/, "") }
+  end
+
+  # This method removes the curly braces and any surrounding
+  # spaces and leaves only the content inside.
+  def unwrap_dynamic_content
+    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')
+  end
+
+  def eliminate_spaces_from_word(word)
+    word.gsub(/\s+/, "")
+  end
+
+  def find_answer_and_substitute(word)
+    answer = ExtractAnswer.new(word: word, story: @story).call || "______"
+
+    @words << word
+    @data.sub!(word, answer)
+  end
+
+  class WordValidator
+    attr_accessor :word
+
+    def initialize(word:)
+      @word = word
+      @success = false
+    end
+
+    def call
+      sequence_and_format_validations
+      {success: @success, word: word}
+    end
+
+    private
+
+    def sequence_and_format_validations
+      @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?)(:A#(100|[1-9]\d?))?)?\z/.match?(word)
+    end
+  end
+
+  class ExtractAnswer
+    attr_reader :word
+
+    def initialize(word:, story:)
+      @word = word
+      @story = story
+    end
+
+    def call
+      extract_counter_parts
+    end
+
+    private
+
+    def extract_counter_parts
+      target_objects = word.split(":")
+      question_position = target_objects[0][-1]
+
+      if target_objects.size > 1
+        prompt_position = target_objects[1][-1] || nil
+        answer_position = (target_objects.size == 3) ? target_objects[2][-1] : nil
+      end
+
+      query_answer(question_position, prompt_position, answer_position)
+    end
+
+    def query_answer(question_position, prompt_position, answer_position)
+      if question_position && prompt_position && answer_position
+        @story.answers.joins(question: :prompts).find_by(
+          position: answer_position,
+          questions: {
+            position: question_position,
+            prompts: {position: prompt_position}
+          }
+        )&.response
+      elsif question_position && prompt_position
+        @story.answers.joins(question: :prompts).find_by(
+          questions: {
+            position: question_position,
+            prompts: {
+              position: prompt_position
+            }
+          }
+        )&.response
+      else
+        @story.answers.joins(:question).find_by(questions: {position: question_position})&.response
+      end
+    end
   end
 end

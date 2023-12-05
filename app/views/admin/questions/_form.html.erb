@@ -1,8 +1,38 @@
 <%= form_for(question, url: url) do |f| %>
   <%= f.label(:title) %>
   <%= f.text_field(:title, required: true, class: "rounded-md xl:w-3/4") %>
+
+  <% if fallback_to_builder %>
+    <%= hidden_field_tag(:fallback_builder_id, params[:fallback_builder_id]) %>
+  <% end %>
+
+  <div data-controller="questions" class="mt-3">
+    
+    <div class="flex items-center mt-2" data-questions-target="aiPromptAttached">
+      <label for="question_ai_prompt_attached" id="ai_prompt_label" class="flex items-center cursor-pointer mb-0">
+        <div class="relative">
+          <%= f.check_box(:ai_prompt_attached, data: { action: "questions#toggleAiPromptContainerView"}, class:'form-checkbox') %>
+        </div>
+        <h5 class="ml-1 mt-[6px] opacity-50" id="aiPromptLabel">Attach a custom AI prompt</h5>
+      </label>
+    </div>
+
+    <div class="mt-3" data-questions-target="aiPrompt">
+      <%= f.text_area(:ai_prompt, placeholder:'Write custom AI prompt here', rows: 4, class:'rounded-md xl:w-3/4', data: { questions_target: "aiPromptTextarea" }) %>
+    </div>
+
+    <div class="flex items-center mt-2" data-questions-target="aiPromptAttached">
+      <label for="question_multiple_node_selection" class="flex items-center cursor-pointer mb-0">
+        <div class="relative">
+          <%= f.check_box(:multiple_node_selection, data: { action: "", class: "form-checkbox" }) %>
+        </div>
+        <h5 class="ml-1 mt-[6px]">Enable Multi Selection of nodes</h5>
+      </label>
+    </div> 
+
+  </div>
   
-  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="my-3 xl:w-3/4">
+  <div data-controller="nested-form" data-nested-form-wrapper-selector-value=".prompts-form-wrapper" class="mb-3 mt-4 xl:w-3/4">
     <h5 class="mb-1">Prompts</h5>
     <template data-nested-form-target="template">
       <%= f.fields_for :prompts, Prompt.new, child_index: 'NEW_RECORD' do |prompt_fields| %>
@@ -36,5 +66,5 @@
     <button type="button" data-action="nested-form#add" class="btn btn-primary btn-small mt-3">Add New Node</button>
   </div>
 
-  <%= f.submit("Save Question", class: "btn btn-primary my-3") %>
+  <%= f.submit("Save Question", class: "btn btn-primary mt-6 mb-4") %>
 <% end %>
