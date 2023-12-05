@@ -92,7 +92,7 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     question = story_builder.questions.first
 
     get question_navigation_path(story_builder.id), params: {position: 1}, xhr: true
-    
+
     assert_equal(JSON.parse(response.body)["question_title"], question.title)
     assert_response :success
   end
@@ -133,12 +133,12 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
   test "should track answers" do
     question = questions(:one)
     prompt = question.prompts.first
-    
+
     @story.story_builder.questions << question
     @story.story_builder.questions << questions(:two)
 
     post track_answers_path(question.id), params: {prompt_id: prompt.id, story_id: @story.id, selector: "selected_option"}, xhr: true
-    
+
     assert_equal(JSON.parse(response.body)["answers"][0]["id"].present?, true)
 
     assert_response :success

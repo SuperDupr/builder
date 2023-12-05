@@ -10,16 +10,17 @@ class StoryCreatorJobTest < ActiveJob::TestCase
   end
 
   def stubbed_ai_request(stubbed_response)
-    stub_request(:post, "https://api.openai.com/v1/chat/completions").
-    with(
-      body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"Nothing special!\"}],\"temperature\":0.2}",
-      headers: {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby'
-      }).
-      to_return(status: 200, body: {
+    stub_request(:post, "https://api.openai.com/v1/chat/completions")
+      .with(
+        body: "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"Nothing special!\"}],\"temperature\":0.2}",
+        headers: {
+          "Accept" => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Content-Type" => "application/json",
+          "User-Agent" => "Ruby"
+        }
+      )
+      .to_return(status: 200, body: {
         choices: [
           {message: {content: stubbed_response}}
         ]
