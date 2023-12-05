@@ -252,7 +252,6 @@ class Accounts::StoriesController < Accounts::BaseController
     end
 
     remove_detached_answers(question.answers, selectors)
-
     if params[:cursor] == "undefined"
       question_title = question.title
     else
