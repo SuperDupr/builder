@@ -88,9 +88,11 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should navigate to a question" do
     story_builder = @story.story_builder
+    story_builder.questions << questions(:one)
     question = story_builder.questions.first
 
-    get question_navigation_path(story_builder.id), params: {q_index: 0}, xhr: true
+    get question_navigation_path(story_builder.id), params: {position: 1}, xhr: true
+    
     assert_equal(JSON.parse(response.body)["question_title"], question.title)
     assert_response :success
   end
@@ -107,7 +109,8 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get question nodes" do
     story_builder = story_builders(:one)
-    question = story_builder.questions.first
+    question = questions(:one)
+    story_builder.questions << question
     question_parent_node = question.parent_nodes.create!(title: "Node 1")
 
     get question_nodes_path(question.id, story_builder_id: story_builder.id), xhr: true
@@ -130,9 +133,13 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
   test "should track answers" do
     question = questions(:one)
     prompt = question.prompts.first
-    post track_answers_path(question.id), params: {prompt_id: prompt.id, story_id: @story.id, selector: "selected_option"}, xhr: true
+    
+    @story.story_builder.questions << question
+    @story.story_builder.questions << questions(:two)
 
-    assert_equal(JSON.parse(response.body)["answer"]["id"].present?, true)
+    post track_answers_path(question.id), params: {prompt_id: prompt.id, story_id: @story.id, selector: "selected_option"}, xhr: true
+    
+    assert_equal(JSON.parse(response.body)["answers"][0]["id"].present?, true)
 
     assert_response :success
   end
@@ -146,7 +153,7 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should generate content" do
     @story.update(ai_generated_content: "Instructions for GPT-4")
-    get generated_content_path(@story)
+    get final_version_path(@story)
 
     my_stories = controller.instance_variable_get(:@my_stories)
     response_generated = controller.instance_variable_get(:@response_generated)

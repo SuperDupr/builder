@@ -243,8 +243,6 @@ class Accounts::StoriesController < Accounts::BaseController
       answers << track_answer_as_per_prompt(question, prompt, selector)
     end
 
-    puts answers.inspect
-
     answers.each do |answer|
       if answer.save
         prompt.update(selector: params[:selector]) if prompt.present?

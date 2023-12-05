@@ -24,8 +24,10 @@ one:
   pre_text: MyString
   post_text: MyString
   question: one
+  position: 1
 
 two:
   pre_text: MyString
   post_text: MyString
   question: two
+  position: 2
