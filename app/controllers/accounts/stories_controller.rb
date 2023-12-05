@@ -41,7 +41,6 @@ class Accounts::StoriesController < Accounts::BaseController
       @nodes = @question.parent_nodes
       @prompt = @prompts.first
       @selectors = question_answers.where(story_id: @story.id, prompt_id: @prompt.id)&.pluck(:response) if @prompt.present?
-      puts @selectors
       @prompt_pre_text, @prompt_post_text = parse_prompt_title(@story.id) if @prompt.present?
 
       @prompt_mode = @prompts.any? ? "on" : "off"
@@ -112,6 +111,7 @@ class Accounts::StoriesController < Accounts::BaseController
     @prompt_pre_text, @prompt_post_text = parse_prompt_title(params[:story_id]) if @prompt.present?
     question_answers = question.answers
     answer_response = question_answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
+    ai_content_mode = question.ai_prompt_attached ? "on" : "off"
 
     if params[:story_id].present? && @prompt.present?
       @selectors = question_answers.where(story_id: params[:story_id], prompt_id: @prompt.id)&.pluck(:response)
@@ -126,7 +126,7 @@ class Accounts::StoriesController < Accounts::BaseController
             render json: {
               html: render_to_string(partial: "display_question_content", locals: {
                                                                             renderer: "without_nodes_prompts_container",
-                                                                            ai_content_mode: question.ai_prompt_attached,
+                                                                            ai_content_mode: ai_content_mode,
                                                                             only_node_mode: "off",
                                                                             prompt_mode: "off",
                                                                             prompts: @prompts,
@@ -151,7 +151,7 @@ class Accounts::StoriesController < Accounts::BaseController
             render json: {
               html: render_to_string(partial: "display_question_content", locals: {
                                                                             renderer: "nodes_prompts_container",
-                                                                            ai_content_mode: question.ai_prompt_attached,
+                                                                            ai_content_mode: ai_content_mode,
                                                                             only_node_mode: "on",
                                                                             prompt_mode: "off",
                                                                             prompts: @prompts,
@@ -174,7 +174,7 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {
             html: render_to_string(partial: "display_question_content", locals: {
                                                                           renderer: "wrap_prompts_container",
-                                                                          ai_content_mode: question.ai_prompt_attached,
+                                                                          ai_content_mode: ai_content_mode,
                                                                           only_node_mode: "off",
                                                                           prompt_mode: "on",
                                                                           prompts: @prompts,
@@ -251,6 +251,7 @@ class Accounts::StoriesController < Accounts::BaseController
       end
     end
 
+    remove_detached_answers(question.answers, selectors)
     if params[:cursor] == "undefined"
       question_title = question.title
     else
@@ -337,6 +338,12 @@ class Accounts::StoriesController < Accounts::BaseController
     prompt.present? ?
       question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id, response: selector) :
       question.answers.find_or_initialize_by(story_id: params[:story_id], response: selector)
+  end
+
+  def remove_detached_answers(answers, selectors)
+    answers.each do |answer|
+      answer.destroy unless selectors.include?(answer.response)
+    end
   end
 
   def build_node_selection_structure(parent_nodes)
