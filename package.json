@@ -23,7 +23,7 @@
     "jstz": "^2.1.1",
     "local-time": "^2.1.0",
     "ninja-keys": "^1.2.2",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.32",
     "postcss-import": "^15.0.0",
     "sortablejs": "^1.15.1",
     "stimulus-flatpickr": "^3.0.0-0",
