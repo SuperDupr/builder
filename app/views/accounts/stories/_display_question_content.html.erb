@@ -1,4 +1,4 @@
-<div id="answerProvider" class="w-full" data-aicontent-mode="<% ai_content_mode %>" data-prompt-mode="<%= prompt_mode %>" data-only-node-mode="<%= only_node_mode %>" data-questionnaires-target="answerProvider">
+<div id="answerProvider" class="w-full" data-aicontent-mode="<%= ai_content_mode %>" data-prompt-mode="<%= prompt_mode %>" data-only-node-mode="<%= only_node_mode %>" data-questionnaires-target="answerProvider">
   <% if renderer == "wrap_prompts_container" %>
     <%= render(partial: "prompt_navigation", locals: { prompts: prompts, prompt: prompt }) %>
     <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
