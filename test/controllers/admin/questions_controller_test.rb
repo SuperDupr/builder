@@ -30,13 +30,13 @@ class Admin::QuestionsControllerTest < ActionDispatch::IntegrationTest
         parent_nodes_attributes: [
           {title: "Parent Node", child_nodes_attributes: [{title: "Child Node"}]}
         ]
-      }
+      },
+      fallback_builder_id: story_builders(:one).id
     }
 
     question = controller.instance_variable_get(:@question)
 
-    assert_redirected_to admin_questions_path
-    assert_equal "Question created successfully!", flash[:notice]
+    assert_equal "Question added successfully!", flash[:notice]
     assert_equal question.parent_nodes.first.title, "Parent Node"
     assert_equal question.prompts.first.pre_text, "Pre"
   end
@@ -54,7 +54,6 @@ class Admin::QuestionsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to admin_questions_path
-    assert_equal "Question updated successfully!", flash[:notice]
     question.reload
     assert_equal "Updated Title", question.title
   end

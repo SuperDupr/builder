@@ -17,7 +17,9 @@
 one:
   title: MyString
   position: 1
+  story_builder: one
 
 two:
   title: MyString
   position: 2
+  story_builder: one
