@@ -46,35 +46,35 @@ class AiDataParser
     @data = data
     @words = []
   end
-  
+
   def parse
     return "" if @data.nil?
-    
+
     scanner = StringScanner.new(data)
 
     eliminate_spaces_from_wrapped_tags
 
     while scanner.scan_until(/\{\{([^{}]+)\}\}/)
       word = eliminate_spaces_from_word(scanner[1])
-      
+
       validator = WordValidator.new(word: word).call
 
       validator[:success] ? find_answer_and_substitute(word) : @data.sub!(word, "______")
     end
-    
+
     unwrap_dynamic_content
-  end  
-  
-  private
-  
-  def eliminate_spaces_from_wrapped_tags
-    @data = @data.gsub(/\{\{([^{}]+)\}\}/) { |match| match.gsub(/\s+/, '') }
   end
-  
-  # This method removes the curly braces and any surrounding 
+
+  private
+
+  def eliminate_spaces_from_wrapped_tags
+    @data = @data.gsub(/\{\{([^{}]+)\}\}/) { |match| match.gsub(/\s+/, "") }
+  end
+
+  # This method removes the curly braces and any surrounding
   # spaces and leaves only the content inside.
   def unwrap_dynamic_content
-    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')    
+    @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')
   end
 
   def eliminate_spaces_from_word(word)
@@ -87,7 +87,7 @@ class AiDataParser
     @words << word
     @data.sub!(word, answer)
   end
-  
+
   class WordValidator
     attr_accessor :word
 
@@ -98,7 +98,7 @@ class AiDataParser
 
     def call
       sequence_and_format_validations
-      { success: @success, word: word }
+      {success: @success, word: word}
     end
 
     private
@@ -128,32 +128,32 @@ class AiDataParser
 
       if target_objects.size > 1
         prompt_position = target_objects[1][-1] || nil
-        answer_position = target_objects.size == 3 ? target_objects[2][-1] : nil
+        answer_position = (target_objects.size == 3) ? target_objects[2][-1] : nil
       end
-      
+
       query_answer(question_position, prompt_position, answer_position)
     end
 
     def query_answer(question_position, prompt_position, answer_position)
       if question_position && prompt_position && answer_position
         @story.answers.joins(question: :prompts).find_by(
-          position: answer_position, 
-          questions: { 
+          position: answer_position,
+          questions: {
             position: question_position,
-            prompts: { position: prompt_position }
+            prompts: {position: prompt_position}
           }
         )&.response
       elsif question_position && prompt_position
         @story.answers.joins(question: :prompts).find_by(
-          questions: { 
-            position: question_position, 
-            prompts: { 
-              position: prompt_position 
+          questions: {
+            position: question_position,
+            prompts: {
+              position: prompt_position
             }
           }
         )&.response
       else
-        @story.answers.joins(:question).find_by(questions: { position: question_position })&.response
+        @story.answers.joins(:question).find_by(questions: {position: question_position})&.response
       end
     end
   end

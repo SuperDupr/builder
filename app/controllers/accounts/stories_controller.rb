@@ -46,15 +46,15 @@ class Accounts::StoriesController < Accounts::BaseController
 
       @prompt_mode = @prompts.any? ? "on" : "off"
       @ai_content_mode = @question.ai_prompt_attached ? "on" : "off"
-      @only_node_mode = @prompt_mode == "off" && @nodes.present? ? "on" : "off"
-      
+      @only_node_mode = (@prompt_mode == "off" && @nodes.present?) ? "on" : "off"
+
       if @prompt_mode == "on"
         @renderer = "wrap_prompts_container"
       elsif @prompt_mode == "off"
-        if @only_node_mode == "on"
-          @renderer = "nodes_prompts_container"
+        @renderer = if @only_node_mode == "on"
+          "nodes_prompts_container"
         else
-          @renderer = "without_nodes_prompts_container"
+          "without_nodes_prompts_container"
         end
       end
     end
@@ -72,7 +72,7 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {status: @story.status.to_s, operation: "draft_mode"}
         else
           create_story_version(reset_old: true)
-          render json: { url: final_version_path(@story.id) }
+          render json: {url: final_version_path(@story.id)}
         end
       end
 
@@ -93,10 +93,10 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {question_id: nil, question_title: nil, success: false}
         else
           render json: {
-            question_id: @question.id, 
-            question_title: @question.title, 
+            question_id: @question.id,
+            question_title: @question.title,
             ai_mode: @question.ai_prompt_attached,
-            multiple_node_selection_mode: @question.multiple_node_selection, 
+            multiple_node_selection_mode: @question.multiple_node_selection,
             success: true
           }
         end
@@ -112,7 +112,7 @@ class Accounts::StoriesController < Accounts::BaseController
     @prompt_pre_text, @prompt_post_text = parse_prompt_title(params[:story_id]) if @prompt.present?
     question_answers = question.answers
     answer_response = question_answers&.find_by(story_id: params[:story_id])&.response if params[:story_id].present?
-    
+
     if params[:story_id].present? && @prompt.present?
       @selectors = question_answers.where(story_id: params[:story_id], prompt_id: @prompt.id)&.pluck(:response)
     end
@@ -124,21 +124,21 @@ class Accounts::StoriesController < Accounts::BaseController
         if @prompt.nil?
           if node_selection.empty?
             render json: {
-              html: render_to_string(partial: "display_question_content", locals: { 
-                renderer: "without_nodes_prompts_container",
-                ai_content_mode: question.ai_prompt_attached,
-                only_node_mode: "off",
-                prompt_mode: "off",
-                prompts: @prompts,
-                prompt: @prompt,
-                prompt_pretext: @prompt_pre_text,
-                prompt_posttext: @prompt_post_text,
-                selectors: @selectors,
-                nodes: question.parent_nodes,
-                multiple_selection_mode: question.multiple_node_selection,
-                answer: answer_response
-              },
-              formats: [:html]),
+              html: render_to_string(partial: "display_question_content", locals: {
+                                                                            renderer: "without_nodes_prompts_container",
+                                                                            ai_content_mode: question.ai_prompt_attached,
+                                                                            only_node_mode: "off",
+                                                                            prompt_mode: "off",
+                                                                            prompts: @prompts,
+                                                                            prompt: @prompt,
+                                                                            prompt_pretext: @prompt_pre_text,
+                                                                            prompt_posttext: @prompt_post_text,
+                                                                            selectors: @selectors,
+                                                                            nodes: question.parent_nodes,
+                                                                            multiple_selection_mode: question.multiple_node_selection,
+                                                                            answer: answer_response
+                                                                          },
+                formats: [:html]),
               nodes_without_prompt: false,
               prompt_id: nil,
               prompt_pretext: nil,
@@ -149,21 +149,21 @@ class Accounts::StoriesController < Accounts::BaseController
             }
           else
             render json: {
-              html: render_to_string(partial: "display_question_content", locals: { 
-                renderer: "nodes_prompts_container",
-                ai_content_mode: question.ai_prompt_attached,
-                only_node_mode: "on",
-                prompt_mode: "off",
-                prompts: @prompts,
-                prompt: @prompt,
-                prompt_pretext: @prompt_pre_text,
-                prompt_posttext: @prompt_post_text,
-                selectors: @selectors,
-                nodes: question.parent_nodes,
-                multiple_selection_mode: question.multiple_node_selection,
-                answer: answer_response
-              },
-              formats: [:html]),
+              html: render_to_string(partial: "display_question_content", locals: {
+                                                                            renderer: "nodes_prompts_container",
+                                                                            ai_content_mode: question.ai_prompt_attached,
+                                                                            only_node_mode: "on",
+                                                                            prompt_mode: "off",
+                                                                            prompts: @prompts,
+                                                                            prompt: @prompt,
+                                                                            prompt_pretext: @prompt_pre_text,
+                                                                            prompt_posttext: @prompt_post_text,
+                                                                            selectors: @selectors,
+                                                                            nodes: question.parent_nodes,
+                                                                            multiple_selection_mode: question.multiple_node_selection,
+                                                                            answer: answer_response
+                                                                          },
+                formats: [:html]),
               nodes_without_prompt: true,
               nodes: node_selection,
               answer: answer_response,
@@ -172,21 +172,21 @@ class Accounts::StoriesController < Accounts::BaseController
           end
         else
           render json: {
-            html: render_to_string(partial: "display_question_content", locals: { 
-              renderer: "wrap_prompts_container",
-              ai_content_mode: question.ai_prompt_attached,
-              only_node_mode: "off",
-              prompt_mode: "on",
-              prompts: @prompts,
-              prompt: @prompt,
-              prompt_pretext: @prompt_pre_text,
-              prompt_posttext: @prompt_post_text,
-              selectors: @selectors,
-              nodes: question.parent_nodes,
-              multiple_selection_mode: question.multiple_node_selection,
-              answer: answer_response
-            },
-            formats: [:html]),
+            html: render_to_string(partial: "display_question_content", locals: {
+                                                                          renderer: "wrap_prompts_container",
+                                                                          ai_content_mode: question.ai_prompt_attached,
+                                                                          only_node_mode: "off",
+                                                                          prompt_mode: "on",
+                                                                          prompts: @prompts,
+                                                                          prompt: @prompt,
+                                                                          prompt_pretext: @prompt_pre_text,
+                                                                          prompt_posttext: @prompt_post_text,
+                                                                          selectors: @selectors,
+                                                                          nodes: question.parent_nodes,
+                                                                          multiple_selection_mode: question.multiple_node_selection,
+                                                                          answer: answer_response
+                                                                        },
+              formats: [:html]),
             nodes_without_prompt: false,
             prompt_id: @prompt.id,
             prompt_pretext: @prompt_pre_text,
@@ -233,24 +233,23 @@ class Accounts::StoriesController < Accounts::BaseController
     answers = []
     success = true
 
-    if params[:ai_mode] == "on"
-      selectors = [params[:selector]]
+    selectors = if params[:ai_mode] == "on"
+      [params[:selector]]
     else
-      selectors = params[:selector].split(",")
+      params[:selector].split(",")
     end
-    
-    
+
     selectors.each do |selector|
       answers << track_answer_as_per_prompt(question, prompt, selector)
     end
 
     puts answers.inspect
 
-    answers.each do |answer| 
-      unless answer.save
-        success = false
-      else
+    answers.each do |answer|
+      if answer.save
         prompt.update(selector: params[:selector]) if prompt.present?
+      else
+        success = false
       end
     end
 
@@ -258,16 +257,15 @@ class Accounts::StoriesController < Accounts::BaseController
       question_title = question.title
     else
       story = Story.find_by(id: answers.first.story_id)
-  
+
       if story.present?
-        next_position = params[:cursor] == "backward" ? question.position - 1 : question.position + 1
+        next_position = (params[:cursor] == "backward") ? question.position - 1 : question.position + 1
         next_position += 1 if next_position == 0
         next_question = story.story_builder.questions.find_by(position: next_position)
         question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
       end
     end
 
-    
     respond_to do |format|
       format.json do
         render json: {answers: answers, next_question_title: question_title, success: success}
@@ -289,9 +287,9 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def ai_based_questions_content
     question = Question.find(params[:question_id])
-    
+
     dynamic_content = AiDataParser.new(
-      story_id: params[:story_id], 
+      story_id: params[:story_id],
       data: question.ai_prompt
     ).parse
 
@@ -299,7 +297,7 @@ class Accounts::StoriesController < Accounts::BaseController
       current_user: current_user,
       content: dynamic_content
     })
-    
+
     respond_to do |format|
       format.json do
         render json: {
@@ -338,10 +336,9 @@ class Accounts::StoriesController < Accounts::BaseController
   end
 
   def track_answer_as_per_prompt(question, prompt, selector)
-    answer = prompt.present? ?
+    prompt.present? ?
       question.answers.find_or_initialize_by(story_id: params[:story_id], prompt_id: prompt.id, response: selector) :
       question.answers.find_or_initialize_by(story_id: params[:story_id], response: selector)
-    answer
   end
 
   def build_node_selection_structure(parent_nodes)
@@ -361,14 +358,9 @@ class Accounts::StoriesController < Accounts::BaseController
 
     node_selection
   end
-  
+
   def create_story_version(reset_old:)
-    if params[:request_new_version].present?
-      notice = "Enhancing the story with a new version!"
-    else
-      @story.complete!
-      notice = "Story marked as completed successfully!"
-    end
+    @story.complete! unless params[:request_new_version].present?
 
     @story.update(ai_generated_content: nil) if reset_old
 

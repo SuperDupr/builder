@@ -13,7 +13,7 @@ class ChangeResponseBasedColumnsTypesOfAnswersAndPrompts < ActiveRecord::Migrati
       end
     end
   end
-  
+
   def down
     remove_column :prompts, :position
     remove_column :answers, :position
