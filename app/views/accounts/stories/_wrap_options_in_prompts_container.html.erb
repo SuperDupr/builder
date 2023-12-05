@@ -1,5 +1,5 @@
 <div id="promptContainer" class="w-full flex items-center gap-3 flex-wrap justify-center" data-id="<%= prompt.id %>" data-questionnaires-target="promptContainer">
   <div id="promptPreText" class="fs-20"><%= prompt_pretext %></div>
-    <%= render(partial: "select_options", locals: { prompt: prompt, nodes: nodes, answer: answer, selector: selector }) %>
+    <%= render(partial: "select_options", locals: { prompt: prompt, nodes: nodes, answer: answer, selector: selector, multiple_selection_mode: multiple_selection_mode }) %>
   <div id="promptPostText" class="fs-20"><%= prompt_posttext %></div>
 </div>

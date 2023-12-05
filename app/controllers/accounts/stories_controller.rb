@@ -134,6 +134,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt_posttext: @prompt_post_text,
                 selector: @selector,
                 nodes: question.parent_nodes,
+                multiple_selection_mode: question.multiple_node_selection,
                 answer: answer_response
               },
               formats: [:html]),
@@ -158,6 +159,7 @@ class Accounts::StoriesController < Accounts::BaseController
                 prompt_posttext: @prompt_post_text,
                 selector: @selector,
                 nodes: question.parent_nodes,
+                multiple_selection_mode: question.multiple_node_selection,
                 answer: answer_response
               },
               formats: [:html]),
@@ -180,6 +182,7 @@ class Accounts::StoriesController < Accounts::BaseController
               prompt_posttext: @prompt_post_text,
               selector: @selector,
               nodes: question.parent_nodes,
+              multiple_selection_mode: question.multiple_node_selection,
               answer: answer_response
             },
             formats: [:html]),
