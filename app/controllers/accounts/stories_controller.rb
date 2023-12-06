@@ -251,7 +251,7 @@ class Accounts::StoriesController < Accounts::BaseController
       end
     end
 
-    remove_detached_answers(question.answers, selectors)
+    remove_detached_answers(question.answers, selectors, prompt&.id)
 
     if params[:cursor] == "undefined"
       question_title = question.title
@@ -341,9 +341,18 @@ class Accounts::StoriesController < Accounts::BaseController
       question.answers.find_or_initialize_by(story_id: params[:story_id], response: selector)
   end
 
-  def remove_detached_answers(answers, selectors)
+  def keep_answer?(answer, selectors, prompt_id)
+    if prompt_id.present?
+      return true if answer.prompt_id != prompt_id
+      selectors.include?(answer.response)
+    else
+      selectors.include?(answer.response)
+    end
+  end
+
+  def remove_detached_answers(answers, selectors, prompt_id)
     answers.each do |answer|
-      answer.destroy unless selectors.include?(answer.response)
+      answer.destroy unless keep_answer?(answer, selectors, prompt_id)
     end
   end
 

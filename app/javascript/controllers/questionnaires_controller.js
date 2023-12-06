@@ -290,7 +290,7 @@ export default class extends Controller {
 
     if (this.answerProviderTarget.dataset.aicontentMode === "on") {
       answerFieldValue = this.answerTarget.textContent
-    } else if (answerProviderTarget.dataset.aicontentMode === "off") {
+    } else if (this.answerProviderTarget.dataset.aicontentMode === "off") {
       answerFieldValue = this.answerTarget.value
     }
 
