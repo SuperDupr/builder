@@ -344,10 +344,9 @@ class Accounts::StoriesController < Accounts::BaseController
   def keep_answer?(answer, selectors, prompt_id)
     if prompt_id.present?
       return true if answer.prompt_id != prompt_id
-      selectors.include?(answer.response)
-    else
-      selectors.include?(answer.response)
     end
+
+    selectors.include?(answer.response)
   end
 
   def remove_detached_answers(answers, selectors, prompt_id)
