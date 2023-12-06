@@ -258,13 +258,13 @@ class Accounts::StoriesController < Accounts::BaseController
     if params[:cursor] == "undefined"
       question_title = question.title
     else
-      story = Story.find_by(id: answers.first.story_id)
+      story = Story.find_by(id: params[:story_id])
 
       if story.present?
         next_position = (params[:cursor] == "backward") ? question.position - 1 : question.position + 1
         next_position += 1 if next_position == 0
         next_question = story.story_builder.questions.find_by(position: next_position)
-        question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
+        question_title = AiDataParser.new(story_id: params[:story_id], data: next_question.title).parse
       end
     end
 
