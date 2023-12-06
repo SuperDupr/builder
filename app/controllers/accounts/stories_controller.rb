@@ -115,6 +115,8 @@ class Accounts::StoriesController < Accounts::BaseController
 
     if params[:story_id].present? && @prompt.present?
       @selectors = question_answers.where(story_id: params[:story_id], prompt_id: @prompt.id)&.pluck(:response)
+    elsif params[:story_id].present?
+      @selectors = question_answers.where(story_id: params[:story_id])&.pluck(:response)
     end
 
     node_selection = build_node_selection_structure(question.parent_nodes)
