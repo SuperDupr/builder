@@ -168,7 +168,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.2.0)
       railties (>= 6.0.0)
-    date (3.3.3)
+    date (3.3.4)
     devise (4.9.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
