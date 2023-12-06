@@ -363,9 +363,9 @@ export default class extends Controller {
     } else if (promptMode === "off") {
       let answerFieldValue = this.handleAnswerAsPerNodeMode()
 
-      let aiResult = this.handleAnswerAsPerAiContentMode()
+      // let aiResult = this.handleAnswerAsPerAiContentMode()
 
-      console.log(aiResult)
+      // console.log(aiResult)
 
       this.trackAnswerAsPerValidation(event, navigator, answerFieldValue, answerTrackedBefore)
     }
