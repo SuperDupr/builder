@@ -115,6 +115,8 @@ class Accounts::StoriesController < Accounts::BaseController
 
     if params[:story_id].present? && @prompt.present?
       @selectors = question_answers.where(story_id: params[:story_id], prompt_id: @prompt.id)&.pluck(:response)
+    elsif params[:story_id].present?
+      @selectors = question_answers.where(story_id: params[:story_id])&.pluck(:response)
     end
 
     node_selection = build_node_selection_structure(question.parent_nodes)
@@ -251,17 +253,17 @@ class Accounts::StoriesController < Accounts::BaseController
       end
     end
 
-    remove_detached_answers(question.answers, selectors)
+    remove_detached_answers(question.answers, selectors, prompt&.id)
     if params[:cursor] == "undefined"
       question_title = question.title
     else
-      story = Story.find_by(id: answers.first.story_id)
+      story = Story.find_by(id: params[:story_id])
 
       if story.present?
         next_position = (params[:cursor] == "backward") ? question.position - 1 : question.position + 1
         next_position += 1 if next_position == 0
         next_question = story.story_builder.questions.find_by(position: next_position)
-        question_title = AiDataParser.new(story_id: answers.first.story_id, data: next_question.title).parse
+        question_title = AiDataParser.new(story_id: params[:story_id], data: next_question.title).parse
       end
     end
 
@@ -340,9 +342,17 @@ class Accounts::StoriesController < Accounts::BaseController
       question.answers.find_or_initialize_by(story_id: params[:story_id], response: selector)
   end
 
-  def remove_detached_answers(answers, selectors)
+  def keep_answer?(answer, selectors, prompt_id)
+    if prompt_id.present?
+      return true if answer.prompt_id != prompt_id
+    end
+
+    selectors.include?(answer.response)
+  end
+
+  def remove_detached_answers(answers, selectors, prompt_id)
     answers.each do |answer|
-      answer.destroy unless selectors.include?(answer.response)
+      answer.destroy unless keep_answer?(answer, selectors, prompt_id)
     end
   end
 

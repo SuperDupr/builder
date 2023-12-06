@@ -1,52 +1,38 @@
-# ***Algorithm for parsing the AI prompt data***
+# AiDataParser is responsible for parsing AI-generated data with placeholders
+# and substituting them with corresponding answers from the database.
 
-# Q denotes Question
-# P denotes Prompt
-# A denotes Answer
+# Valid Combinations:
 
-# choice = "Q#1: P#1"
+# Q#1
+# Q#100
+# Q#1:P#2
+# Q#100:P#99:A#3
+# Invalid Combinations:
 
-# A valid choice must have *Q* alphabet
-# A valid choice can't have alphabets except *Q*, *P*
-# A valid choice must contain alphabets in order of [Q, P] or simply [Q]
-# A number must be preceeded by a hash (#)
-# Each data aggregate is a combination of the sequence: [Q/P][#][(1..100)]
-# A semi-colon must comes after the number except for the last number in the string
-
-# Any other character presence except hash and space in the choice will make it invalid
-
-# *Level #1: Validations*
-
-# A valid choice must have *Q* alphabet
-# A valid choice can't have alphabets except *Q*, *P*
-# A valid choice must contain alphabets in order of [Q, P] or simply [Q]
-
-# *Level #2: Validations*
-
-# Each data aggregate is a combination of the sequence: [Q/P][#][(1..100)]
-# A semi-colon must comes after the number except for the last number in the string
-# (A semi-colon after the last number would be ignored)
-
-# *Level #3: Breaking a valid choice*
-
-# For example; choice = "Q#1: P#1"
-
-# Extract counter parts:
-
-# Q#1 -> Number after hash; Find question by position /1/
-# P#1 -> Number after hash; Find question's prompt by position /1/
-
-# Find the answer finally
-
+# Q#0 (Invalid position; should start from 1)
+# Q#01 (Invalid leading zero in the position)
+# Q#101 (Position cannot be greater than 100)
+# Q#1:P#0 (Invalid position for Prompt; should start from 1)
+# Q#1:A#01 (Invalid leading zero in the position for Answer)
+# Q#1:A#1 (Invalid as Answer position relies on Prompts)
 class AiDataParser
   attr_accessor :data, :words
 
+  # Initializes an AiDataParser instance with the given story_id and data.
+  # The story_id is used to retrieve answers from the database.
+  #
+  # @param story_id [Integer] ID of the story.
+  # @param data [String] AI-enabled data with placeholders.
   def initialize(story_id:, data:)
     @story = Story.find(story_id)
     @data = data
     @words = []
   end
 
+  # Parses the AI-generated data and substitutes placeholders with answers.
+  # The parsed data is returned.
+  #
+  # @return [String] Parsed data with substituted answers.
   def parse
     return "" if @data.nil?
 
@@ -67,6 +53,7 @@ class AiDataParser
 
   private
 
+  # Eliminates spaces from wrapped tags in the data.
   def eliminate_spaces_from_wrapped_tags
     @data = @data.gsub(/\{\{([^{}]+)\}\}/) { |match| match.gsub(/\s+/, "") }
   end
@@ -77,10 +64,17 @@ class AiDataParser
     @data.gsub(/{{\s*([^}]*)\s*}}/, '\1')
   end
 
+  # Eliminates spaces from a word.
+  #
+  # @param word [String] The word to process.
+  # @return [String] The word with spaces eliminated.
   def eliminate_spaces_from_word(word)
     word.gsub(/\s+/, "")
   end
 
+  # Finds the answer corresponding to the given word and substitutes it in the data.
+  #
+  # @param word [String] The placeholder word.
   def find_answer_and_substitute(word)
     answer = ExtractAnswer.new(word: word, story: @story).call || "______"
 
@@ -88,14 +82,21 @@ class AiDataParser
     @data.sub!(word, answer)
   end
 
+  # WordValidator class validates the format of a word.
   class WordValidator
     attr_accessor :word
 
+    # Initializes a WordValidator instance with the given word.
+    #
+    # @param word [String] The word to validate.
     def initialize(word:)
       @word = word
       @success = false
     end
 
+    # Validates the format of the word and returns a hash indicating success.
+    #
+    # @return [Hash] Validation result with success status and word.
     def call
       sequence_and_format_validations
       {success: @success, word: word}
@@ -103,6 +104,7 @@ class AiDataParser
 
     private
 
+    # Performs sequence and format validations on the word.
     def sequence_and_format_validations
       @success = /\AQ#(100|[1-9]\d?)(:P#(100|[1-9]\d?)(:A#(100|[1-9]\d?))?)?\z/.match?(word)
     end
@@ -111,17 +113,25 @@ class AiDataParser
   class ExtractAnswer
     attr_reader :word
 
+    # Initializes an ExtractAnswer instance with the given word and story.
+    #
+    # @param word [String] The placeholder word.
+    # @param story [Story] The story from which to retrieve answers.
     def initialize(word:, story:)
       @word = word
       @story = story
     end
 
+    # Extracts and returns the answer corresponding to the word.
+    #
+    # @return [String, nil] The extracted answer or nil if not found.
     def call
       extract_counter_parts
     end
 
     private
 
+    # Extracts counter parts from the word and queries the database for the answer.
     def extract_counter_parts
       target_objects = word.split(":")
       question_position = target_objects[0][-1]
@@ -134,6 +144,7 @@ class AiDataParser
       query_answer(question_position, prompt_position, answer_position)
     end
 
+    # Queries the database for the answer based on counter parts.
     def query_answer(question_position, prompt_position, answer_position)
       if question_position && prompt_position && answer_position
         @story.answers.joins(question: :prompts).find_by(
