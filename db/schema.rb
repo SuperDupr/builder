@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_04_032555) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_06_203258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -343,6 +343,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_04_032555) do
     t.boolean "ai_prompt_attached", default: false
     t.text "ai_prompt"
     t.boolean "multiple_node_selection", default: false
+    t.text "subtitle"
   end
 
   create_table "stories", force: :cascade do |t|
@@ -365,6 +366,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_04_032555) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "system_ai_prompt"
     t.text "admin_ai_prompt"
   end
 
