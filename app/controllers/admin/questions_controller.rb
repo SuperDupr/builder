@@ -49,6 +49,7 @@ class Admin::QuestionsController < Admin::ApplicationController
   def question_params
     params.require(:question).permit(
       :title,
+      :subtitle,
       :ai_prompt_attached,
       :multiple_node_selection,
       :ai_prompt,
