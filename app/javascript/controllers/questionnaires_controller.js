@@ -51,12 +51,23 @@ export default class extends Controller {
     this.currentQuestionPosition = this.activePositions[toBeNavigatedPositionIndex]
   }
 
+  changeTextOfContentBtn(content) {
+    this.contentBtnTarget.textContent = content
+  }
+
   handleContentBtnAndNavigation(aiMode) {
+    let content
+
     if(aiMode){
       if(this.hasContentBtnTarget){
-        this.answerTarget.value.length > 0 ?
-          this.contentBtnTarget.textContent = "Create another version" :
-          this.contentBtnTarget.textContent = 'Get Content'
+        if (this.hasAnswerTarget) {
+          content = this.answerTarget.value.length > 0 ? "Create another version" : "Get Content"
+          this.changeTextOfContentBtn(content)
+        } else {
+          let answer = document.getElementById("answer")
+          content = answer.value.length > 0 ? "Create another version" : "Get Content"
+          this.changeTextOfContentBtn(content)
+        }
           
         this.contentBtnTarget.style.display = 'inline-flex'
       }
@@ -261,7 +272,9 @@ export default class extends Controller {
         // return true
       }
     } else if (this.answerProviderTarget.dataset.onlyNodeMode === "off") {
-      let answerFieldValue = this.answerTarget.value
+      let answerFieldValue = this.hasAnswerTarget ? 
+        this.answerTarget.value : 
+        document.getElementById("answer").value
       const checkedValues = []
 
       if (answerFieldValue === '') {
@@ -289,9 +302,13 @@ export default class extends Controller {
     let answerFieldValue
 
     if (this.answerProviderTarget.dataset.aicontentMode === "on") {
-      answerFieldValue = this.answerTarget.textContent
+      answerFieldValue = this.hasAnswerTarget ? 
+        this.answerTarget.textContent :
+        document.getElementById("answer").textContent
     } else if (this.answerProviderTarget.dataset.aicontentMode === "off") {
-      answerFieldValue = this.answerTarget.value
+      answerFieldValue = this.hasAnswerTarget ? 
+        this.answerTarget.value :
+        document.getElementById("answer").value
     }
 
     return answerFieldValue
