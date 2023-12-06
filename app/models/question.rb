@@ -8,6 +8,7 @@
 #  ai_prompt_attached      :boolean          default(FALSE)
 #  multiple_node_selection :boolean          default(FALSE)
 #  position                :integer
+#  subtitle                :text
 #  title                   :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
