@@ -304,7 +304,7 @@ export default class extends Controller {
     if (this.answerProviderTarget.dataset.aicontentMode === "on") {
       answerFieldValue = this.hasAnswerTarget ? 
         this.answerTarget.textContent :
-        document.getElementById("answer").textContent
+        document.getElementById("answer")?.textContent
     } else if (this.answerProviderTarget.dataset.aicontentMode === "off") {
       answerFieldValue = this.hasAnswerTarget ? 
         this.answerTarget.value :
