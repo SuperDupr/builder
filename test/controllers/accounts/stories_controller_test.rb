@@ -91,7 +91,7 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     story_builder.questions << questions(:one)
     question = story_builder.questions.first
 
-    get question_navigation_path(story_builder.id), params: {position: 1}, xhr: true
+    get question_navigation_path(story_builder.id), params: {story_id: @story.id, position: 1}, xhr: true
 
     assert_equal(JSON.parse(response.body)["question_title"], question.title)
     assert_response :success
