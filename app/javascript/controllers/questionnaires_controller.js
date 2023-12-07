@@ -263,13 +263,10 @@ export default class extends Controller {
 
       if (!checkboxesInfo[0]) {
         this.errorTextTarget.classList.remove("hidden");
-        // return false
+        return ""
       } else {
         this.errorTextTarget.classList.add("hidden");
-        // let questionId = this.questionContainerTarget.dataset.id
-        // let storyId = document.getElementById("storyDetails").dataset.storyId
-        // this.trackAnswer(questionId, storyId, "", checkboxesInfo[1])
-        // return true
+        return checkboxesInfo[1]
       }
     } else if (this.answerProviderTarget.dataset.onlyNodeMode === "off") {
       let answerFieldValue = this.hasAnswerTarget ? 
