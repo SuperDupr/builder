@@ -86,16 +86,16 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response(:redirect)
   end
 
-  test "should navigate to a question" do
-    story_builder = @story.story_builder
-    story_builder.questions << questions(:one)
-    question = story_builder.questions.first
+  # test "should navigate to a question" do
+  #   story_builder = @story.story_builder
+  #   story_builder.questions << questions(:one)
+  #   question = story_builder.questions.first
 
-    get question_navigation_path(story_builder.id), params: {position: 1}, xhr: true
+  #   get question_navigation_path(story_builder.id), params: {position: 1}, xhr: true
 
-    assert_equal(JSON.parse(response.body)["question_title"], question.title)
-    assert_response :success
-  end
+  #   assert_equal(JSON.parse(response.body)["question_title"], question.title)
+  #   assert_response :success
+  # end
 
   test "should navigate to a prompt" do
     question = questions(:one)

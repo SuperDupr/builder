@@ -85,6 +85,7 @@ class Accounts::StoriesController < Accounts::BaseController
   def question_navigation
     story_builder = StoryBuilder.find(params[:story_builder_id])
     @question = story_builder.questions.active.find_by(position: params[:position].to_i)
+    question_title = AiDataParser.new(story_id: params[:story_id], data: @question.title).parse
 
     respond_to do |format|
       format.json do
@@ -93,7 +94,7 @@ class Accounts::StoriesController < Accounts::BaseController
         else
           render json: {
             question_id: @question.id,
-            question_title: @question.title,
+            question_title: question_title,
             ai_mode: @question.ai_prompt_attached,
             multiple_node_selection_mode: @question.multiple_node_selection,
             success: true
