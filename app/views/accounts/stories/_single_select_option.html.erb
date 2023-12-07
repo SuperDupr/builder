@@ -6,7 +6,7 @@
   class="mr-1 mt-[2px] nodes" 
   value="<%= node.id %>" 
   data-text="<%= node.title %>" 
-  <%= selectors.include?(node.title) ? 'checked' : '' %>
+  <%= selectors.present? ? (selectors.include?(node.title) ? 'checked' : '') : '' %>
   >
   <%= node.title %>
 </label>
