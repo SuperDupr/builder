@@ -25,7 +25,11 @@
 one:
   response: MyText
   question: one
+  story: one
+  position: 1
 
 two:
   response: MyText
   question: two
+  story: two
+  position: 1
