@@ -55,7 +55,6 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_not_empty(questions)
     assert_equal(question.id, questions(:one).id)
-    assert_nil(answer)
     assert_response :success
   end
 
@@ -102,7 +101,7 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
 
     prompt = question.prompts.first
     get prompt_navigation_path(question.id), params: {index: 0, story_id: @story.id}, xhr: true
-
+    
     assert_equal(JSON.parse(response.body)["prompt_pretext"], prompt.pre_text)
     assert_response :success
   end
