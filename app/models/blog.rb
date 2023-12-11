@@ -10,4 +10,5 @@
 #  updated_at :datetime         not null
 #
 class Blog < ApplicationRecord
+  has_rich_text :content
 end
