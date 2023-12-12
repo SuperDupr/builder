@@ -12,4 +12,5 @@ class Blog < ApplicationRecord
   validates_presence_of :title
   
   has_rich_text :body
+  acts_as_taggable_on :tags
 end
