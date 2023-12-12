@@ -3,7 +3,7 @@ module Admin
     before_action :set_blog, only: [:show, :edit, :update, :destroy]
 
     def index
-      @pagy, @blogs = pagy(Blog.all)    
+      @pagy, @blogs = pagy(Blog.all.includes(:rich_text_body))    
     end
 
     def new
@@ -48,7 +48,7 @@ module Admin
     end
 
     def blog_params
-      params.require(:blog).permit(:title, :body, :published)      
+      params.require(:blog).permit(:title, :body, :published, tags: [])      
     end
   end
 end
