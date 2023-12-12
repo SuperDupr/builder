@@ -47,6 +47,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :blogs
+
       root to: "dashboard#show"
     end
 

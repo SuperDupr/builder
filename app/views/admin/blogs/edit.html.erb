@@ -1,0 +1,3 @@
+<h1>Edit Blog</h1>
+<%= render(partial: "form", locals: { blog: @blog, url: admin_blog_path(@blog) }) %>
+<%= link_to 'Back', admin_blogs_path, class: "btn btn-primary" %>
