@@ -16,4 +16,16 @@ class BlogTest < ActiveSupport::TestCase
 
     assert(blog.invalid?, true)
   end
+
+  test "Associations" do
+    @associations_reflector = Blog.reflect_on_all_associations
+
+    # assoc_classes = @associations_reflector.map { |assoc_ref| assoc_ref.class }
+    assoc_names = @associations_reflector.map { |assoc_ref| assoc_ref.name }
+
+    # assert_includes(assoc_classes, ActiveRecord::Reflection::BelongsToReflection)
+    assert_includes(assoc_names, :taggings)
+    assert_includes(assoc_names, :tags)
+    assert_includes(assoc_names, :tag_taggings)
+  end
 end
