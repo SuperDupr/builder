@@ -116,7 +116,6 @@ Rails.application.routes.draw do
   patch "/users/:id/update_team", to: "teams#update_user", as: :update_user
 
   resources :story_builders
-  resources :blogs
 
   # Payments
   resource :billing_address
