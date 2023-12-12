@@ -14,12 +14,12 @@ class CreateBlogs < ActiveRecord::Migration[7.0]
 
         puts "*** Seeding Blogs ***"
         50.times do |i|
-          blog = Blog.create(
+          Blog.create(
             title: "Blog - #{i}",
             body: "ActionText content",
             published: false
           )
-        end   
+        end
       end
 
       dir.down {}
