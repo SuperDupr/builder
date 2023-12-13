@@ -4,11 +4,11 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  // connect() {
-  // }
+  connect() {
+    this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  }
 
   toggleSwitchListener(event) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const blogId = event.target.dataset.id
     const isConfirmed = confirm("This will publish the blog. You can't reverse this action. Are you sure to continue?");
     
@@ -21,7 +21,7 @@ export default class extends Controller {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
+        "X-CSRF-Token": this.csrfToken
       },
     }).then((response) => {
       if (response.ok) {
