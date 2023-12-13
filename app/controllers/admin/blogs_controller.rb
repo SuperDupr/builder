@@ -3,7 +3,7 @@ module Admin
     before_action :set_blog, only: [:show, :edit, :update, :destroy]
 
     def index
-      @pagy, @blogs = pagy(Blog.all.includes(:rich_text_body))
+      @pagy, @blogs = pagy(Blog.all)
     end
 
     def new
