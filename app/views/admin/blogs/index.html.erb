@@ -1,36 +1,75 @@
-<h1>Blog Index</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Body</th>
-      <th>Published</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @blogs.each do |blog| %>
-      <tr>
-        <td><%= blog.title %></td>
-        <td><%= blog.body %></td>
-        <td><%= blog.published ? 'Yes' : 'No' %></td>
-        <td><%= link_to 'Show', admin_blog_path(blog) %></td>
-        <td><%= link_to 'Edit', edit_admin_blog_path(blog) %></td>
-        <td><%= link_to 'Destroy', admin_blog_path(blog), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class='flex justify-between items-center mb-4 px-4 shadow-md py-4'>
+  <h4>Blogs</h4>
+  <%= link_to("New Blog", new_admin_blog_path, class: "btn btn-primary") %>
+</div>
+<div class="container mx-auto px-4" data-controller="blogs">
+  <div class="overflow-x-auto">
+    <table class="border border-collapse mt-5">
+      <thead>
+        <tr>
+          <th class="">Title</th>
+          <th class="">Tags</th>
+          <th class="">Published</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      <thead>
+      <tbody>
+        <% if @blogs.present? %>
+          <% @blogs.each do |blog| %>
+            <tr>
+              <td><%= blog.title %></td>
+              <td><%= blog.tag_list.present? ? blog.tag_list : 'No Tags Present' %></td>
+              <td>
+                <div class="flex items-center w-full">
+                  <% if blog.published %>
+                    <label class="flex items-center">
+                      <div class="relative">
+                        <input type="checkbox" class="sr-only" checked disabled>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 text-gray-700 font-medium"></div>
+                    </label>
+                  <% else %>
+                    <label for="publish<%= blog.id %>" class="flex items-center cursor-pointer">
+                      <div class="relative" data-controller="tooltip" data-tippy-content="Publish the blog. You can't reverse this action">
+                        <input id="publish<%= blog.id %>" type="checkbox" class="sr-only"  
+                          data-id="<%= blog.id %>" data-action="click->blogs#toggleSwitchListener" <%= blog.published ? "checked" : "" %>>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 text-gray-700 font-medium"></div>
+                    </label>
+                  <% end %>
+                </div>
+              </td>
+              <td>
+                <div class="flex items-center justify-end gap-2">
+                  <%= link_to(admin_blog_path(blog), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-eye"></i>
+                  <% end %>
+                  <%= link_to(edit_admin_blog_path(blog), class: "btn btn-primary") do %>
+                    <i class="fa-solid fa-pencil"></i>
+                  <% end %>
+                  <%= link_to(admin_blog_path(blog), class: "btn btn-danger", method: :delete,
+                  data: { confirm: "Are you sure?" }) do %>
+                    <i class="fa-solid fa-trash"></i>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="3" class="text-center">No Blogs found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @pagy.pages > 1 %>
+      <div class="my-6 text-right">
+        <%== pagy_nav(@pagy) %>
+      </div>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<!-- TODO: Utilize the @pagy variable for pagination -->
-<% if @pagy.pages > 1 %>
-  <div class="my-6 text-center">
-    <%== pagy_nav(@pagy) %>
   </div>
-<% end %>
-
-<%= link_to 'New Blog', new_admin_blog_path, class: "btn btn-primary" %>
+</div>

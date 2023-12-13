@@ -1,3 +1,7 @@
-<h1>New Blog</h1>
-
-<%= render(partial: "form", locals: { blog: @blog, url: admin_blogs_path }) %>
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4>New Blog</h4>
+  <%= link_to("Back to Blogs", admin_blogs_path, class: 'btn btn-primary') %>
+</header>
+<div class="px-4">
+  <%= render(partial: "form", locals: { blog: @blog, url: admin_blogs_path }) %>
+</div>

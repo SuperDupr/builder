@@ -1,14 +1,30 @@
-<h1><%= @blog.title %></h1>
+<header class="main-content__header flex place-content-between justify-between items-center mb-4 px-4 shadow-md py-4">
+  <h4 class="main-content__page-title">
+    Show Blog
+  </h4>
+  <div class="ml-2">
+    <%= link_to("Edit Blog", edit_admin_blog_path(@blog), class: 'btn btn-primary') %>
+  </div>
+</header>
 
-<p><strong>Body:</strong></p>
-<%= @blog.body %>
+<div class="px-4">
+  <h5>Title</h5>
+  <div class="text-lg mb-1"><%= @blog.title %></div>
 
-<p>Tag List</p>
-<%= @blog.tag_list %>
+  <h5 class="mt-3">Published</h5>
+  <div class="mb-1"><%= @blog.published ? 'Yes' : 'No' %></div>
 
-<p><strong>Published:</strong> <%= @blog.published ? 'Yes' : 'No' %></p>
+  <div class="border p-2 mb-4 mt-3">
+    <h5 class="mb-2">Tags</h5>
+    <% if @blog.tag_list.present? %>
+      <div><%= @blog.tag_list %></div>
+    <% else %>
+      <div>No tags present.</div>
+    <% end %>
+  </div>
 
-<p>
-  <%= link_to 'Edit', edit_admin_blog_path(@blog) %> |
-  <%= link_to 'Back', admin_blogs_path %>
-</p>
+  <div class="border p-2 mb-4">
+    <h5 class="mb-2">Body</h5>
+    <div><%= @blog.body %></div>
+  </div>
+</div>
