@@ -13,4 +13,7 @@ class Blog < ApplicationRecord
 
   has_rich_text :body
   acts_as_taggable_on :tags
+
+  has_many :blog_shares, dependent: :destroy
+  has_many :accounts_shared_with, through: :blog_shares, source: :account
 end

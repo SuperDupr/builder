@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_12_161323) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_12_172718) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -150,6 +150,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_161323) do
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_api_tokens_on_user_id"
+  end
+
+  create_table "blog_shares", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "blog_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_blog_shares_on_account_id"
+    t.index ["blog_id"], name: "index_blog_shares_on_blog_id"
   end
 
   create_table "blogs", force: :cascade do |t|
@@ -470,6 +479,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_161323) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "stories"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "blog_shares", "accounts"
+  add_foreign_key "blog_shares", "blogs"
   add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "industries", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
