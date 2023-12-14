@@ -30,7 +30,10 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
 
     console.log(data.body)
 
-    questionContent.style.display = "none";
+    if (questionContent) {
+      questionContent.style.display = "none";
+    }
+    
     contentBtn.innerHTML = 'Create another version'
     nextQuestionButton.style.display = 'inline-flex'
     answerField.value = data.body
