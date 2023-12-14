@@ -18,7 +18,7 @@
           <% @blogs.each do |blog| %>
             <tr>
               <td><%= blog.title %></td>
-              <td><%= blog.tag_list.present? ? blog.tag_list : 'No Tags Present' %></td>
+              <td><%= blog.tag_list.present? ? (tags = blog.tag_list.first(4).join(", "); blog.tag_list.length > 4 ? tags + ', ...' : tags) : 'No Tags Present' %></td>
               <td>
                 <div class="flex items-center w-full">
                   <% if blog.published %>
@@ -34,7 +34,7 @@
                     <label for="publish<%= blog.id %>" class="flex items-center cursor-pointer">
                       <div class="relative" data-controller="tooltip" data-tippy-content="Publish the blog. You can't reverse this action">
                         <input id="publish<%= blog.id %>" type="checkbox" class="sr-only"  
-                          data-id="<%= blog.id %>" data-action="click->blogs#toggleSwitchListener" <%= blog.published ? "checked" : "" %>>
+                          data-id="<%= blog.id %>" data-action="click->blogs#toggleSwitchListener">
                         <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
                         <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
                       </div>
