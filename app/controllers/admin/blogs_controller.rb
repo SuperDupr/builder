@@ -50,7 +50,7 @@ module Admin
       remove_blog_shares(supplied_account_ids, shared_account_ids)
 
       respond_to do |format|
-        format.json { render json: { accounts: shared_accounts.reload } }
+        format.json { render json: {accounts: shared_accounts.reload} }
       end
     end
 
@@ -58,7 +58,7 @@ module Admin
       @blog.update(published: true)
 
       respond_to do |format|
-        format.json { render json: { published: @blog.published } }
+        format.json { render json: {published: @blog.published} }
       end
     end
 
@@ -68,10 +68,12 @@ module Admin
       blog_shares_to_be_added = []
 
       supplied_account_ids.each do |id|
-        blog_shares_to_be_added << { 
-          blog_id: @blog.id, 
-          account_id: id 
-        } unless shared_account_ids.include?(id.to_i)
+        unless shared_account_ids.include?(id.to_i)
+          blog_shares_to_be_added << {
+            blog_id: @blog.id,
+            account_id: id
+          }
+        end
       end
 
       BlogShare.insert_all(blog_shares_to_be_added) unless blog_shares_to_be_added.empty?
@@ -82,7 +84,7 @@ module Admin
 
       shared_account_ids.each do |id|
         unless supplied_account_ids.include?(id.to_s)
-          removable_blog_share_account_ids << id 
+          removable_blog_share_account_ids << id
         end
       end
 
