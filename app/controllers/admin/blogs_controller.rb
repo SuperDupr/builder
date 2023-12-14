@@ -3,7 +3,7 @@ module Admin
     before_action :set_blog, only: [:show, :edit, :update, :destroy, :share]
 
     def index
-      @pagy, @blogs = pagy(Blog.all)
+      @pagy, @blogs = pagy(Blog.includes(tags: [:taggings]))
     end
 
     def new

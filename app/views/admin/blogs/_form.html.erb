@@ -8,13 +8,8 @@
   <%= f.label(:tag_list, "Tags (comma-separated)", class:'mt-3') %>
   <div data-controller="tags">
     <%= f.hidden_field(:tag_list, data: {tags_target: "tagsInputField"}) %>
-    <select data-tags-target="select" multiple placeholder="Search or add new tags">
-      <option <%= blog.tag_list.include?("Tag1") ? 'selected' : '' %> value="Tag1">Tag1</option>
-      <option <%= blog.tag_list.include?("Tag2") ? 'selected' : '' %> value="Tag2">Tag2</option>
-      <option <%= blog.tag_list.include?("Tag3") ? 'selected' : '' %> value="Tag3">Tag3</option>
-      <option <%= blog.tag_list.include?("Tag4") ? 'selected' : '' %> value="Tag4">Tag4</option>
-      <option <%= blog.tag_list.include?("Tag5") ? 'selected' : '' %> value="Tag5">Tag5</option>
-    </select>
+
+    <%= select_tag 'tags[]', options_for_select(blog.tag_list, blog.tag_list), multiple: true, data: { tags_target: 'select' }, placeholder: 'Search or add new tags' %>
   </div>
   <%= f.submit("Save Blog", class: "btn btn-primary mt-6 mb-4") %>
 <% end %>
