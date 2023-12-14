@@ -7,7 +7,7 @@
 
   <%= f.label(:tag_list, "Tags (comma-separated)", class:'mt-3') %>
   <div data-controller="tags">
-    <%= f.text_field(:tag_list, data: {tags_target: "tagsInputField"}) %>
+    <%= f.hidden_field(:tag_list, data: {tags_target: "tagsInputField"}) %>
     <select data-tags-target="select" multiple placeholder="Search or add new tags">
       <option <%= blog.tag_list.include?("Tag1") ? 'selected' : '' %> value="Tag1">Tag1</option>
       <option <%= blog.tag_list.include?("Tag2") ? 'selected' : '' %> value="Tag2">Tag2</option>
