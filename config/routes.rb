@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resources :blogs do
         member do
           post :share
+          patch :publish
         end
       end
 

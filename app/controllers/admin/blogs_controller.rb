@@ -1,9 +1,9 @@
 module Admin
   class BlogsController < Admin::ApplicationController
-    before_action :set_blog, only: [:show, :edit, :update, :destroy, :share]
+    before_action :set_blog, only: [:show, :edit, :update, :destroy, :share, :publish]
 
     def index
-      @pagy, @blogs = pagy(Blog.includes(tags: [:taggings]))
+      @pagy, @blogs = pagy(Blog.includes(tags: [:taggings]).order(updated_at: :desc))
     end
 
     def new
@@ -51,6 +51,14 @@ module Admin
 
       respond_to do |format|
         format.json { render json: { accounts: shared_accounts.reload } }
+      end
+    end
+
+    def publish
+      @blog.update(published: true)
+
+      respond_to do |format|
+        format.json { render json: { published: @blog.published } }
       end
     end
 

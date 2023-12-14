@@ -8,16 +8,16 @@ export default class extends Controller {
     this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
   }
 
-  toggleSwitchListener(event) {
+  publishBlog(event) {
     const blogId = event.target.dataset.id
-    const isConfirmed = confirm("This will publish the blog. You can't reverse this action. Are you sure to continue?");
+    const isConfirmed = confirm("This will publish the blog. You can't reverse this action. Are you sure to continue?")
     
     if (!isConfirmed) {
       event.preventDefault();
       return;
     }
 
-    fetch(`/admin/blogs/${blogId}/published`, { 
+    fetch(`/admin/blogs/${blogId}/publish`, { 
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +26,9 @@ export default class extends Controller {
     }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          alert(`Blog was published successfully!`)
+          if (data.published) {
+            alert("Blog was published successfully!")
+          }
         })
       }
     })
