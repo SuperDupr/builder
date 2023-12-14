@@ -47,7 +47,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :blogs
+      resources :blogs do
+        member do
+          post :share
+        end
+      end
 
       root to: "dashboard#show"
     end

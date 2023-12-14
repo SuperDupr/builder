@@ -1,6 +1,6 @@
 module Admin
   class BlogsController < Admin::ApplicationController
-    before_action :set_blog, only: [:show, :edit, :update, :destroy]
+    before_action :set_blog, only: [:show, :edit, :update, :destroy, :share]
 
     def index
       @pagy, @blogs = pagy(Blog.all)
@@ -41,7 +41,45 @@ module Admin
       redirect_to(admin_blogs_path)
     end
 
+    def share
+      supplied_account_ids = params[:account_ids].split(",").compact_blank.map(&:strip)
+      shared_accounts = @blog.accounts_shared_with
+      shared_account_ids = shared_accounts.pluck(:id)
+
+      create_blog_shares(supplied_account_ids, shared_account_ids)
+      remove_blog_shares(supplied_account_ids, shared_account_ids)
+
+      respond_to do |format|
+        format.json { render json: { accounts: shared_accounts.reload } }
+      end
+    end
+
     private
+
+    def create_blog_shares(supplied_account_ids, shared_account_ids)
+      blog_shares_to_be_added = []
+
+      supplied_account_ids.each do |id|
+        blog_shares_to_be_added << { 
+          blog_id: @blog.id, 
+          account_id: id 
+        } unless shared_account_ids.include?(id.to_i)
+      end
+
+      BlogShare.insert_all(blog_shares_to_be_added) unless blog_shares_to_be_added.empty?
+    end
+
+    def remove_blog_shares(supplied_account_ids, shared_account_ids)
+      removable_blog_share_account_ids = []
+
+      shared_account_ids.each do |id|
+        unless supplied_account_ids.include?(id.to_s)
+          removable_blog_share_account_ids << id 
+        end
+      end
+
+      BlogShare.where(account_id: removable_blog_share_account_ids).delete_all unless removable_blog_share_account_ids.empty?
+    end
 
     def set_blog
       @blog = Blog.find(params[:id])
