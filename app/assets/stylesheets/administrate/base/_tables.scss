@@ -250,3 +250,29 @@ table.new-design-table td{
 trix-editor {
   min-height: 250px !important;
 }
+
+.ts-wrapper{
+  *{
+    font-size: 16px !important;
+  }
+  &.multi .ts-control{
+    padding: 8px 12px;
+    border-radius: .375rem;
+    border-color: #737373;
+    input{
+      line-height: 1.5rem !important;
+    }
+    &>div{
+      margin: 0 6px 6px 0;
+      padding: 4px 8px;
+    }
+  } 
+  .ts-dropdown{
+    border-color: #737373;
+    margin: 0;
+    border-radius: .375rem;
+    .option{
+      line-height: 1.5rem;
+    }
+  }
+}
