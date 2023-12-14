@@ -1,0 +1,20 @@
+<h1>Blogs#index</h1>
+<p>Find me in app/views/blogs/index.html.erb</p>
+
+<% @blogs.each do |blog| %>
+  <%= blog.title %>
+  <%= blog.body %>
+  <%= blog.tag_list %>
+
+  <div class="flex items-center justify-end gap-2">
+    <%= link_to(account_blog_path(blog, account_id: current_account.id), class: "btn btn-primary") do %>
+      <i class="fa-solid fa-eye"></i>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @pagy.pages > 1 %>
+  <div class="my-6 text-right">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>

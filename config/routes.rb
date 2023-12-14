@@ -103,6 +103,7 @@ Rails.application.routes.draw do
       end
     end
     resources :stories, module: :accounts
+    resources :blogs, module: :accounts
     resources :industries, module: :accounts
   end
 
