@@ -24,7 +24,7 @@ class Accounts::BlogsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get show" do
     get account_blog_url(@blog, account_id: @account.id)
-    
+
     assert_response :success
   end
 end

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -25,8 +25,8 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create blog" do
-    assert_difference('Blog.count') do
-      post admin_blogs_url, params: { blog: { title: "New Blog", body: "Lorem Ipsum", published: true, tag_list: "tag1, tag2" } }
+    assert_difference("Blog.count") do
+      post admin_blogs_url, params: {blog: {title: "New Blog", body: "Lorem Ipsum", published: true, tag_list: "tag1, tag2"}}
     end
 
     assert_redirected_to admin_blogs_url
@@ -44,7 +44,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update blog" do
-    patch admin_blog_url(@blog), params: { blog: { title: "Updated Title" } }
+    patch admin_blog_url(@blog), params: {blog: {title: "Updated Title"}}
     assert_redirected_to admin_blogs_url
     assert_equal "Blog was updated successfully!", flash[:notice]
     @blog.reload
@@ -52,7 +52,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy blog" do
-    assert_difference('Blog.count', -1) do
+    assert_difference("Blog.count", -1) do
       delete admin_blog_url(@blog)
     end
 
@@ -62,11 +62,11 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
 
   test "should share blog with accounts" do
     BlogShare.delete_all
-    
-    assert_difference('BlogShare.count', 1) do
-      account_ids = "#{accounts(:one).id}"
-      post share_admin_blog_url(@blog), params: { account_ids: account_ids }, as: :json
-      
+
+    assert_difference("BlogShare.count", 1) do
+      account_ids = accounts(:one).id.to_s
+      post share_admin_blog_url(@blog), params: {account_ids: account_ids}, as: :json
+
       assert_response :success
     end
   end
@@ -75,7 +75,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
     patch publish_admin_blog_url(@blog), as: :json
 
     assert_equal(JSON.parse(response.body)["published"], true)
-    
+
     assert_response :success
   end
 end
