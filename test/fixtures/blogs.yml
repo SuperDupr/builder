@@ -11,8 +11,8 @@
 
 one:
   title: MyString
-  published: false
+  published: true
 
 two:
   title: MyString
-  published: false
+  published: true
