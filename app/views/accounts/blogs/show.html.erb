@@ -1,8 +1,9 @@
-<h1>Blogs#show</h1>
-<p>Find me in app/views/blogs/show.html.erb</p>
 
-<%= link_to("Back to Blogs", account_blogs_path(current_account.id), class: 'btn btn-primary') %>
-
-<%= @blog.title %>
-<%= @blog.body %>
-<%= @blog.tag_list %>
+<div class="xl:container mx-auto pt-12 mt-5 px-4">
+  <div class="mb-7 font-bold fs-15">
+    Tags: <%= @blog.tag_list %>
+  </div>
+  <div class="text-4xl fw-medium"><%= @blog.title %></div>
+  
+  <div class="mt-7"><%= @blog.body %></div>
+</div>
