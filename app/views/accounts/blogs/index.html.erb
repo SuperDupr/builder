@@ -1,20 +1,45 @@
-<h1>Blogs#index</h1>
-<p>Find me in app/views/blogs/index.html.erb</p>
-
-<% @blogs.each do |blog| %>
-  <%= blog.title %>
-  <%= blog.body %>
-  <%= blog.tag_list %>
-
-  <div class="flex items-center justify-end gap-2">
-    <%= link_to(account_blog_path(blog, account_id: current_account.id), class: "btn btn-primary") do %>
-      <i class="fa-solid fa-eye"></i>
-    <% end %>
+<div class="py-8 bg-primary">
+  <h1 class="text-center text-white fs-40 fw-medium">Blogs</h1>
+</div>
+<div class="xl:container mx-auto pt-12 px-4">
+  <div class="mb-12">
+    <table class="new-design-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @blogs.present? %>
+          <% @blogs.each do |blog| %>
+            <tr>
+              <td class="w-1/3">
+                <div class="fs-20"><%= blog.title %>ddd</div>
+              </td>
+              <td class="w-1/2">
+                <div class="fs-20"><%= blog.tag_list %>eee</div>
+              </td>
+              <td class="w-1/3 text-center !p-0">
+                <div class="flex w-full items-center gap-2 justify-center" >
+                  <%= link_to(account_blog_path(blog, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
+                    SHOW BLOG
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" class="text-center">No Blogs found</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-<% end %>
-
-<% if @pagy.pages > 1 %>
-  <div class="my-6 text-right">
+  <% if @pagy.pages > 1 %>
+  <div class="mt-6 text-right">
     <%== pagy_nav(@pagy) %>
   </div>
-<% end %>
+  <% end %>
+</div>
