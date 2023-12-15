@@ -4,7 +4,7 @@ class Accounts::BlogsController < Accounts::BaseController
   before_action :set_blog, only: [:show]
 
   def index
-    @pagy, @blogs = pagy(@account.shared_blogs, items: 6)
+    @pagy, @blogs = pagy(@account.shared_blogs.published, items: 6)
   end
 
   def show
@@ -13,7 +13,7 @@ class Accounts::BlogsController < Accounts::BaseController
   private
 
   def set_blog
-    @blog = @account.shared_blogs.find(params[:id])
+    @blog = @account.shared_blogs.published.find(params[:id])
   end
 
   def set_account

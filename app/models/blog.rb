@@ -16,4 +16,6 @@ class Blog < ApplicationRecord
 
   has_many :blog_shares, dependent: :destroy
   has_many :accounts_shared_with, through: :blog_shares, source: :account
+
+  scope :published, -> { where(published: true) }
 end
