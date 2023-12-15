@@ -13,7 +13,7 @@ class Accounts::BlogsController < Accounts::BaseController
   private
 
   def set_blog
-    @blog = Blog.find(params[:id])
+    @blog = @account.blogs.find(params[:id])
   end
 
   def set_account

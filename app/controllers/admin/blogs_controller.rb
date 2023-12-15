@@ -14,9 +14,12 @@ module Admin
     def create
       @blog = Blog.new(blog_params)
 
-      @blog.save ?
-        flash[:notice] = "Blog was created successfully!" :
+      if @blog.save
+        associate_accounts
+        flash[:notice] = "Blog was created successfully!"
+      else
         flash[:alert] = "Unable to create blog. Errors: #{@blog.errors.full_messages.join(", ")}"
+      end
 
       redirect_to(admin_blogs_path)
     end
@@ -26,9 +29,12 @@ module Admin
     end
 
     def update
-      @blog.update(blog_params) ?
-        flash[:notice] = "Blog was updated successfully!" :
+      if @blog.update(blog_params)
+        associate_accounts
+        flash[:notice] = "Blog was updated successfully!"
+      else
         flash[:alert] = "Unable to update blog. Errors: #{@blog.errors.full_messages.join(", ")}"
+      end
 
       redirect_to(admin_blogs_path)
     end
@@ -43,13 +49,17 @@ module Admin
       redirect_to(admin_blogs_path)
     end
 
-    def share
+    def associate_accounts
       supplied_account_ids = params[:account_ids].split(",").compact_blank.map(&:strip)
       shared_accounts = @blog.accounts_shared_with
       shared_account_ids = shared_accounts.pluck(:id)
 
       create_blog_shares(supplied_account_ids, shared_account_ids)
       remove_blog_shares(supplied_account_ids, shared_account_ids)
+    end
+
+    def share
+      associate_accounts
 
       respond_to do |format|
         format.json { render json: {accounts: shared_accounts.reload} }
