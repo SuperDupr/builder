@@ -1,8 +1,48 @@
-<h5 class="mt-8 fs-30">Already know what kind of story you want to build?</h5>
-<div class="mt-2 fs-20 mb-4">Select the builder you'd like to use below</div>
-<div class="flex flex-wrap gap-2">
-  <div class="story-build-card mr-2 mb-2">
-    <p class="fs-20 font-bold mb-2">Fichteen's Curve</p>
-    <button class="fs-15 font-bold uppercase">Start Building ></button>
+<% if @story_builders.present? %>
+  <h5 class="mt-8 fs-22">
+    Already know what kind of story you want to build?
+  </h5>
+  <div class="mt-2 fs-17 mb-4">
+    Select the builder you'd like to use below
   </div>
-</div>
+  <div class="flex flex-wrap gap-2 mt-5">
+    <% @story_builders.each do |story_builder| %>
+      <div class="story-build-card mr-2 mb-2">
+        <p class="fs-20 font-bold mb-2"><%= story_builder.title %></p>
+        
+        <% if @redirect_to_registration_section %>
+          <%= link_to("Start Building >", registration_questions_path(fallback: "story_creation"), class: "fs-15 font-bold uppercase uppercase") %>
+        <% else %>
+          <% if story_builder.questions.empty? %>
+            <%= link_to("Start Building >", "javascript:void(0)", class: "fs-15 font-bold uppercase", 
+              data: { controller: "stories", action: "stories#showQuestionsAbsenceAlert" }) %>
+          <% else %>
+            <div class="flex items-center gap-2">
+            <div data-controller="modal" data-action="keydown.esc->modal#close" tabindex="-1">
+              <button class="fs-15 font-bold uppercase" data-action="click->modal#open:prevent">Start Building ></button>
+
+              <div class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 overflow-y-auto flex items-center justify-center backdrop-blur-sm dark:bg-gray-800 dark:bg-opacity-80" data-modal-target="background" data-action="click-&gt;modal#closeBackground" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="bg-opacity-0 backdrop-blur-none" data-transition-enter-to="bg-opacity-80 backdrop-blur-sm" data-transition-leave="transition-all ease-in-out duration-200" data-transition-leave-from="bg-opacity-80 backdrop-blur-sm" data-transition-leave-to="bg-opacity-0 backdrop-blur-none">
+                <div class="max-w-sm max-h-screen w-full relative" data-modal-target="container" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="opacity-0" data-transition-enter-to="opacity-100" data-transition-leave="transition ease-in-out duration-200" data-transition-leave-from="opacity-100" data-transition-leave-to="opacity-0">
+                  <div class="p-6 bg-white rounded shadow-lg dark:bg-gray-900 dark:text-gray-200">
+                    <h2 class="text-lg mb-2">Suggest a Name for your Story</h2>
+
+                    <%= form_for(@story, url: account_stories_path(account_id: current_account.id)) do |f| %>
+                      <%= f.text_field(:title, class:"form-control", required: true) %>
+                      <%= f.hidden_field(:story_builder_id, value: story_builder.id) %>
+
+                      <div class="flex justify-end items-center flex-wrap gap-2 mt-4">
+                        <%= f.submit("Proceed", class: "btn btn-white") %>
+                        <button class="btn btn-white" data-action="click->modal#close:prevent">Cancel</button>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
