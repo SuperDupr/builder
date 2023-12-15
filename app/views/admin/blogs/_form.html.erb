@@ -11,5 +11,12 @@
 
     <%= select_tag 'tags[]', options_for_select(blog.tag_list, blog.tag_list), multiple: true, data: { tags_target: 'select' }, placeholder: 'Search or add new tags' %>
   </div>
+
+  <!-- TODO: Use this object for accounts selection without #inspect -->
+  <%= selectable_accounts.inspect %>
+
+  <!-- TODO: Use this object to capture joined tags without #inspect -->
+  <%= joined_tag_list.inspect %>
+
   <%= f.submit("Save Blog", class: "btn btn-primary mt-6 mb-4") %>
 <% end %>

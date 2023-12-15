@@ -4,5 +4,5 @@
 </header>
 
 <div class='px-4'>
-  <%= render(partial: "form", locals: { blog: @blog, url: admin_blog_path(@blog) }) %>
+  <%= render(partial: "form", locals: { blog: @blog, url: admin_blog_path(@blog), selectable_accounts: @selectable_accounts, joined_tag_list: @joined_tag_list }) %>
 </div>

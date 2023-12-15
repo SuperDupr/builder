@@ -3,5 +3,5 @@
   <%= link_to("Back to Blogs", admin_blogs_path, class: 'btn btn-primary') %>
 </header>
 <div class="px-4">
-  <%= render(partial: "form", locals: { blog: @blog, url: admin_blogs_path }) %>
+  <%= render(partial: "form", locals: { blog: @blog, url: admin_blogs_path, selectable_accounts: @selectable_accounts, joined_tag_list: @joined_tag_list }) %>
 </div>

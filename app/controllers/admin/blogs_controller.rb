@@ -8,6 +8,7 @@ module Admin
 
     def new
       @blog = Blog.new
+      get_selectable_accounts_and_tags
     end
 
     def create
@@ -21,6 +22,7 @@ module Admin
     end
 
     def edit
+      get_selectable_accounts_and_tags
     end
 
     def update
@@ -89,6 +91,11 @@ module Admin
       end
 
       BlogShare.where(account_id: removable_blog_share_account_ids).delete_all unless removable_blog_share_account_ids.empty?
+    end
+
+    def get_selectable_accounts_and_tags
+      @selectable_accounts = Account.active.where.not(owner_id: current_user.id)
+      @joined_tag_list = @blog.tag_list&.join(", ")
     end
 
     def set_blog
