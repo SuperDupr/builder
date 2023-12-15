@@ -11,7 +11,7 @@
           <% if @admin_logged_in %>
             <th>Team Access</th>
           <% end %>
-          <th width="11%"></td>
+          <th width="11%"></th>
         </tr>
       </thead>
       <tbody>
@@ -60,11 +60,9 @@
                     SHOW STORY
                   <% end %>
                 </div>
-              </label>
-            </div>
-          </td>
-        <% end %>
-        </tr>
+              </td>
+            <% end %>
+          </tr>
         <% else %>
           <tr>
             <td colspan="6" class="text-center">No Organizations stories found</td>
@@ -74,9 +72,9 @@
     </table>
   </div>
   <% if @pagy_1.pages > 1 %>
-  <div class="mt-6 text-right">
-    <%== pagy_nav(@pagy_1) %>
-  </div>
+    <div class="mt-6 text-right">
+      <%== pagy_nav(@pagy_1) %>
+    </div>
   <% end %>
 </div>
 
@@ -200,7 +198,7 @@
           <th>Status</th>
           <th>Access</th>
           <th>Organization</th>
-          <th></td>
+          <th></th>
         </tr>
       </thead>
       <tbody>
