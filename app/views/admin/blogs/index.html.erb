@@ -18,9 +18,18 @@
           <% @blogs.each do |blog| %>
             <tr>
               <td><%= blog.title %></td>
-              <td><%= blog.tags.present? ? (
-                tags = blog.tag_list.first(4).join(", "); blog.tag_list.length > 4 ? tags + ', ...' : 
-                tags) : 'No Tags Present' %></td>
+              <td>
+                <% if blog.tag_list.present? %>
+                  <div class="flex items-center flex-wrap gap-2">
+                    <% for tag in blog.tag_list.first(4) do %>
+                      <div class="text-sm border px-2 py-1 rounded bg-F5F5F5"><%= tag %></div>
+                    <% end %>
+                    <%= blog.tag_list.length > 4 ? '...' : '' %>
+                  </div>
+                <% else %>
+                  <div>No tags present.</div>
+                <% end %>
+              </td>
               <td>
                 <div class="flex items-center w-full">
                   <% if blog.published %>

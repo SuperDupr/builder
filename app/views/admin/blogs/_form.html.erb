@@ -7,16 +7,21 @@
 
   <%= f.label(:tag_list, "Tags (comma-separated)", class:'mt-3') %>
   <div data-controller="tags">
-    <%= f.hidden_field(:tag_list, data: {tags_target: "tagsInputField"}) %>
+    <%= f.hidden_field(:tag_list, value:joined_tag_list, data: {tags_target: "tagsInputField"}) %>
 
     <%= select_tag 'tags[]', options_for_select(blog.tag_list, blog.tag_list), multiple: true, data: { tags_target: 'select' }, placeholder: 'Search or add new tags' %>
   </div>
 
-  <!-- TODO: Use this object for accounts selection without #inspect -->
-  <%= selectable_accounts.inspect %>
-
-  <!-- TODO: Use this object to capture joined tags without #inspect -->
-  <%= joined_tag_list.inspect %>
+  
+  <%= f.label(:tag_list, "Share Blog with Organizations", class:'mt-3') %>
+  <div data-controller="share">
+    <%= f.hidden_field(:tag_list, value:joined_tag_list, data: {share_target: "shareInputField"}) %>
+    <select data-share-target="select" multiple placeholder="Search Organizations">
+      <% for account in selectable_accounts do %>
+        <option value=<%= account.id %>><%= account.name %></option>
+      <% end %>
+    </select>
+  </div>
 
   <%= f.submit("Save Blog", class: "btn btn-primary mt-6 mb-4") %>
 <% end %>
