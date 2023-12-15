@@ -26,7 +26,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create blog" do
     assert_difference("Blog.count") do
-      post admin_blogs_url, params: {blog: {title: "New Blog", body: "Lorem Ipsum", published: true, tag_list: "tag1, tag2"}}
+      post admin_blogs_url, params: {blog: {title: "New Blog", body: "Lorem Ipsum", published: true, tag_list: "tag1, tag2"}, account_ids: accounts(:one).id.to_s}
     end
 
     assert_redirected_to admin_blogs_url
@@ -44,7 +44,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update blog" do
-    patch admin_blog_url(@blog), params: {blog: {title: "Updated Title"}}
+    patch admin_blog_url(@blog), params: {blog: {title: "Updated Title"}, account_ids: accounts(:two).id.to_s}
     assert_redirected_to admin_blogs_url
     assert_equal "Blog was updated successfully!", flash[:notice]
     @blog.reload
@@ -58,17 +58,6 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_blogs_url
     assert_equal "Blog was deleted successfully!", flash[:notice]
-  end
-
-  test "should share blog with accounts" do
-    BlogShare.delete_all
-
-    assert_difference("BlogShare.count", 1) do
-      account_ids = accounts(:one).id.to_s
-      post share_admin_blog_url(@blog), params: {account_ids: account_ids}, as: :json
-
-      assert_response :success
-    end
   end
 
   test "should publish blog" do

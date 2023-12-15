@@ -58,14 +58,6 @@ module Admin
       remove_blog_shares(supplied_account_ids, shared_account_ids)
     end
 
-    def share
-      associate_accounts
-
-      respond_to do |format|
-        format.json { render json: {accounts: shared_accounts.reload} }
-      end
-    end
-
     def publish
       @blog.update(published: true)
 
