@@ -30,6 +30,7 @@ class Accounts::StoriesController < Accounts::BaseController
     @my_stories = Story.where(creator_id: current_user.id).limit(5)
     @questions = @story.story_builder.questions.active
     @active_positions = @questions.pluck(:position).sort.join(",")
+    @story_builders = StoryBuilder.where.not(id: @story.story_builder.id)
 
     if @questions.empty?
       redirect_to(account_stories_path(current_account), alert: "Your chosen story builder has no associated questions!")

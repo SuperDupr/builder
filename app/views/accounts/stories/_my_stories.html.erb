@@ -5,7 +5,9 @@
   <% @my_stories.each do |story| %>
     <div class="bg-F5F5F5 p-4 mb-3">
       <div class="fs-20 font-bold mb-4"><%= story.title %></div>
-      <p class="fs-20 mb-4">Final highlights will come here..</p>
+      <p class="fs-20 mb-4">
+        <%= truncate(story.ai_generated_content, length: 30) if story.ai_generated_content.present? %>
+      </p>
       <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="font-bold fs-15">VIEW ></a>
     </div>
   <% end %>
