@@ -28,6 +28,7 @@ export default class extends Controller {
         response.json().then((data) => {
           if (data.published) {
             alert("Blog was published successfully!")
+            this.element.classList.add("pointer-events-none", "opacity-75");
           }
         })
       }

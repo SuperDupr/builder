@@ -4,7 +4,6 @@ import TomSelect from "tom-select"
 export default class extends Controller {
   static targets = ["shareInputField", "select"];
   connect() {
-    this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     this.selectSearch()
   }
   

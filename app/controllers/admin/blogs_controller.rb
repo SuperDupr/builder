@@ -106,6 +106,7 @@ module Admin
     def get_selectable_accounts_and_tags
       @selectable_accounts = Account.active.where.not(owner_id: current_user.id)
       @joined_tag_list = @blog.tag_list&.join(", ")
+      @joined_shared_account_ids = @blog.accounts_shared_with.pluck(:id).join(", ")
     end
 
     def set_blog
