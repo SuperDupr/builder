@@ -1,11 +1,11 @@
 <div class="flex justify-between items-center gap-2 w-full">
-  <%= link_to("Prev Question", "javascript:void(0)", id:'questionBackward', class: "btn btn-gray btn-outline mr-2 pointer-events-none opacity-50", data: { questionnaires_target: "questionBackward", action: "questionnaires#prepareAnswer", cursor: "backward", story_builder_id: story.story_builder.id }) %>
+  <%= link_to("Prev", "javascript:void(0)", id:'questionBackward', class: "btn btn-gray btn-outline mr-2 pointer-events-none opacity-50", data: { questionnaires_target: "questionBackward", action: "questionnaires#prepareAnswer", cursor: "backward", story_builder_id: story.story_builder.id }) %>
   <div id="questionsNavigationSection" data-questionnaires-target="questionsNavigationSection">
     <%= link_to("Get Content", "javascript:void(0)", id:'contentBtn', class: "btn btn-gray me-1 #{ai_content_mode == 'on' ? '' : 'hidden'}", data: { questionnaires_target: "contentBtn", action: "questionnaires#fetchAiContent" }) %>
     <% if questions.count <= 1 %>
       <%= link_to("Get me a Metaphor", "javascript:void(0)", class: "btn btn-gray", id: "finishLink", method: :patch, data: { questionnaires_target: "finishLink", action: "questionnaires#prepareAnswer" }) %>
     <% else %>
-      <%= link_to("Next Question", "javascript:void(0)", id: 'questionForward', class: "btn btn-gray #{ai_content_mode == 'on' ? 'hidden' : ''}", data: { questionnaires_target: "questionForward", action: "questionnaires#prepareAnswer", cursor: "forward", story_builder_id: story.story_builder.id }) %>
+      <%= link_to("Next", "javascript:void(0)", id: 'questionForward', class: "btn btn-gray #{ai_content_mode == 'on' ? 'hidden' : ''}", data: { questionnaires_target: "questionForward", action: "questionnaires#prepareAnswer", cursor: "forward", story_builder_id: story.story_builder.id }) %>
     <% end %>
   </div>
 </div>
