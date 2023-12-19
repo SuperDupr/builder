@@ -19,20 +19,12 @@
   <section class="container p-4 mx-auto">
     <% if current_roles.include?(:admin) %>
       <div class="flex">
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Identity Metaphors Built</h4>
-          <p class="text-3xl font-bold">12</p>
-        </div>
-
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Perception Shifting Metaphors Built</h4>
-          <p class="text-3xl font-bold">22</p>
-        </div>
-
-        <div class="flex-1 shadow rounded p-4 m-4 text-center">
-          <h4 class="font-normal mb-2">Multi-Step Process Metaphors Built</h4>
-          <p class="text-3xl font-bold">3</p>
-        </div>
+        <% @builders.each do |builder| %>
+          <div class="flex-1 shadow rounded p-4 m-4 text-center">
+            <h4 class="font-normal mb-2"><%= builder.title %></h4>
+            <p class="text-3xl font-bold"><%= current_account.stories.where(story_builder_id: builder.id).count %></p>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </section>
