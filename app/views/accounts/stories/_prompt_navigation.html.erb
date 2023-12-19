@@ -1,12 +1,14 @@
 <div class="flex items-center justify-between w-full gap-2 mb-6">
-  <h5>
-    Prompts
-    <span class="font-normal" id="promptCountContainer">
-      <span id="promptNumber" data-questionnaires-target="promptNumber"><%= prompt.position %></span>
-      /
-      <span id="promptsCount" data-questionnaires-target="promptsCount"><%= prompts.count %></span>
-    </span>
-  </h5>
+  <% if prompts.count > 1 %>
+    <h5>
+      Prompts
+      <span class="font-normal" id="promptCountContainer">
+        <span id="promptNumber" data-questionnaires-target="promptNumber"><%= prompt.position %></span>
+        /
+        <span id="promptsCount" data-questionnaires-target="promptsCount"><%= prompts.count %></span>
+      </span>
+    </h5>
+  <% end %>
   <div class="flex items-center justify-between gap-2">
     <i class="fa-solid fa-circle-arrow-left fa-2x cursor-pointer text-primary <%= prompt.position === 1 ? 'pointer-events-none opacity-50' : '' %> <%= prompts.count <= 1 ? '!hidden' : '' %>" id="promptBackward" data-action="click->questionnaires#prepareAnswer" data-cursor="backward" data-questionnaires-target="promptBackward"></i>
     <i class="fa-solid fa-circle-arrow-right fa-2x cursor-pointer text-primary <%= prompts.count <= 1 ? '!hidden' : '' %>" id="promptForward" data-action="click->questionnaires#prepareAnswer" data-cursor="forward" data-questionnaires-target="promptForward"></i>

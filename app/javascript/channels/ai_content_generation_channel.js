@@ -1,10 +1,10 @@
 import consumer from "./consumer"
 
 const spinnerElement = document.querySelector(".spinnerStory")
-const questionContent = document.getElementById("questionContent")
-const contentBtn = document.getElementById("contentBtn")
-const nextQuestionButton = document.getElementById('questionForward');
-const aiContentDiv = document.getElementById("aiContentDiv")
+const questionContentNative = document.getElementById("questionContent")
+const contentBtnNative = document.getElementById("contentBtn")
+const nextQuestionButtonNative = document.getElementById('questionForward');
+const aiContentDivNative = document.getElementById("aiContentDiv")
 const answerFieldNative = document.getElementById("answer")
 
 if(spinnerElement) {
@@ -30,8 +30,11 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
     
     console.log(data.body)
     
-    if (questionContent) {
-      questionContent.style.display = "none";
+    if (questionContentNative) {
+      questionContentNative.style.display = "none";
+    } else {
+      const questionContent = document.getElementById("questionContent")
+      questionContent.style.display = "none"
     }
     
     if (answerFieldNative) {
@@ -42,12 +45,29 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
       answerField.value = data.body
       answerField.textContent = data.body
     }
-    
-    contentBtn.innerHTML = 'Create another version'
-    nextQuestionButton.style.display = 'inline-flex'
-    aiContentDiv.innerHTML = 
+
+    if (contentBtnNative) {
+      contentBtnNative.innerHTML = 'Create another version'
+    } else {
+      const contentBtn = document.getElementById("contentBtn")
+      contentBtn.innerHTML = "Create another version"
+    }
+
+    if (nextQuestionButtonNative) {
+      nextQuestionButtonNative.style.display = 'inline-flex'
+    } else {
+      const nextQuestionButton = document.getElementById('questionForward');
+      nextQuestionButton.style.display = 'inline-flex'
+    }
+
+    if (aiContentDivNative) {
+      aiContentDivNative.innerHTML = 
         `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
-    
+    } else {
+      const aiContentDiv = document.getElementById("aiContentDiv")
+      aiContentDiv.innerHTML = 
+          `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
+    }
     
     if(spinnerElement) {
       spinnerElement.style.display = "none";
