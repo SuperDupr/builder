@@ -13,11 +13,7 @@
         
         <div data-controller="questionnaires">
           <!--  It displays question title and all questions count number -->
-          <%
-=begin%>
- <%= render(partial: "questions", locals: { questions_count: @questions.count, question: @question, active_positions: @active_positions }) %> 
-<%
-=end%>
+          <%= render(partial: "questions", locals: { questions_count: @questions.count, question: @question, active_positions: @active_positions }) %> 
 
           <!-- It displays area where a question is being answered -->
           <%= render("questionnaire_area") %>
