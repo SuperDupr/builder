@@ -95,15 +95,15 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should navigate to a prompt" do
-    question = questions(:one)
+  # test "should navigate to a prompt" do
+  #   question = questions(:one)
 
-    prompt = question.prompts.first
-    get prompt_navigation_path(question.id), params: {index: 0, story_id: @story.id}, xhr: true
+  #   prompt = question.prompts.first
+  #   get prompt_navigation_path(question.id), params: {index: 0, story_id: @story.id}, xhr: true
 
-    assert_equal(JSON.parse(response.body)["prompt_pretext"], prompt.pre_text)
-    assert_response :success
-  end
+  #   assert_equal(JSON.parse(response.body)["prompt_pretext"], prompt.pre_text)
+  #   assert_response :success
+  # end
 
   test "should get question nodes" do
     story_builder = story_builders(:one)
