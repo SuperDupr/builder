@@ -5,7 +5,7 @@ const questionContentNative = document.getElementById("questionContent")
 const contentBtnNative = document.getElementById("contentBtn")
 const nextQuestionButtonNative = document.getElementById('questionForward');
 const aiContentDivNative = document.getElementById("aiContentDiv")
-const answerFieldNative = document.getElementById("answer")
+// const answerFieldNative = document.getElementById("answer")
 
 if (spinnerElementNative) {
   spinnerElementNative.style.display = "none";
@@ -40,14 +40,15 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
       questionContent.style.display = "none"
     }
     
-    if (answerFieldNative) {
-      answerFieldNative.value = data.body
-      answerFieldNative.textContent = data.body
-    } else {
-      const answerField = document.getElementById("answer")
-      answerField.value = data.body
-      answerField.textContent = data.body
-    }
+    // if (answerFieldNative) {
+    const answerField = document.getElementById("answer")
+    answerField.value = data.body
+    answerField.textContent = data.body
+    // } else {
+    //   const answerField = document.getElementById("answer")
+    //   answerField.value = data.body
+    //   answerField.textContent = data.body
+    // }
 
     if (contentBtnNative) {
       contentBtnNative.innerHTML = 'Create another version'
