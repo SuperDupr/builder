@@ -3,6 +3,7 @@
 # Table name: blogs
 #
 #  id         :bigint           not null, primary key
+#  private    :boolean          default(TRUE)
 #  published  :boolean          default(FALSE)
 #  title      :string
 #  created_at :datetime         not null
