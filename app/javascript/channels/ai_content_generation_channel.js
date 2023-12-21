@@ -1,14 +1,14 @@
 import consumer from "./consumer"
 
-const spinnerElement = document.querySelector(".spinnerStory")
+const spinnerElementNative = document.querySelector(".spinnerStory")
 const questionContentNative = document.getElementById("questionContent")
 const contentBtnNative = document.getElementById("contentBtn")
 const nextQuestionButtonNative = document.getElementById('questionForward');
 const aiContentDivNative = document.getElementById("aiContentDiv")
 const answerFieldNative = document.getElementById("answer")
 
-if(spinnerElement) {
-  spinnerElement.style.display = "none";
+if (spinnerElementNative) {
+  spinnerElementNative.style.display = "none";
 }
 
 consumer.subscriptions.create("AiContentGenerationChannel", {
@@ -24,8 +24,11 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    if(spinnerElement) {
-      spinnerElement.style.display = "flex";
+    if (spinnerElementNative) {
+      spinnerElementNative.style.display = "flex";
+    } else {
+      const spinnerElement = document.querySelector(".spinnerStory")
+      spinnerElement.style.display = "flex"
     }
     
     console.log(data.body)
@@ -61,16 +64,17 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
     }
 
     if (aiContentDivNative) {
-      aiContentDivNative.innerHTML = 
-        `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
+      aiContentDivNative.innerHTML = `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
     } else {
       const aiContentDiv = document.getElementById("aiContentDiv")
-      aiContentDiv.innerHTML = 
-          `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
+      aiContentDiv.innerHTML = `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
     }
     
-    if(spinnerElement) {
-      spinnerElement.style.display = "none";
+    if (spinnerElementNative) {
+      spinnerElementNative.style.display = "none";
+    } else {
+      const spinnerElement2 = document.querySelector(".spinnerStory")
+      spinnerElement2.style.display = "none"
     }
   }
 });
