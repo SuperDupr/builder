@@ -166,7 +166,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_21_110706) do
     t.boolean "published", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "private", default: true
+    t.boolean "public_access", default: false
   end
 
   create_table "connected_accounts", force: :cascade do |t|

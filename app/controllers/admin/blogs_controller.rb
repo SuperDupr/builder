@@ -13,6 +13,7 @@ module Admin
 
     def create
       @blog = Blog.new(blog_params)
+      mark_blog_as_published
 
       if @blog.save
         associate_accounts
@@ -29,6 +30,8 @@ module Admin
     end
 
     def update
+      mark_blog_as_published
+
       if @blog.update(blog_params)
         associate_accounts
         flash[:notice] = "Blog was updated successfully!"
@@ -101,12 +104,17 @@ module Admin
       @joined_shared_account_ids = @blog.accounts_shared_with.pluck(:id).join(", ")
     end
 
+    def mark_blog_as_published
+      return unless blog_params[:public_access] == "1"
+      @blog.published = true
+    end
+
     def set_blog
       @blog = Blog.find(params[:id])
     end
 
     def blog_params
-      params.require(:blog).permit(:title, :body, :published, :tag_list)
+      params.require(:blog).permit(:title, :body, :published, :public_access, :tag_list)
     end
   end
 end
