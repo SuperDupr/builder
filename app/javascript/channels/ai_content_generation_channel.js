@@ -14,12 +14,10 @@ if (spinnerElementNative) {
 consumer.subscriptions.create("AiContentGenerationChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
-    console.log("We are connected to AiContentGenerationChannel!")
   },
 
   disconnected() {
     // Called when the subscription has been terminated by the server
-    console.log("We are disconnected to AiContentGenerationChannel!")
   },
 
   received(data) {
@@ -30,8 +28,6 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
       const spinnerElement = document.querySelector(".spinnerStory")
       spinnerElement.style.display = "flex"
     }
-    
-    console.log(data.body)
     
     if (questionContentNative) {
       questionContentNative.style.display = "none";
