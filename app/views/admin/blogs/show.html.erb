@@ -28,22 +28,22 @@
   </div>
 
   <!-- TODO: Style this element -->
-  <% if @blog.public_access %>
-    <p>Shared with all accounts</p>
-  <% else %>
     <div class="border p-2 mb-4 mt-3">
       <h5 class="mb-2">Shared with Accounts</h5>
-      <% if @blog.accounts_shared_with.present? %>
-        <div class="flex items-center flex-wrap gap-3">
-          <% for account in @blog.accounts_shared_with do %>
-            <div class="border px-2 py-1 rounded bg-F5F5F5"><%= account.name %></div>
-          <% end %>
-        </div>
+       <% if @blog.public_access %>
+        <div>This blog is shared with all accounts</div>
       <% else %>
-        <div>No accounts present.</div>
+        <% if @blog.accounts_shared_with.present? %>
+          <div class="flex items-center flex-wrap gap-3">
+            <% for account in @blog.accounts_shared_with do %>
+              <div class="border px-2 py-1 rounded bg-F5F5F5"><%= account.name %></div>
+            <% end %>
+          </div>
+        <% else %>
+          <div>No accounts present.</div>
+        <% end %>
       <% end %>
     </div>
-  <% end %>
 
 
   <div class="border p-2 mb-4">
