@@ -66,6 +66,27 @@ consumer.subscriptions.create("AiContentGenerationChannel", {
       const aiContentDiv = document.getElementById("aiContentDiv")
       aiContentDiv.innerHTML = `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
     }
+
+    if (contentBtnNative) {
+      contentBtnNative.innerHTML = 'Create another version'
+    } else {
+      const contentBtn = document.getElementById("contentBtn")
+      contentBtn.innerHTML = "Create another version"
+    }
+
+    if (nextQuestionButtonNative) {
+      nextQuestionButtonNative.style.display = 'inline-flex'
+    } else {
+      const nextQuestionButton = document.getElementById('questionForward');
+      nextQuestionButton.style.display = 'inline-flex'
+    }
+
+    if (aiContentDivNative) {
+      aiContentDivNative.innerHTML = `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
+    } else {
+      const aiContentDiv = document.getElementById("aiContentDiv")
+      aiContentDiv.innerHTML = `<div class="contentDiv border p-3 rounded lg:w-2/3 xl:w-1/2">${data.body}</div>`
+    }
     
     if (spinnerElementNative) {
       spinnerElementNative.style.display = "none";
