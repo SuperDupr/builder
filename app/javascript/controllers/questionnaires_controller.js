@@ -83,7 +83,6 @@ export default class extends Controller {
   }
 
   questionNavigation(event) {
-    console.log(event)
     let storyBuilderId = event.target.dataset.storyBuilderId
     let storyId = document.getElementById("storyDetails").dataset.storyId
     let cursor = event.target.dataset.cursor
@@ -103,8 +102,6 @@ export default class extends Controller {
           if (data.success) {
             this.questionNumberTarget.textContent = this.qIndex + 1
             this.questionContainerTarget.dataset.id = data.question_id
-            console.log(data)
-            console.log("Multiple Node Selection Mode", data.multiple_node_selection_mode)
             this.questionContainerTarget.textContent = data.question_title
             this.answerProviderTarget.dataset.aicontentMode = data.ai_mode ? "on" : "off"
             this.questionContentTarget.style.display = "flex"
@@ -321,7 +318,7 @@ export default class extends Controller {
       this.errorTextTarget.classList.add("hidden");
       let questionId = this.questionContainerTarget.dataset.id
       let storyId = document.getElementById("storyDetails").dataset.storyId
-      console.log("When answer field is not empty string")
+
       if (!answerTrackedBefore) {
         this.trackAnswer(event, navigator, questionId, storyId, "", checkedValues)
       }
@@ -360,9 +357,7 @@ export default class extends Controller {
     } else if (promptMode === "off") {
       let answerFieldValue = this.handleAnswerAsPerNodeMode()
 
-      let aiResult = this.handleAnswerAsPerAiContentMode()
-
-      console.log(aiResult)
+      this.handleAnswerAsPerAiContentMode()
 
       this.trackAnswerAsPerValidation(event, navigator, answerFieldValue, answerTrackedBefore)
     }
@@ -394,7 +389,6 @@ export default class extends Controller {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          console.log("Answer saved successfully:", data.answers)
           this.performNavigation(event, navigator, storyId)
           this.spinner.style.display = "none"
         } else {
@@ -435,7 +429,6 @@ export default class extends Controller {
     })
     .then(response => response.json())
     .then(data => {
-      console.log("Request forwarded!")
     })
   }
 

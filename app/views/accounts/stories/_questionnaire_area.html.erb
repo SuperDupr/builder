@@ -1,4 +1,10 @@
 <div class="py-5 px-4 shadow-box-card relative rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6">
+  <div class="w-full">
+    <p id="questionContainer" class="fs-20 font-bold" data-id=<%= @question.id %> data-questionnaires-target="questionContainer">
+      <%= @question.title %>
+    </p>
+    <p class="fs-15"><%= @question.subtitle %></p>
+  </div>
   <%= render("spinner") %>
   
   <%= render(partial: "display_question_content", locals: { 
