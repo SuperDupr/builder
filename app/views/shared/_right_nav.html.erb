@@ -7,6 +7,7 @@
 <% if user_signed_in? && !current_user.admin? %>
   <%= nav_link_to tag.span("Builders"), story_builders_path, class: ["nav-link"] %>
   <%= nav_link_to tag.span("Stories"), account_stories_path(current_account.id), class: ["nav-link"] %>
+  <%= nav_link_to tag.span("Blogs"), account_blogs_path(current_account.id), class: ["nav-link"] %>
 <% end %>
 
 <%= nav_link_to tag.span(t(".announcements")), announcements_path, class: ["nav-link", unread_announcements_class(current_user)] %>

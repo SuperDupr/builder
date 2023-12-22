@@ -40,10 +40,13 @@ class Account < ApplicationRecord
   has_many :industries, dependent: :destroy
   has_many :teams, dependent: :destroy
   has_many :stories, dependent: :destroy
+  has_many :blog_shares, dependent: :destroy
+  has_many :shared_blogs, through: :blog_shares, source: :blog
 
   scope :personal, -> { where(personal: true) }
   scope :impersonal, -> { where(personal: false) }
   scope :sorted, -> { order(personal: :desc, name: :asc) }
+  scope :active, -> { where(active: true) }
 
   has_noticed_notifications
   has_one_attached :avatar

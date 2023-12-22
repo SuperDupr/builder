@@ -1,0 +1,18 @@
+
+<div class="xl:container mx-auto pt-12 mt-5 px-4">
+  <div class="mb-7 font-bold fs-15">
+    Tags:
+    <% if @blog.tag_list.present? %>
+      <div class="flex items-center flex-wrap gap-3">
+        <% for tag in @blog.tag_list do %>
+          <div class="border px-2 py-1 rounded bg-F5F5F5"><%= tag %></div>
+        <% end %>
+      </div>
+    <% else %>
+      <div>No tags present.</div>
+    <% end %>
+  </div>
+  <div class="text-4xl fw-medium"><%= @blog.title %></div>
+  
+  <div class="mt-7"><%= @blog.body %></div>
+</div>

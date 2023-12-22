@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_07_160313) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_21_110706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -150,6 +150,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_07_160313) do
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_api_tokens_on_user_id"
+  end
+
+  create_table "blog_shares", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "blog_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_blog_shares_on_account_id"
+    t.index ["blog_id"], name: "index_blog_shares_on_blog_id"
+  end
+
+  create_table "blogs", force: :cascade do |t|
+    t.string "title"
+    t.boolean "published", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "public_access", default: false
   end
 
   create_table "connected_accounts", force: :cascade do |t|
@@ -369,6 +386,37 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_07_160313) do
     t.text "admin_ai_prompt"
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.string "taggable_type"
+    t.bigint "taggable_id"
+    t.string "tagger_type"
+    t.bigint "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at", precision: nil
+    t.string "tenant", limit: 128
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tagger_type", "tagger_id"], name: "index_taggings_on_tagger_type_and_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "teams", force: :cascade do |t|
     t.string "name"
     t.bigint "account_id", null: false
@@ -432,6 +480,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_07_160313) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "stories"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "blog_shares", "accounts"
+  add_foreign_key "blog_shares", "blogs"
   add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "industries", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
@@ -441,5 +491,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_07_160313) do
   add_foreign_key "stories", "accounts"
   add_foreign_key "stories", "story_builders"
   add_foreign_key "stories", "users", column: "creator_id"
+  add_foreign_key "taggings", "tags"
   add_foreign_key "teams", "accounts"
 end
