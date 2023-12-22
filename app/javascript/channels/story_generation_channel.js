@@ -3,7 +3,6 @@ import consumer from "./consumer"
 consumer.subscriptions.create("StoryGenerationChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
-    console.log("We are connected to StoryGenerationChannel!")
     this.spinnerElement = document.querySelector(".spinnerStory")
     this.storyContentElement = document.querySelector(".story_content")
     this.aiContentElement = document.getElementById("aiContent")
@@ -19,7 +18,6 @@ consumer.subscriptions.create("StoryGenerationChannel", {
 
   disconnected() {
     // Called when the subscription has been terminated by the server
-    console.log("We are disconnected to StoryGenerationChannel!")
   },
 
   received(data) {
