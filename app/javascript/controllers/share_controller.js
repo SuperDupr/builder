@@ -13,7 +13,6 @@ export default class extends Controller {
       this.blogAccessTarget.style.display = "block"
     }
     else{
-      this.blogAccessTextareaTarget.required = true
       blogAccessLabel.classList.remove('opacity-50')
     }
   }
