@@ -1,5 +1,9 @@
 <div id="answerProvider" class="w-full" data-aicontent-mode="<%= ai_content_mode %>" data-prompt-mode="<%= prompt_mode %>" data-only-node-mode="<%= only_node_mode %>" data-questionnaires-target="answerProvider">
   <% if renderer == "wrap_prompts_container" %>
+    <p id="questionContainer" class="fs-20 font-bold" data-id=<%= question.id %> data-questionnaires-target="questionContainer">
+      <%= question.title %>
+    </p>
+    <p class="fs-15 mb-4"><%= question.subtitle %></p>
     <%= render(partial: "prompt_navigation", locals: { prompts: prompts, prompt: prompt }) %>
     <div class="min-h-400 flex-col" id="questionContent" data-questionnaires-target="questionContent">
       <%= render(partial: "wrap_options_in_prompts_container", locals: { prompt: prompt, prompt_pretext: prompt_pretext, prompt_posttext: prompt_posttext, nodes: nodes, answer: answer, selectors: selectors, multiple_selection_mode: multiple_selection_mode }) %>
