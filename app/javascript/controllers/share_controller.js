@@ -12,8 +12,8 @@ export default class extends Controller {
     if (!blogAccessAttachedCheckBox.checked) {
       this.blogAccessTarget.style.display = "block"
     }
+    
     else{
-      this.blogAccessTextareaTarget.required = true
       blogAccessLabel.classList.remove('opacity-50')
     }
   }
