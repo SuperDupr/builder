@@ -6,12 +6,14 @@ consumer.subscriptions.create("StoryGenerationChannel", {
     this.spinnerElement = document.querySelector(".spinnerStory")
     this.storyContentElement = document.querySelector(".story_content")
     this.aiContentElement = document.getElementById("aiContent")
+    this.showModeContainer = document.getElementById("showModeContainer")
     
     if (this.storyContentElement && this.aiContentElement) {
-      this.spinnerElement.style.display = "flex"
+      if (this.spinnerElement && this.spinnerElement.dataset.showMode === "off") 
+        this.spinnerElement.style.display = "flex"
   
       if (this.aiContentElement.textContent.length > 0) {
-        this.spinnerElement.style.display = "none"
+        if (this.spinnerElement) this.spinnerElement.style.display = "none"
       }
     }
   },
@@ -22,6 +24,7 @@ consumer.subscriptions.create("StoryGenerationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
+    if (this.showModeContainer) this.showModeContainer.style.display = "none"
     this.spinnerElement.style.display = "none"
     this.aiContentElement.textContent = data.body
   }

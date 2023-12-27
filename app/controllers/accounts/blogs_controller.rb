@@ -4,6 +4,7 @@ class Accounts::BlogsController < Accounts::BaseController
   before_action :set_blog, only: [:show]
 
   def index
+    @pagy_1, @public_blogs = pagy(Blog.where(public_access: true), items: 6)
     @pagy, @blogs = pagy(@account.shared_blogs.published, items: 6)
   end
 
@@ -13,7 +14,8 @@ class Accounts::BlogsController < Accounts::BaseController
   private
 
   def set_blog
-    @blog = @account.shared_blogs.published.find(params[:id])
+    @blog = @account.shared_blogs.published.find_by(id: params[:id]) ||
+      Blog.find_by(id: params[:id], public_access: true)
   end
 
   def set_account
