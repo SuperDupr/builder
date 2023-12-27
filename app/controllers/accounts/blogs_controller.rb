@@ -15,7 +15,7 @@ class Accounts::BlogsController < Accounts::BaseController
 
   def set_blog
     @blog = @account.shared_blogs.published.find_by(id: params[:id]) ||
-            Blog.find_by(id: params[:id], public_access: true)
+      Blog.find_by(id: params[:id], public_access: true)
   end
 
   def set_account
