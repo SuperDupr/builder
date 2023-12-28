@@ -8,7 +8,11 @@
       <p class="fs-20 mb-4">
         <%= truncate(story.ai_generated_content, length: 80) if story.ai_generated_content.present? %>
       </p>
-      <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="font-bold fs-12">VIEW ></a>
+      <% if story.ai_generated_content.present? %>
+        <a href="<%= final_version_path(story, show: "on") %>" class="font-bold fs-12">VIEW ></a>
+      <% else %>
+        <a href="<%= edit_account_story_path(story, account_id: current_account.id) %>" class="font-bold fs-12">EDIT ></a>
+      <% end %>
     </div>
   <% end %>
 </div>
