@@ -19,10 +19,6 @@
 #
 #  index_connected_accounts_on_owner_id_and_owner_type  (owner_id,owner_type)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (owner_id => users.id)
-#
 
 require "test_helper"
 

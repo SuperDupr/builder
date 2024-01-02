@@ -6,6 +6,7 @@ class Accounts::StoriesController < Accounts::BaseController
   before_action :is_story_published, only: :edit
 
   def index
+    @builder_types = StoryBuilder.all
     # Fetch organization stories that are shared by the organization admin
     org_stories = current_account.stories.includes(:story_builder, :creator).publicized.order(updated_at: :desc)
     @admin_logged_in = current_account_user.roles.include?("admin")
