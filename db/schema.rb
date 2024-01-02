@@ -482,7 +482,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_21_110706) do
   add_foreign_key "api_tokens", "users"
   add_foreign_key "blog_shares", "accounts"
   add_foreign_key "blog_shares", "blogs"
-  add_foreign_key "connected_accounts", "users", column: "owner_id"
   add_foreign_key "industries", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"

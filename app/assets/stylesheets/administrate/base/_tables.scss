@@ -123,10 +123,14 @@ table.new-design-table td{
 }
 
 .story-type {
-  background-color: #F5F5F5;
-  padding: 7px;
+  background-color: #cecaca;
+  padding: 7px 15px;
   width: 100%;
   max-width: 187px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .story-build-card {
   background-color: #F5F5F5;
