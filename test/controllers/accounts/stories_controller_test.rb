@@ -14,14 +14,16 @@ class Accounts::StoriesControllerTest < ActionDispatch::IntegrationTest
     get account_stories_path(account_id: @account.id)
 
     admin_logged_in = controller.instance_variable_get(:@admin_logged_in)
-    pagy_1 = controller.instance_variable_get(:@pagy_1)
-    org_stories = controller.instance_variable_get(:@org_stories)
-    my_stories = controller.instance_variable_get(:@my_stories)
+    pagy = controller.instance_variable_get(:@pagy)
+    all_stories = controller.instance_variable_get(:@stories)
+    # org_stories = controller.instance_variable_get(:@org_stories)
+    # my_stories = controller.instance_variable_get(:@my_stories)
 
     assert_equal(admin_logged_in, true)
-    assert_instance_of(Pagy, pagy_1)
-    assert_includes(org_stories, @story)
-    assert_includes(my_stories, @story)
+    assert_instance_of(Pagy, pagy)
+    assert_includes(all_stories, @story)
+    # assert_includes(org_stories, @story)
+    # assert_includes(my_stories, @story)
 
     assert_response(:success)
   end

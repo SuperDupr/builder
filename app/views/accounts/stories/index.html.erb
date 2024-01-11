@@ -7,7 +7,7 @@
         <% @builder_types.each do |builder| %>
           <div class="story-type mx-2">
             <div class="flex items-center">
-              <p class="fs-15"><%= builder.title %></p>
+              <%= link_to builder.title, account_stories_path(builder_type: builder.title), class: "fs-15" %>
             </div>
           </div>
         <% end %>
@@ -25,7 +25,6 @@
         <tr>
           <th>Story Details</th>
           <th>Story Type</th>
-          <th>Communication Challenge</th>
           <th>Status</th>
           <th>Access</th>
           <th>Organization</th>
@@ -33,25 +32,18 @@
         </tr>
       </thead>
       <tbody>
-        <% if @my_stories.present? %>
-          <% @my_stories.each do |story| %>
+        <% if @stories.present? %>
+          <% @stories.each do |story| %>
             <tr>
               <td>
               <p class="fs-15 font-bold">
                 <%= story.title %>
               </p>
-              <p class="fs-15 italic"> <%= story.story_builder.title %></p>
               </td>
               <td>
                 <div class="flex items-center gap-2 small-screen">
                   <img src="/star.svg" alt="star">
-                  <p class="fs-20">Metaphor</p>
-                </div>
-              </td>
-              <td>
-                <div class="flex items-center gap-2 small-screen">
-                  <div class="red-circle"></div>
-                  <p class="fs-20 mb-1">Provide Clarity</p>
+                  <p class="fs-20"><%= story.story_builder.title %></p>
                 </div>
               </td>
               <td>
@@ -60,31 +52,35 @@
               </div>
               </td>
               <td>
-                <div class="flex items-center w-full">
-                  <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
-                    <div class="relative" data-controller="stories">
-                      <% if story.private_access %>
-                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                          data-id="<%= story.id %>"
-                          checked
-                          data-account-id="<%= current_account.id %>"
-                          data-change-access-mode="on"
-                          data-draft-mode="off"
-                          data-action="change->stories#updateStoryAccessOrDraftMode">
-                      <% else %>
-                        <input id="access<%= story.id %>" type="checkbox" class="sr-only"
-                          data-id="<%= story.id %>"
-                          data-account-id="<%= current_account.id %>"
-                          data-change-access-mode="on"
-                          data-draft-mode="off"
-                          data-action="change->stories#updateStoryAccessOrDraftMode">
-                      <% end %>
-                      <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
-                      <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                    </div>
-                    <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
-                  </label>
-                </div>
+                <% if story.creator_id == current_user.id %>
+                  <div class="flex items-center w-full">
+                    <label for="access<%= story.id %>" class="flex items-center cursor-pointer" data-controller="tooltip" data-tippy-content="Mark story as Private/Public">
+                      <div class="relative" data-controller="stories">
+                        <% if story.private_access %>
+                          <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                            data-id="<%= story.id %>"
+                            checked
+                            data-account-id="<%= current_account.id %>"
+                            data-change-access-mode="on"
+                            data-draft-mode="off"
+                            data-action="change->stories#updateStoryAccessOrDraftMode">
+                        <% else %>
+                          <input id="access<%= story.id %>" type="checkbox" class="sr-only"
+                            data-id="<%= story.id %>"
+                            data-account-id="<%= current_account.id %>"
+                            data-change-access-mode="on"
+                            data-draft-mode="off"
+                            data-action="change->stories#updateStoryAccessOrDraftMode">
+                        <% end %>
+                        <div class="w-10 h-4 line bg-gray-300 rounded-full shadow-inner"></div>
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                      </div>
+                      <div class="ml-3 fs-20" id="privateAccess<%= story.id %>"><%= story.private_access === true ? 'Private' : 'Public' %></div>
+                    </label>
+                  </div>
+                <% else %>
+
+                <% end %>
               </td>
               <td>
                 <div class="small-screen">
@@ -94,9 +90,9 @@
               <td class="text-center !p-0">
                 <div class="flex items-center gap-2 justify-center" >
                   <% if story.ai_generated_content.present? %>
-                    <a href="<%= final_version_path(id: story, show_final: true) %>" class="font-bold fs-12">VIEW</a>
+                    <a href="<%= final_version_path(id: story, show_final: true) %>" class="font-bold fs-15">VIEW</a>
                   <% else %>
-                    <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15 py-8 px-5") do %>
+                    <%= link_to(edit_account_story_path(story, account_id: current_account.id), class: "font-bold fs-15") do %>
                       EDIT STORY
                     <% end %>
                   <% end %>
@@ -112,9 +108,9 @@
       </tbody>
     </table>
   </div>
-  <% if @pagy_2.pages > 1 %>
+  <% if @pagy.pages > 1 %>
     <div class="mt-6 text-right">
-      <%== pagy_nav(@pagy_2) %>
+      <%== pagy_nav(@pagy) %>
     </div>
   <% end %>
 </div>

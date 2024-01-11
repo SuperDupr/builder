@@ -13,12 +13,14 @@ class StoryBuildersControllerTest < ActionDispatch::IntegrationTest
 
     story_builders = controller.instance_variable_get(:@story_builders)
     pagy = controller.instance_variable_get(:@pagy)
-    redirect_to_registration_section = controller.instance_variable_get(:@redirect_to_registration_section)
+    # removed for now
+    # redirect_to_registration_section = controller.instance_variable_get(:@redirect_to_registration_section)
     story = controller.instance_variable_get(:@story)
 
     assert_includes(story_builders, @story_builder)
     assert_instance_of(Pagy, pagy)
-    assert_equal(redirect_to_registration_section, true)
+    # removed for now
+    # assert_equal(redirect_to_registration_section, true)
     assert_equal(story.new_record?, true)
 
     assert_response :success

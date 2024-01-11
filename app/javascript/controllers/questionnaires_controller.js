@@ -2,10 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["questionNumber", "questionsCount", "questionContainer", "questionsNavigationSection",
-                    "storyDetails", "questionBackward", "questionForward", "promptBackward", 
-                    "finishLink", "answerProvider", "contentBtn", "questionContent", "promptContainer",
-                    "promptNumber", "promptBackward", "promptForward", "promptsCount", "errorText", "answer"]
+  static targets = ["questionNumber", "questionsCount", "questionContainer", "questionSubtitle", 
+                    "questionsNavigationSection", "storyDetails", "questionBackward", "questionForward", 
+                    "promptBackward", "finishLink", "answerProvider", "contentBtn", "questionContent", 
+                    "promptContainer", "promptNumber", "promptBackward", "promptForward", "promptsCount", "errorText", "answer"]
 
   connect() {
     this.index = 0
@@ -103,6 +103,7 @@ export default class extends Controller {
             this.questionNumberTarget.textContent = this.qIndex + 1
             this.questionContainerTarget.dataset.id = data.question_id
             this.questionContainerTarget.textContent = data.question_title
+            this.questionSubtitleTarget.textContent = data.question_subtitle
             this.answerProviderTarget.dataset.aicontentMode = data.ai_mode ? "on" : "off"
             this.questionContentTarget.style.display = "flex"
             

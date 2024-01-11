@@ -6,14 +6,23 @@ class Accounts::StoriesController < Accounts::BaseController
   before_action :is_story_published, only: :edit
 
   def index
-    @builder_types = StoryBuilder.all
     # Fetch organization stories that are shared by the organization admin
-    org_stories = current_account.stories.includes(:story_builder, :creator).publicized.order(updated_at: :desc)
     @admin_logged_in = current_account_user.roles.include?("admin")
-    @pagy_1, @org_stories = pagy(@admin_logged_in ? org_stories : org_stories.viewable, items: 10)
+    all_stories = Story.joins(:account).includes(:story_builder, :creator)
+      .where("(stories.creator_id = :user_id) OR (accounts.id = :account_id AND stories.private_access = :publicized)", user_id: current_user.id, account_id: current_account.id, publicized: false)
+      .order(updated_at: :desc)
 
-    # Fetch stories that are created by the logged in organization admin/member
-    @pagy_2, @my_stories = pagy(Story.includes(:story_builder, :creator).where(creator_id: current_user.id).order(updated_at: :desc), items: 10)
+    # Filter stories by builder type if the parameter is present
+    if params[:builder_type].present?
+      builder_type = StoryBuilder.find_by(title: params[:builder_type])
+      all_stories = all_stories.where(story_builder: builder_type) if builder_type
+    end
+
+    all_stories = all_stories.viewable unless @admin_logged_in
+
+    @pagy, @stories = pagy(all_stories, items: 10)
+
+    @builder_types = StoryBuilder.joins(:stories).where(stories: {id: @stories.pluck(:id)}).distinct(:name)
   end
 
   def create
@@ -66,7 +75,10 @@ class Accounts::StoriesController < Accounts::BaseController
       format.json do
         if params[:change_access_mode] == "on"
           @story.toggle!(:private_access)
-
+          # adding this to toggle automatically, can be added to org setting to allow for admins to toggle on and off
+          if @story.private_access == false
+            @story.update(viewable: true)
+          end
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
@@ -88,7 +100,6 @@ class Accounts::StoriesController < Accounts::BaseController
     story_builder = StoryBuilder.find(params[:story_builder_id])
     @question = story_builder.questions.active.find_by(position: params[:position].to_i)
     question_title = AiDataParser.new(story_id: params[:story_id], data: @question.title).parse
-
     respond_to do |format|
       format.json do
         if @question.nil?
@@ -97,6 +108,7 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {
             question_id: @question.id,
             question_title: question_title,
+            question_subtitle: @question.subtitle,
             ai_mode: @question.ai_prompt_attached,
             multiple_node_selection_mode: @question.multiple_node_selection,
             success: true

@@ -57,7 +57,7 @@ export default class extends Controller {
     })
     .then(response => response.json())
     .then(data => {
-      console.log("Work under process!")
+      // console.log("Work under process!")
     })
   }
 

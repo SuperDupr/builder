@@ -62,13 +62,13 @@ async function buildAndReload() {
     .listen(port)
 
   await context.rebuild()
-  console.log("[reload] initial build succeeded")
+  // console.log("[reload] initial build succeeded")
 
   let ready = false
   chokidar
     .watch(watchDirectories)
     .on("ready", () => {
-      console.log("[reload] ready")
+      // console.log("[reload] ready")
       ready = true
     })
     .on("all", async (event, path) => {
@@ -78,7 +78,7 @@ async function buildAndReload() {
         try {
           await setTimeout(20)
           await context.rebuild()
-          console.log("[reload] build succeeded")
+          // console.log("[reload] build succeeded")
         } catch (error) {
           console.error("[reload] build failed", error)
         }
