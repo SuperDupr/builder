@@ -22,8 +22,8 @@ class Accounts::StoriesController < Accounts::BaseController
     all_stories = all_stories.viewable unless @admin_logged_in
 
     @pagy, @stories = pagy(all_stories, items: 10)
-    
-    @builder_types = StoryBuilder.joins(:stories).where(stories: { id: @stories.pluck(:id) }).distinct(:name)
+
+    @builder_types = StoryBuilder.joins(:stories).where(stories: {id: @stories.pluck(:id)}).distinct(:name)
   end
 
   def create
