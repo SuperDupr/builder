@@ -7,7 +7,6 @@ class Accounts::StoriesController < Accounts::BaseController
 
   def index
     # Fetch organization stories that are shared by the organization admin
-    org_stories = current_account.stories.includes(:story_builder, :creator).publicized.order(updated_at: :desc)
     @admin_logged_in = current_account_user.roles.include?("admin")
     all_stories = Story.joins(:account).includes(:story_builder, :creator)
       .where("(stories.creator_id = :user_id) OR (accounts.id = :account_id AND stories.private_access = :publicized)", user_id: current_user.id, account_id: current_account.id, publicized: false)
