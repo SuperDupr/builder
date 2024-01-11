@@ -88,6 +88,7 @@ class Accounts::StoriesController < Accounts::BaseController
     story_builder = StoryBuilder.find(params[:story_builder_id])
     @question = story_builder.questions.active.find_by(position: params[:position].to_i)
     question_title = AiDataParser.new(story_id: params[:story_id], data: @question.title).parse
+    # questtion_subtitle = 
 
     respond_to do |format|
       format.json do
@@ -97,6 +98,7 @@ class Accounts::StoriesController < Accounts::BaseController
           render json: {
             question_id: @question.id,
             question_title: question_title,
+            question_subtitle: @question.subtitle,
             ai_mode: @question.ai_prompt_attached,
             multiple_node_selection_mode: @question.multiple_node_selection,
             success: true

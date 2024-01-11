@@ -1,9 +1,11 @@
 <div class="py-5 px-4 shadow-box-card relative rounded-sm mt-4 prompt-height flex flex-col justify-between items-center gap-6">
-  <div class="w-full">
-    <p id="questionContainer" class="fs-20 font-bold" data-id=<%= @question.id %> data-questionnaires-target="questionContainer">
+  <div class="w-full" >
+    <p class="fs-20 font-bold id="questionContainer" data-id=<%= @question.id %> data-questionnaires-target="questionContainer">
       <%= @question.title %>
     </p>
-    <p class="fs-15"><%= @question.subtitle %></p>
+    <p class="fs-15" id="questionContainer" data-questionnaires-target="questionSubtitle">
+      <%= @question.subtitle %>
+    </p>
   </div>
   <%= render("spinner") %>
   

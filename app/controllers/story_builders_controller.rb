@@ -4,7 +4,8 @@ class StoryBuildersController < ApplicationController
 
   def index
     @pagy, @story_builders = pagy(StoryBuilder.includes(:questions).all, items: 6)
-    @redirect_to_registration_section = current_user.registration_data_absence?
+    # @redirect_to_registration_section = current_user.registration_data_absence?
+    @redirect_to_registration_section = false
     @story = Story.new
   end
 
