@@ -88,7 +88,7 @@ class Accounts::StoriesController < Accounts::BaseController
     story_builder = StoryBuilder.find(params[:story_builder_id])
     @question = story_builder.questions.active.find_by(position: params[:position].to_i)
     question_title = AiDataParser.new(story_id: params[:story_id], data: @question.title).parse
-    # questtion_subtitle = 
+    # questtion_subtitle =
 
     respond_to do |format|
       format.json do
