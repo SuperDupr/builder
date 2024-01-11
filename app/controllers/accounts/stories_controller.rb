@@ -16,7 +16,7 @@ class Accounts::StoriesController < Accounts::BaseController
 
     all_stories = all_stories.viewable unless @admin_logged_in
 
-    @pagy, @stories = pagy(all_stories, items: 10)  
+    @pagy, @stories = pagy(all_stories, items: 10)
   end
 
   def create
