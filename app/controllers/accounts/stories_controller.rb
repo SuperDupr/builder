@@ -6,7 +6,6 @@ class Accounts::StoriesController < Accounts::BaseController
   before_action :is_story_published, only: :edit
 
   def index
-    @builder_types = StoryBuilder.all
     # Fetch organization stories that are shared by the organization admin
     org_stories = current_account.stories.includes(:story_builder, :creator).publicized.order(updated_at: :desc)
     @admin_logged_in = current_account_user.roles.include?("admin")
@@ -14,9 +13,17 @@ class Accounts::StoriesController < Accounts::BaseController
       .where("(stories.creator_id = :user_id) OR (accounts.id = :account_id AND stories.private_access = :publicized)", user_id: current_user.id, account_id: current_account.id, publicized: false)
       .order(updated_at: :desc)
 
+    # Filter stories by builder type if the parameter is present
+    if params[:builder_type].present?
+      builder_type = StoryBuilder.find_by(title: params[:builder_type])
+      all_stories = all_stories.where(story_builder: builder_type) if builder_type
+    end
+
     all_stories = all_stories.viewable unless @admin_logged_in
 
     @pagy, @stories = pagy(all_stories, items: 10)
+    
+    @builder_types = StoryBuilder.joins(:stories).where(stories: { id: @stories.pluck(:id) }).distinct(:name)
   end
 
   def create
