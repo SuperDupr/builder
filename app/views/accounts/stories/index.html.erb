@@ -33,8 +33,8 @@
         </tr>
       </thead>
       <tbody>
-        <% if @my_stories.present? %>
-          <% @my_stories.each do |story| %>
+        <% if @stories.present? %>
+          <% @stories.each do |story| %>
             <tr>
               <td>
               <p class="fs-15 font-bold">
@@ -112,9 +112,9 @@
       </tbody>
     </table>
   </div>
-  <% if @pagy_2.pages > 1 %>
+  <% if @pagy.pages > 1 %>
     <div class="mt-6 text-right">
-      <%== pagy_nav(@pagy_2) %>
+      <%== pagy_nav(@pagy) %>
     </div>
   <% end %>
 </div>

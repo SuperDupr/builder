@@ -10,10 +10,13 @@ class Accounts::StoriesController < Accounts::BaseController
     # Fetch organization stories that are shared by the organization admin
     org_stories = current_account.stories.includes(:story_builder, :creator).publicized.order(updated_at: :desc)
     @admin_logged_in = current_account_user.roles.include?("admin")
-    @pagy_1, @org_stories = pagy(@admin_logged_in ? org_stories : org_stories.viewable, items: 10)
+    all_stories = Story.joins(:account).includes(:story_builder, :creator)
+      .where("(stories.creator_id = :user_id) OR (accounts.id = :account_id AND stories.private_access = :publicized)", user_id: current_user.id, account_id: current_account.id, publicized: false)
+      .order(updated_at: :desc)
 
-    # Fetch stories that are created by the logged in organization admin/member
-    @pagy_2, @my_stories = pagy(Story.includes(:story_builder, :creator).where(creator_id: current_user.id).order(updated_at: :desc), items: 10)
+    all_stories = all_stories.viewable unless @admin_logged_in
+
+    @pagy, @stories = pagy(all_stories, items: 10)  
   end
 
   def create
@@ -66,7 +69,10 @@ class Accounts::StoriesController < Accounts::BaseController
       format.json do
         if params[:change_access_mode] == "on"
           @story.toggle!(:private_access)
-
+          # adding this to toggle automatically, can be added to org setting to allow for admins to toggle on and off
+          if @story.private_access == false
+            @story.update(viewable: true)
+          end
           render json: {private_access: @story.private_access, operation: "change_access_mode"}
         elsif params[:draft_mode] == "on"
           @story.draft!
