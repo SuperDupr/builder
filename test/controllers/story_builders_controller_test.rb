@@ -13,7 +13,8 @@ class StoryBuildersControllerTest < ActionDispatch::IntegrationTest
 
     story_builders = controller.instance_variable_get(:@story_builders)
     pagy = controller.instance_variable_get(:@pagy)
-    redirect_to_registration_section = controller.instance_variable_get(:@redirect_to_registration_section)
+    # removed for now
+    # redirect_to_registration_section = controller.instance_variable_get(:@redirect_to_registration_section)
     story = controller.instance_variable_get(:@story)
 
     assert_includes(story_builders, @story_builder)
