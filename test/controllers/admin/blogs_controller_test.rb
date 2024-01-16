@@ -13,7 +13,7 @@ class Admin::BlogsControllerTest < ActionDispatch::IntegrationTest
 
     # featured_blogs = controller.instance_variable_get(:@featured_blogs)
     # recent_blogs = controller.instance_variable_get(:@recent_blogs)
-    
+
     # assert_instance_of(ActiveRecord::Relation, featured_blogs)
     # assert_instance_of(ActiveRecord::Relation, recent_blogs)
     # assert_includes(featured_blogs, @blog)
