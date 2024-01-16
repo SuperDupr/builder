@@ -20,7 +20,7 @@
 			</div>
 			<% if user_signed_in? && !current_user.admin? %>
 				<%= nav_link_to tag.span("Builders"), story_builders_path, class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
-				<%= nav_link_to tag.span("Stories"), account_stories_path(current_account.id), class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
+				<%= nav_link_to tag.span("Storybank"), account_stories_path(current_account.id), class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
 				<%= nav_link_to tag.span("Blog"), account_blogs_path(current_account.id), class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
 			<% end %>
 			<%= render(partial: "shared/settings_dropdown") %>
