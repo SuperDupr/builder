@@ -15,31 +15,15 @@
 				</svg>
 			</button>
 		</div>
-		<div class="flex-grow hidden w-full pb-6 lg:flex lg:w-auto lg:pb-0" data-toggle-target="toggleable" data-transition-enter="transition-all ease-linear duration-300" data-transition-enter-from="opacity-0 h-0" data-transition-enter-to="opacity-100" data-transition-leave="transition-all ease-linear duration-300" data-transition-leave-from="opacity-100" data-transition-leave-to="opacity-0">
+		<div class="flex-grow hidden w-full lg:flex lg:w-auto lg:pb-0" data-toggle-target="toggleable" data-transition-enter="transition-all ease-linear duration-300" data-transition-enter-from="opacity-0 h-0" data-transition-enter-to="opacity-100" data-transition-leave="transition-all ease-linear duration-300" data-transition-leave-from="opacity-100" data-transition-leave-to="opacity-0">
 			<div class="lg:flex-grow">
-	
 			</div>
-			<div>
-				<div class="mt-4 lg:mt-0 pl-2 mb-2 lg:mb-0 lg:pl-0 lg:inline-flex z-10 items-center leading-none align-middle rounded text-gray-700 hover:text-gray-800 dark:text-gray-50 dark:hover:text-gray-200 mr-3 builder-nav-space">
-					<div class="relative" data-controller="dropdown">
-						<div data-action="click->dropdown#toggle click@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu"> <span class="<%= (request.path.include? "stories" or request.path === '/story_builders') ? 'active' : '' %> bulider-link flex  items-center fs-15 text-black appearance-none">
-							Story Builders
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="fill-current w-4 h-4">
-								<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-							</svg>
-							</span>
-						</div>
-						<div data-dropdown-target="menu" class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu" data-original-class="z-20 mt-2 lg:absolute lg:right-0 dropdown-menu">
-							<div class="overflow-hidden bg-white border border-gray-200 rounded shadow-md"> 
-									<%= nav_link_to tag.span("Builders"), story_builders_path, class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
-									<%= nav_link_to tag.span("Stories"), account_stories_path(current_account.id), class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
-									<%= nav_link_to tag.span("Blogs"), account_blogs_path(current_account.id), class: ["no-underline block px-6 py-3 text-gray-800 bg-white hover:bg-fte-primary hover:text-white transition ease-in-out duration-200 whitespace-nowrap"] %>
-							</div>
-						</div>
-					</div>
-				</div>
-				<%= render(partial: "shared/settings_dropdown") %>
-			</div>
+			<% if user_signed_in? && !current_user.admin? %>
+				<%= nav_link_to tag.span("Builders"), story_builders_path, class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
+				<%= nav_link_to tag.span("Storybank"), account_stories_path(current_account.id), class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
+				<%= nav_link_to tag.span("Blog"), account_blogs_path(current_account.id), class: ["nav-link text-fte-primary hover:transform hover:scale-110"] %>
+			<% end %>
+			<%= render(partial: "shared/settings_dropdown") %>
 		</div>
 	</nav>
 	
