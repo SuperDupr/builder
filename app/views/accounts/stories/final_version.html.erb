@@ -63,10 +63,10 @@
         <% @my_stories.each do |story| %>
           <div class="bg-F5F5F5 p-4 mb-3">
             <p class="fs-20 font-bold mb-4"><%= story.title %></p>
-            <p class="fs-20 mb-4">
-              <%= story.ai_generated_content&.truncate(50) %>
+            <p class="fs-12 mb-4">
+              <%= story.ai_generated_content&.truncate(100) %>
             </p>
-            <a href="<%= final_version_path(story, show: "on") %>" class="font-bold fs-15">VIEW ></a>
+            <a href="<%= final_version_path(story) %>" class="font-bold fs-15">VIEW</a>
           </div>
         <% end %>
         <div class="text-center py-3">
