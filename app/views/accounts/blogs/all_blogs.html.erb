@@ -1,0 +1,44 @@
+<div class="py-8 bg-primary">
+  <h1 class="text-center text-white fs-40 fw-medium">All Blogs</h1>
+</div>
+
+<div class="bg-white py-28 lg:py-12">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:mx-0">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">From the blog</h2>
+      <p class="mt-2 text-lg leading-8 text-gray-600">Learn how to improve your story telling from experts.</p>
+    </div>
+    <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 mt-16 lg:mt-4 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+      <% @blogs.each do |blog| %>
+        <article class="flex max-w-xl flex-col items-start justify-between">
+          <div class="flex items-center gap-x-4 text-xs">
+            <time datetime="<%= blog.created_at.strftime('%Y-%m-%d') %>" class="text-gray-500">
+              <%= blog.created_at.strftime('%b %d, %Y') %>
+            </time>
+            <% for tag in blog.tag_list.first(4) do %>
+              <div class="relative z-10 rounded-full bg-gray-200 px-3 py-1.5 font-medium text-gray-600 mx-1"><%= tag %></div>
+            <% end %>
+          </div>
+          <div class="group relative">
+            <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+              <%= link_to account_blog_path(current_account.id, blog.id) do %>
+                <span class="absolute inset-0"></span>
+                <%= blog.title %>
+              <% end %>
+            </h3>
+            <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+              <%= truncate(strip_tags(blog.body.to_s).html_safe, length: 150) %>
+            </p>
+          </div>
+        </article>
+      <% end %>
+
+      <% if @pagy.pages > 1 %>
+        <div class="my-6 text-center">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+      <!-- More posts... -->
+    </div>
+  </div>
+</div>

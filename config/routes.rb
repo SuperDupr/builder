@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     end
     resources :stories, module: :accounts
     resources :blogs, module: :accounts
+    get :all_blogs, to: "accounts/blogs#all_blogs", as: :all_blogs
     resources :industries, module: :accounts
   end
 
